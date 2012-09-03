@@ -12,6 +12,7 @@ class bind (
 		hasrestart => true,
 		hasstatus  => true,
 		require    => Package[$bind::params::bind_package],
+		subscribe  => File[$bind::params::confdir],
 	}
 
 	concat { [
