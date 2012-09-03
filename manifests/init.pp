@@ -11,5 +11,6 @@ class bind (
 		enable     => true,
 		hasrestart => true,
 		hasstatus  => true,
+		require    => Package[$bind::params::bind_package],
 	}
 }
