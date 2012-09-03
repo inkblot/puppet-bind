@@ -1,0 +1,5 @@
+acl <%= name %> {
+<%- addresses.each |address| do %>
+	<%= address %>;
+<%- end %>
+};
