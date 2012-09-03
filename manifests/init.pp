@@ -15,9 +15,9 @@ class bind (
 	}
 
 	concat { [
-		"${bind::params::confdir}/acls.conf"
-		"${bind::params::confdir}/views.conf"
-		"${bind::params::confdir}/zones.conf"
+		"${bind::params::confdir}/acls.conf",
+		"${bind::params::confdir}/views.conf",
+		"${bind::params::confdir}/zones.conf",
 		]:
 		owner => $bind::params::bind_user,
 		group => $bind::params::bind_group,
