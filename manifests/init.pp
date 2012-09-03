@@ -9,7 +9,6 @@ class bind (
 	service { $bind::params::bind_service:
 		ensure     => running,
 		enable     => true,
-		hasreload  => true,
 		hasrestart => true,
 		hasstatus  => true,
 	}
