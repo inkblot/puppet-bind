@@ -1,7 +1,6 @@
 class bind (
 	$confdir = $bind::params::confdir,
-) {
-	include bind::params
+) inherits bind::params {
 
 	package { $bind::params::bind_package:
 		ensure => latest,
