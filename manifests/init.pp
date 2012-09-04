@@ -1,6 +1,10 @@
 class bind (
-	$confdir = $bind::params::confdir,
+	$confdir    = $bind::params::confdir,
+	$cachedir   = $bind::params::cachedir,
+	$forwarders = [],
 ) inherits bind::params {
+
+	$auth_nxdomain = false
 
 	package { $bind::params::bind_package:
 		ensure => latest,
@@ -13,10 +17,19 @@ class bind (
 		hasstatus  => true,
 		require    => Package[$bind::params::bind_package],
 	}
+	
+	file { $confdir:
+		ensure  => directory,
+		owner   => 'root',
+		group   => $bind::params::bind_group,
+		mode    => '2755',
+		purge   => true,
+		require => Package[$bind::params::bind_package],
+	}
 
-	file { "${bind::params::confdir}/named.conf":
+	file { "${confdir}/named.conf":
 		ensure  => present,
-		owner   => $bind::params::bind_user,
+		owner   => 'root',
 		group   => $bind::params::bind_group,
 		mode    => '0644',
 		content => template('bind/named.conf.erb'),
@@ -25,16 +38,16 @@ class bind (
 
 	file { "${confdir}/zones":
 		ensure => directory,
-		owner  => $bind::params::bind_user,
+		owner  => 'root',
 		group  => $bind::params::bind_group,
 		mode   => '0755',
 	}
 
 	concat { [
-		"${bind::params::confdir}/acls.conf",
-		"${bind::params::confdir}/views.conf",
+		"${confdir}/acls.conf",
+		"${confdir}/views.conf",
 		]:
-		owner  => $bind::params::bind_user,
+		owner  => 'root',
 		group  => $bind::params::bind_group,
 		mode   => '0644',
 		notify => Service[$bind::params::bind_service],
@@ -42,13 +55,13 @@ class bind (
 
 	concat::fragment { "named-acls-header":
 		order   => '00',
-		target  => "${bind::params::confdir}/acls.conf",
+		target  => "${confdir}/acls.conf",
 		content => "# This file is managed by puppet - changes will be lost\n",
 	}
 
 	concat::fragment { "named-views-header":
 		order   => '00',
-		target  => "${bind::params::confdir}/views.conf",
+		target  => "${confdir}/views.conf",
 		content => "# This file is managed by puppet - changes will be lost\n",
 	}
 }

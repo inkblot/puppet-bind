@@ -1,3 +1,16 @@
 # This file is managed by puppet - changes will be lost
 include "<%= confdir %>/acls.conf";
 include "<%= confdir %>/views.conf";
+
+options {
+	directory "<%= cachedir %>";
+<%- if not forwarders.empty? -%>
+	forwarders {
+<%- forwarders.each do |forwarder| -%>
+		<%= forwarder %>;
+<%- end -%>
+	};
+<%- end -%>
+	auth-nxdomain <%= auth_nxdomain ? 'yes' : 'no' %>;
+	listen-on-v6 { any; };
+}
