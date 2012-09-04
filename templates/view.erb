@@ -20,6 +20,6 @@ view "<%= name %>" {
 <%- end -%>
 
 <%- zones.each do |zone| -%>
-	include "<%= confdir %>/zones/${zone}.conf";
+	include "<%= confdir %>/zones/<%= zone %>.conf";
 <%- end -%>
 };
