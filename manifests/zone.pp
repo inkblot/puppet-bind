@@ -16,7 +16,7 @@ define bind::zone (
 	file { "${bind::confdir}/zones/${name}.conf":
 		ensure  => present,
 		owner   => 'root',
-		group   => ${bind::params::bind_group},
+		group   => $bind::params::bind_group,
 		mode    => '0644',
 		content => template('bind/zone.conf.erb'),
 	}
