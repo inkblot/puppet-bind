@@ -7,8 +7,8 @@ define bind::view (
 	$confdir = $bind::params::confdir
 
 	concat::fragment { "bind-view-${name}":
-		order   = '10',
-		target  = "${bind::params::confdir}/views.conf",
-		content = template('bind/view.erb'),
+		order   => '10',
+		target  => "${bind::params::confdir}/views.conf",
+		content => template('bind/view.erb'),
 	}
 }
