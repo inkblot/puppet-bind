@@ -15,6 +15,11 @@ view "<%= name %>" {
 	};
 <%- end -%>
 	recursion <%= recursion ? 'yes' : 'no' %>;
+<%- if recursion -%>
+<%- if scope.lookupvar('osfamily') == 'Debian' -%>
+include "<%= confdir %>/named.conf.default-zones";
+<%- end -%>
+<%- end -%>
 
 <%- zones.each do |zone| -%>
 	include "<%= confdir %>/zones/${zone}.conf";

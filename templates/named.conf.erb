@@ -1,6 +1,3 @@
 # This file is managed by puppet - changes will be lost
 include "<%= confdir %>/acls.conf";
 include "<%= confdir %>/views.conf";
-<%- if scope.lookupvar('osfamily') == 'Debian' -%>
-include "<%= confdir %>/named.conf.default-zones";
-<%- end -%>
