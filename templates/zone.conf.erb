@@ -1,7 +1,7 @@
 
 # This file managed by puppet - changes will be lost
 zone "<%= _domain %>" {
-	type <%= type %>;
+	type <%= zone_type %>;
 <%- if file != '' -%>
 	file "<%= file %>";
 <%- end -%>

@@ -1,5 +1,5 @@
 define bind::zone (
-	$type,
+	$zone_type,
 	$domain          = '',
 	$masters         = [],
 	$allow_updates   = [],
