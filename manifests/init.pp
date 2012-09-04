@@ -1,4 +1,5 @@
 class bind (
+	$confdir = $bind::params::confdir,
 ) {
 	include bind::params
 
@@ -14,10 +15,18 @@ class bind (
 		require    => Package[$bind::params::bind_package],
 	}
 
+	file { "${bind::params::confdir}/named.conf":
+		ensure  => present,
+		owner   => $bind::params::bind_user,
+		group   => $bind::params::bind_group,
+		mode    => '0644',
+		content => template('bind/named.conf.erb'),
+		notify  => Service[$bind::params::bind_service],
+	}
+
 	concat { [
 		"${bind::params::confdir}/acls.conf",
 		"${bind::params::confdir}/views.conf",
-		"${bind::params::confdir}/zones.conf",
 		]:
 		owner  => $bind::params::bind_user,
 		group  => $bind::params::bind_group,
@@ -34,12 +43,6 @@ class bind (
 	concat::fragment { "named-views-header":
 		order   => '00',
 		target  => "${bind::params::confdir}/views.conf",
-		content => "# This file is managed by puppet - changes will be lost\n",
-	}
-
-	concat::fragment { "named-zones-header":
-		order   => '00',
-		target  => "${bind::params::confdir}/zones.conf",
 		content => "# This file is managed by puppet - changes will be lost\n",
 	}
 }
