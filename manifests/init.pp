@@ -6,18 +6,12 @@ class bind (
 		ensure => latest,
 	}
 
-	file { $bind::params::confdir:
-		ensure  => directory,
-		require => Package[$bind::params::bind_package],
-	}
-
 	service { $bind::params::bind_service:
 		ensure     => running,
 		enable     => true,
 		hasrestart => true,
 		hasstatus  => true,
 		require    => Package[$bind::params::bind_package],
-		subscribe  => File[$bind::params::confdir],
 	}
 
 	concat { [
@@ -25,9 +19,10 @@ class bind (
 		"${bind::params::confdir}/views.conf",
 		"${bind::params::confdir}/zones.conf",
 		]:
-		owner => $bind::params::bind_user,
-		group => $bind::params::bind_group,
-		mode  => '0644',
+		owner  => $bind::params::bind_user,
+		group  => $bind::params::bind_group,
+		mode   => '0644',
+		notify => Service[$bind::params::bind_service],
 	}
 
 	concat::fragment { "named-acls-header":
