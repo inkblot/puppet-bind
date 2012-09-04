@@ -6,6 +6,11 @@ class bind (
 		ensure => latest,
 	}
 
+	file { $bind::params::confdir:
+		ensure  => directory,
+		require => Package[$bind::params::bind_package],
+	}
+
 	service { $bind::params::bind_service:
 		ensure     => running,
 		enable     => true,
