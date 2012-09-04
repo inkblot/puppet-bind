@@ -10,13 +10,13 @@ view "<%= name %>" {
 <%- if not match_destinations.empty? -%>
 	match-destinations {
 <%- match_destinations.each do |match_destination| -%>
-		<%= match_destination %>
+		<%= match_destination %>;
 <%- end -%>
 	};
 <%- end -%>
-	recursion <%= recursion ? 'yes' : 'no' %>
+	recursion <%= recursion ? 'yes' : 'no' %>;
 
 <%- zones.each do |zone| -%>
-	include "<%= confdir %>/zones/${zone}.conf"
+	include "<%= confdir %>/zones/${zone}.conf";
 <%- end -%>
-}
+};
