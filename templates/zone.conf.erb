@@ -1,0 +1,29 @@
+
+# This file managed by puppet - changes will be lost
+zone "<%= _domain %>" {
+	type <%= type %>;
+<%- if file != '' -%>
+	file "<%= file %>";
+<%- end -%>
+<%- if not masters.empty? -%>
+	masters {
+<%- masters.each do |master| -%>
+		<%= master %>;
+<%- end -%>
+	};
+<%- end -%>
+<%- if not allow_updates.empty? -%>
+	allow-update {
+<%- allow_updates.each do |allow_update| -%>
+		<%= allow_update %>;
+<%- end -%>
+	};
+<%- end -%>
+<%- if not allow_transfers.empty? -%>
+	allow-transfer {
+<%- allow_transfers.each do |allow_transfer| -%>
+		<%= allow_transfer %>;
+<%- end -%>
+	};
+<%- end -%>
+};

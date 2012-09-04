@@ -23,6 +23,13 @@ class bind (
 		notify  => Service[$bind::params::bind_service],
 	}
 
+	file { "${confdir}/zones":
+		ensure => directory,
+		owner  => $bind::params::bind_user,
+		group  => $bind::params::bind_group,
+		mode   => '0755',
+	}
+
 	concat { [
 		"${bind::params::confdir}/acls.conf",
 		"${bind::params::confdir}/views.conf",
