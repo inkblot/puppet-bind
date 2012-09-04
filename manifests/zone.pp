@@ -11,9 +11,11 @@ define bind::zone (
 		$_domain = $domain
 	fi
 
-	file { "${bind::params::confdir}/zones/${name}.conf":
+	$file = "${bind::confdir}/zones/${name}.zone"
+
+	file { "${bind::confdir}/zones/${name}.conf":
 		ensure  => present,
-		owner   => ${bind::params::bind_user},
+		owner   => 'root',
 		group   => ${bind::params::bind_group},
 		mode    => '0644',
 		content => template('bind/zone.conf.erb'),
