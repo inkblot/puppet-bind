@@ -5,11 +5,11 @@ define bind::zone (
 	$allow_updates   = [],
 	$allow_transfers = [],
 ) {
-	if $domain == ''
+	if $domain == '' {
 		$_domain = $name
-	else
+	} else {
 		$_domain = $domain
-	fi
+	}
 
 	$file = "${bind::confdir}/zones/${name}.zone"
 
