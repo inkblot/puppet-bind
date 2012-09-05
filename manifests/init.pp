@@ -45,6 +45,7 @@ class bind (
 
 	concat { [
 		"${confdir}/acls.conf",
+		"${confdir}/keys.conf",
 		"${confdir}/views.conf",
 		]:
 		owner  => 'root',
@@ -56,6 +57,12 @@ class bind (
 	concat::fragment { "named-acls-header":
 		order   => '00',
 		target  => "${confdir}/acls.conf",
+		content => "# This file is managed by puppet - changes will be lost\n",
+	}
+
+	concat::fragment { "named-keys-header":
+		order   => '00',
+		target  => "${confdir}/keys.conf",
 		content => "# This file is managed by puppet - changes will be lost\n",
 	}
 

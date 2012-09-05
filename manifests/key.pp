@@ -12,7 +12,7 @@ define bind::key (
 	}
 	concat::fragment { "bind-key-${name}":
 		order   => '10',
-		target  => "${bind::confdir}/named.conf",
+		target  => "${bind::confdir}/keys.conf",
 		content => "include \"${bind::confdir}/keys/${name}.conf\";\n",
 	}
 }
