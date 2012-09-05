@@ -36,7 +36,7 @@ class bind (
 		notify  => Service[$bind::params::bind_service],
 	}
 
-	file { "${confdir}/zones":
+	file { [ "${confdir}/zones", "${confdir}/keys" ]:
 		ensure => directory,
 		owner  => 'root',
 		group  => $bind::params::bind_group,
