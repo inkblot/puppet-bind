@@ -19,6 +19,7 @@ define bind::zone (
 		group   => $bind::params::bind_group,
 		mode    => '0644',
 		content => template('bind/zone.conf.erb'),
+		notify  => Service[$bind::params::bind_server],
 	}
 
 }
