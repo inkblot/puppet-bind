@@ -11,7 +11,22 @@ define bind::zone (
 		$_domain = $domain
 	}
 
-	$file = "${bind::confdir}/zones/${name}.zone"
+	case $zone_type {
+		'forward': {
+			$file = ''
+		}
+		default: {
+			$file = "${bind::confdir}/zones/${name}.zone"
+			file { $file:
+				ensure  => present,
+				owner   => 'root',
+				group   => ${bind::params::bind_group},
+				mode    => '0644',
+				replace => false,
+				source  => 'puppet:///modules/bind/db.empty',
+			}
+		}
+	}
 
 	file { "${bind::confdir}/zones/${name}.conf":
 		ensure  => present,
