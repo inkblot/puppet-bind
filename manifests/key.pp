@@ -2,7 +2,7 @@ define bind::key (
 	$algorithm = 'hmac-sha256',
 	$secret,
 ) {
-	file { "${bind::confdir}/keys/${name}.conf":
+	file { "${bind::confdir}/keys/${name}":
 		ensure  => present,
 		owner   => 'root',
 		group   => $bind::params::bind_group,
@@ -13,6 +13,6 @@ define bind::key (
 	concat::fragment { "bind-key-${name}":
 		order   => '10',
 		target  => "${bind::confdir}/keys.conf",
-		content => "include \"${bind::confdir}/keys/${name}.conf\";\n",
+		content => "include \"${bind::confdir}/keys/${name}\";\n",
 	}
 }
