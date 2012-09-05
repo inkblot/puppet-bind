@@ -20,7 +20,7 @@ define bind::zone (
 			file { $file:
 				ensure  => present,
 				owner   => 'root',
-				group   => ${bind::params::bind_group},
+				group   => $bind::params::bind_group,
 				mode    => '0644',
 				replace => false,
 				source  => 'puppet:///modules/bind/db.empty',
