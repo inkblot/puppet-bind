@@ -16,7 +16,7 @@ define bind::zone (
 			$file = ''
 		}
 		default: {
-			$file = "${bind::confdir}/zones/${name}.zone"
+			$file = "${bind::cachedir}/${name}"
 			file { $file:
 				ensure  => present,
 				owner   => 'root',
