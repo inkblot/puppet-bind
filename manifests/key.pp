@@ -1,5 +1,5 @@
 define bind::key (
-	$algorithm => 'hmac-sha256',
+	$algorithm = 'hmac-sha256',
 	$secret,
 ) {
 	file { "${bind::confdir}/keys/${name}.conf":
