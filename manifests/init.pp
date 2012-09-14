@@ -2,6 +2,7 @@ class bind (
 	$confdir    = $bind::params::confdir,
 	$cachedir   = $bind::params::cachedir,
 	$forwarders = [],
+	$dnssec     = true,
 ) inherits bind::params {
 
 	$auth_nxdomain = false

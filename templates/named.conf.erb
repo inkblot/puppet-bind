@@ -14,4 +14,7 @@ options {
 <%- end -%>
 	auth-nxdomain <%= auth_nxdomain ? 'yes' : 'no' %>;
 	listen-on-v6 { any; };
+	dnssec-enable <%= dnssec ? 'yes' : 'no' %>;
+	dnssec-validation <%= dnssec ? 'yes' : 'no' %>;
+	dnssec-lookaside <%= dnssec ? 'auto' : 'no' %>;
 };
