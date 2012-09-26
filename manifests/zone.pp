@@ -24,6 +24,7 @@ define bind::zone (
 				mode    => '0644',
 				replace => false,
 				source  => 'puppet:///modules/bind/db.empty',
+				require => Package[$bind::params::bind_package],
 			}
 		}
 	}
@@ -35,6 +36,7 @@ define bind::zone (
 		mode    => '0644',
 		content => template('bind/zone.conf.erb'),
 		notify  => Service[$bind::params::bind_service],
+		require => Package[$bind::params::bind_package],
 	}
 
 }

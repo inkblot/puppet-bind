@@ -5,6 +5,8 @@ class bind (
 	$dnssec     = true,
 ) inherits bind::params {
 
+	include concat::setup
+
 	$auth_nxdomain = false
 
 	package { $bind::params::bind_package:
@@ -35,13 +37,15 @@ class bind (
 		mode    => '0644',
 		content => template('bind/named.conf.erb'),
 		notify  => Service[$bind::params::bind_service],
+		require => Package[$bind::params::bind_package],
 	}
 
 	file { [ "${confdir}/zones", "${confdir}/keys" ]:
-		ensure => directory,
-		owner  => 'root',
-		group  => $bind::params::bind_group,
-		mode   => '0755',
+		ensure  => directory,
+		owner   => 'root',
+		group   => $bind::params::bind_group,
+		mode    => '0755',
+		require => Package[$bind::params::bind_package],
 	}
 
 	concat { [
@@ -49,10 +53,11 @@ class bind (
 		"${confdir}/keys.conf",
 		"${confdir}/views.conf",
 		]:
-		owner  => 'root',
-		group  => $bind::params::bind_group,
-		mode   => '0644',
-		notify => Service[$bind::params::bind_service],
+		owner   => 'root',
+		group   => $bind::params::bind_group,
+		mode    => '0644',
+		notify  => Service[$bind::params::bind_service],
+		require => Package[$bind::params::bind_package],
 	}
 
 	concat::fragment { "named-acls-header":

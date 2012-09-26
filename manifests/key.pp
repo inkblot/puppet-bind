@@ -11,6 +11,7 @@ define bind::key (
 		mode    => '0640',
 		content => template('bind/key.conf.erb'),
 		notify  => Service[$bind::params::bind_service],
+		require => Package[$bind::params::bind_package],
 	}
 	concat::fragment { "bind-key-${name}":
 		order   => '10',
