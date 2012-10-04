@@ -13,6 +13,16 @@ class bind (
 		ensure => latest,
 	}
 
+	if $dnssec {
+		file { '/usr/local/bin/dnssec-init':
+			ensure => present,
+			owner  => 'root',
+			group  => 'root',
+			mode   => '0755',
+			source => 'puppet:///modules/bind/dnssec-init',
+		}
+	}
+
 	service { $bind::params::bind_service:
 		ensure     => running,
 		enable     => true,

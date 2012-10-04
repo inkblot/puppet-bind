@@ -2,8 +2,14 @@
 # This file managed by puppet - changes will be lost
 zone "<%= _domain %>" {
 	type <%= zone_type %>;
-<%- if file != '' -%>
-	file "<%= file %>";
+<%- if has_zone_file -%>
+<%-   if dnssec -%>
+	auto-dnssec maintain;
+	key-directory "<%= cachedir %>/<%= name %>";
+	file "<%= cachedir %>/<%= name %>/<%= _domain %>.signed";
+<%-   else -%>
+	file "<%= cachedir %>/<%= name %>/<%= _domain %>";
+<%-   end -%>
 <%- end -%>
 <%- if not masters.empty? -%>
 	masters {

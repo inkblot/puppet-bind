@@ -4,27 +4,58 @@ define bind::zone (
 	$masters         = [],
 	$allow_updates   = [],
 	$allow_transfers = [],
+	$dnssec          = false,
 ) {
+	$cachedir = $bind::cachedir
+
 	if $domain == '' {
 		$_domain = $name
 	} else {
 		$_domain = $domain
 	}
 
-	case $zone_type {
-		'forward': {
-			$file = ''
+	$has_zone_file = $zone_type ? {
+		'master' => true,
+		'slave' => true,
+		'hint' => true,
+		'stub' => true,
+		default => false,
+	}
+
+	if $has_zone_file {
+		file { "${cachedir}/${name}":
+			ensure  => directory,
+			owner   => $bind::params::bind_user,
+			group   => $bind::params::bind_group,
+			mode    => '0755',
+			require => Package[$bind::params::bind_package],
 		}
-		default: {
-			$file = "${bind::cachedir}/${name}"
-			file { $file:
-				ensure  => present,
-				owner   => 'root',
-				group   => $bind::params::bind_group,
-				mode    => '0644',
-				replace => false,
-				source  => 'puppet:///modules/bind/db.empty',
-				require => Package[$bind::params::bind_package],
+
+		file { "${cachedir}/${name}/${_domain}":
+			ensure  => present,
+			owner   => $bind::params::bind_user,
+			group   => $bind::params::bind_group,
+			mode    => '0644',
+			replace => false,
+			source  => 'puppet:///modules/bind/db.empty',
+			audit   => [ content ],
+		}
+
+		if $dnssec {
+			exec { "dnssec-keygen-${_domain}":
+				command => "/usr/local/bin/dnssec-init ${cachedir} ${name} ${_domain}",
+				cwd     => $cachedir,
+				user    => $bind::params::bind_user,
+				creates => "${cachedir}/${name}/${_domain}.signed",
+				timeout => 0, # crypto is hard
+				require => [ File['/usr/local/bin/dnssec-init'], File["${cachedir}/${name}/${_domain}"] ],
+			}
+
+			file { "${cachedir}/${name}/${_domain}.signed":
+				owner => $bind::params::bind_user,
+				group => $bind::params::bind_group,
+				mode  => '0644',
+				audit => [ content ],
 			}
 		}
 	}
