@@ -5,6 +5,9 @@ define bind::zone (
 	$allow_updates   = [],
 	$allow_transfers = [],
 	$dnssec          = false,
+	$notify_ns       = true,
+	$also_notify     = [],
+	$allow_notify    = [],
 ) {
 	$cachedir = $bind::cachedir
 

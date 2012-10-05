@@ -32,4 +32,19 @@ zone "<%= _domain %>" {
 <%- end -%>
 	};
 <%- end -%>
+	notify <%= ns_notify ? 'yes' : 'no' %>;
+<%- if not also_notify.empty? -%>
+	also-notify {
+<%-   also_notify.each do |server| -%>
+		<%= server %>;
+<%-   end -%>
+	};
+<%- end -%>
+<%- if not allow_notify.empty? -%>
+	allow-notify {
+<%-   allow_notify.each do |server| -%>
+		<%= server %>;
+<%-   end -%>
+	};
+<%- end -%>
 };
