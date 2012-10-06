@@ -10,6 +10,21 @@ zone "<%= _domain %>" {
 <%-   else -%>
 	file "<%= cachedir %>/<%= name %>/<%= _domain %>";
 <%-   end -%>
+	notify <%= ns_notify ? 'yes' : 'no' %>;
+<%-   if not also_notify.empty? -%>
+	also-notify {
+<%-     also_notify.each do |server| -%>
+		<%= server %>;
+<%-     end -%>
+	};
+<%-   end -%>
+<%-   if not allow_notify.empty? -%>
+	allow-notify {
+<%-     allow_notify.each do |server| -%>
+		<%= server %>;
+<%-     end -%>
+	};
+<%-   end -%>
 <%- end -%>
 <%- if not masters.empty? -%>
 	masters {
@@ -30,21 +45,6 @@ zone "<%= _domain %>" {
 <%- allow_transfers.each do |allow_transfer| -%>
 		<%= allow_transfer %>;
 <%- end -%>
-	};
-<%- end -%>
-	notify <%= ns_notify ? 'yes' : 'no' %>;
-<%- if not also_notify.empty? -%>
-	also-notify {
-<%-   also_notify.each do |server| -%>
-		<%= server %>;
-<%-   end -%>
-	};
-<%- end -%>
-<%- if not allow_notify.empty? -%>
-	allow-notify {
-<%-   allow_notify.each do |server| -%>
-		<%= server %>;
-<%-   end -%>
 	};
 <%- end -%>
 <%- if forward != '' -%>
