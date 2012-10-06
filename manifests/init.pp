@@ -59,6 +59,15 @@ class bind (
 		require => Package[$bind::params::bind_package],
 	}
 
+	file { "${confdir}/named.conf.local":
+		ensure  => present,
+		owner   => 'root',
+		group   => $bind::params::bind_group,
+		mode    => '0644',
+		replace => false,
+		require => Package[$bind::params::bind_package],
+	}
+
 	concat { [
 		"${confdir}/acls.conf",
 		"${confdir}/keys.conf",
