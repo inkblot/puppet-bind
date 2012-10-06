@@ -3,6 +3,7 @@ class bind (
 	$cachedir   = $bind::params::cachedir,
 	$forwarders = [],
 	$dnssec     = true,
+	$version    = '',
 ) inherits bind::params {
 
 	include concat::setup
