@@ -47,4 +47,14 @@ zone "<%= _domain %>" {
 <%-   end -%>
 	};
 <%- end -%>
+<%- if forward != '' -%>
+	forward <%= forward %>;
+<%- end -%>
+<%- if not forwarders.empty? -%>
+	forwarders {
+<%-   forwarders.each do |forwarder| -%>
+		<%= forwarder %>;
+<%-   end -%>
+	};
+<%- end -%>
 };

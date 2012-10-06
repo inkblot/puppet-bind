@@ -8,6 +8,8 @@ define bind::zone (
 	$ns_notify       = true,
 	$also_notify     = [],
 	$allow_notify    = [],
+	$forwarders      = [],
+	$forward         = '',
 ) {
 	$cachedir = $bind::cachedir
 
