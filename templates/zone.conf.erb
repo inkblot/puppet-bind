@@ -5,7 +5,11 @@ zone "<%= _domain %>" {
 <%- if has_zone_file -%>
 <%-   if dnssec -%>
 	auto-dnssec maintain;
+<%-     if key_directory == '' -%>
 	key-directory "<%= cachedir %>/<%= name %>";
+<%-     else -%>
+        key-directory "<%= key_directory %>";
+<%-     end -%>
 	file "<%= cachedir %>/<%= name %>/<%= _domain %>.signed";
 <%-   else -%>
 	file "<%= cachedir %>/<%= name %>/<%= _domain %>";

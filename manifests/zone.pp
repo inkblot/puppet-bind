@@ -5,6 +5,7 @@ define bind::zone (
 	$allow_updates   = [],
 	$allow_transfers = [],
 	$dnssec          = false,
+	$key_directory   = '',
 	$ns_notify       = true,
 	$also_notify     = [],
 	$allow_notify    = [],
