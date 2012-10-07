@@ -48,7 +48,7 @@ define bind::zone (
 		}
 
 		if $dnssec {
-			exec { "dnssec-keygen-${_domain}":
+			exec { "dnssec-keygen-${name}":
 				command => "/usr/local/bin/dnssec-init ${cachedir} ${name} ${_domain}",
 				cwd     => $cachedir,
 				user    => $bind::params::bind_user,
