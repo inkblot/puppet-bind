@@ -3,7 +3,7 @@
 CACHEDIR="$1"
 NAME="$2"
 DOMAIN="$3"
-KEY_DIRECTORY="$4"
+KEY_DIRECTORY="${4:-${CACHEDIR}/${NAME}}"
 PATH=/bin:/sbin:/usr/bin:/usr/sbin
 dnssec-keygen -K "${KEY_DIRECTORY}" "${DOMAIN}"
 dnssec-keygen -f KSK -K "${KEY_DIRECTORY}" "${DOMAIN}"
