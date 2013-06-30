@@ -1,6 +1,6 @@
 
-acl <%= name %> {
-<%- addresses.each do |address| -%>
+acl <%= @name %> {
+<%- @addresses.each do |address| -%>
 	<%= address %>;
 <%- end -%>
 };

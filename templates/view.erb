@@ -1,25 +1,25 @@
 
-view "<%= name %>" {
-<%- if not match_clients.empty? -%>
+view "<%= @name %>" {
+<%- if not @match_clients.empty? -%>
 	match-clients {
-<%- match_clients.each do |match_client| -%>
+<%- @match_clients.each do |match_client| -%>
 		<%= match_client %>;
 <%- end -%>
 	};
 <%- end -%>
-<%- if not match_destinations.empty? -%>
+<%- if not @match_destinations.empty? -%>
 	match-destinations {
-<%- match_destinations.each do |match_destination| -%>
+<%- @match_destinations.each do |match_destination| -%>
 		<%= match_destination %>;
 <%- end -%>
 	};
 <%- end -%>
-	recursion <%= recursion ? 'yes' : 'no' %>;
+	recursion <%= @recursion ? 'yes' : 'no' %>;
 <%- if scope.lookupvar('osfamily') == 'Debian' -%>
-	include "<%= confdir %>/named.conf.default-zones";
+	include "<%= @confdir %>/named.conf.default-zones";
 <%- end -%>
 
-<%- zones.each do |zone| -%>
-	include "<%= confdir %>/zones/<%= zone %>.conf";
+<%- @zones.each do |zone| -%>
+	include "<%= @confdir %>/zones/<%= @zone %>.conf";
 <%- end -%>
 };

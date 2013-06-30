@@ -1,62 +1,62 @@
 
 # This file managed by puppet - changes will be lost
-zone "<%= _domain %>" {
-	type <%= zone_type %>;
-<%- if has_zone_file -%>
-<%-   if dnssec -%>
+zone "<%= @_domain %>" {
+	type <%= @zone_type %>;
+<%- if @has_zone_file -%>
+<%-   if @dnssec -%>
 	auto-dnssec maintain;
-<%-     if key_directory == '' -%>
-	key-directory "<%= cachedir %>/<%= name %>";
+<%-     if @key_directory == '' -%>
+	key-directory "<%= @cachedir %>/<%= @name %>";
 <%-     else -%>
-        key-directory "<%= key_directory %>";
+        key-directory "<%= @key_directory %>";
 <%-     end -%>
-	file "<%= cachedir %>/<%= name %>/<%= _domain %>.signed";
+	file "<%= @cachedir %>/<%= @name %>/<%= @_domain %>.signed";
 <%-   else -%>
-	file "<%= cachedir %>/<%= name %>/<%= _domain %>";
+	file "<%= @cachedir %>/<%= @name %>/<%= @_domain %>";
 <%-   end -%>
-	notify <%= ns_notify ? 'yes' : 'no' %>;
-<%-   if not also_notify.empty? -%>
+	notify <%= @ns_notify ? 'yes' : 'no' %>;
+<%-   if not @also_notify.empty? -%>
 	also-notify {
-<%-     also_notify.each do |server| -%>
+<%-     @also_notify.each do |server| -%>
 		<%= server %>;
 <%-     end -%>
 	};
 <%-   end -%>
-<%-   if not allow_notify.empty? -%>
+<%-   if not @allow_notify.empty? -%>
 	allow-notify {
-<%-     allow_notify.each do |server| -%>
+<%-     @allow_notify.each do |server| -%>
 		<%= server %>;
 <%-     end -%>
 	};
 <%-   end -%>
 <%- end -%>
-<%- if not masters.empty? -%>
+<%- if not @masters.empty? -%>
 	masters {
-<%- masters.each do |master| -%>
+<%- @masters.each do |master| -%>
 		<%= master %>;
 <%- end -%>
 	};
 <%- end -%>
-<%- if not allow_updates.empty? -%>
+<%- if not @allow_updates.empty? -%>
 	allow-update {
-<%- allow_updates.each do |allow_update| -%>
+<%- @allow_updates.each do |allow_update| -%>
 		<%= allow_update %>;
 <%- end -%>
 	};
 <%- end -%>
-<%- if not allow_transfers.empty? -%>
+<%- if not @allow_transfers.empty? -%>
 	allow-transfer {
-<%- allow_transfers.each do |allow_transfer| -%>
+<%- @allow_transfers.each do |allow_transfer| -%>
 		<%= allow_transfer %>;
 <%- end -%>
 	};
 <%- end -%>
-<%- if forward != '' -%>
-	forward <%= forward %>;
+<%- if @forward != '' -%>
+	forward <%= @forward %>;
 <%- end -%>
-<%- if not forwarders.empty? -%>
+<%- if not @forwarders.empty? -%>
 	forwarders {
-<%-   forwarders.each do |forwarder| -%>
+<%-   @forwarders.each do |forwarder| -%>
 		<%= forwarder %>;
 <%-   end -%>
 	};
