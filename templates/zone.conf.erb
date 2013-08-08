@@ -5,7 +5,7 @@ zone "<%= @_domain %>" {
 <%- if @has_zone_file -%>
 <%-   if @dnssec -%>
 	auto-dnssec maintain;
-<%-     if @key_directory == '' -%>
+<%-     if @key_directory and @key_directory != '' -%>
 	key-directory "<%= @cachedir %>/<%= @name %>";
 <%-     else -%>
         key-directory "<%= @key_directory %>";
@@ -15,48 +15,48 @@ zone "<%= @_domain %>" {
 	file "<%= @cachedir %>/<%= @name %>/<%= @_domain %>";
 <%-   end -%>
 	notify <%= @ns_notify ? 'yes' : 'no' %>;
-<%-   if not @also_notify.empty? -%>
+<%-   if @also_notify and @also_notify != '' -%>
 	also-notify {
-<%-     @also_notify.each do |server| -%>
+<%-     Array(@also_notify).each do |server| -%>
 		<%= server %>;
 <%-     end -%>
 	};
 <%-   end -%>
-<%-   if not @allow_notify.empty? -%>
+<%-   if @allow_notify and @allow_notify != '' -%>
 	allow-notify {
-<%-     @allow_notify.each do |server| -%>
+<%-     Array(@allow_notify).each do |server| -%>
 		<%= server %>;
 <%-     end -%>
 	};
 <%-   end -%>
 <%- end -%>
-<%- if not @masters.empty? -%>
+<%- if @masters and @masters != '' -%>
 	masters {
-<%- @masters.each do |master| -%>
+<%-   Array(@masters).each do |master| -%>
 		<%= master %>;
-<%- end -%>
+<%-   end -%>
 	};
 <%- end -%>
-<%- if not @allow_updates.empty? -%>
+<%- if @allow_updates and @allow_updates != '' -%>
 	allow-update {
-<%- @allow_updates.each do |allow_update| -%>
+<%-   Array(@allow_updates).each do |allow_update| -%>
 		<%= allow_update %>;
-<%- end -%>
+<%-   end -%>
 	};
 <%- end -%>
-<%- if not @allow_transfers.empty? -%>
+<%- if @allow_transfers and @allow_transfers != '' -%>
 	allow-transfer {
-<%- @allow_transfers.each do |allow_transfer| -%>
+<%-   Array(@allow_transfers).each do |allow_transfer| -%>
 		<%= allow_transfer %>;
-<%- end -%>
+<%-   end -%>
 	};
 <%- end -%>
 <%- if @forward != '' -%>
 	forward <%= @forward %>;
 <%- end -%>
-<%- if not @forwarders.empty? -%>
+<%- if @forwarders and @forwarders != '' -%>
 	forwarders {
-<%-   @forwarders.each do |forwarder| -%>
+<%-   Array(@forwarders).each do |forwarder| -%>
 		<%= forwarder %>;
 <%-   end -%>
 	};

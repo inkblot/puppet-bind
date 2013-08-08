@@ -1,17 +1,17 @@
 
 view "<%= @name %>" {
-<%- if not @match_clients.empty? -%>
+<%- if @match_clients and @match_clients != '' -%>
 	match-clients {
-<%- @match_clients.each do |match_client| -%>
+<%-   Array(@match_clients).each do |match_client| -%>
 		<%= match_client %>;
-<%- end -%>
+<%-   end -%>
 	};
 <%- end -%>
-<%- if not @match_destinations.empty? -%>
+<%- if @match_destinations and @match_destinations != '' -%>
 	match-destinations {
-<%- @match_destinations.each do |match_destination| -%>
+<%-   Array(@match_destinations).each do |match_destination| -%>
 		<%= match_destination %>;
-<%- end -%>
+<%-   end -%>
 	};
 <%- end -%>
 	recursion <%= @recursion ? 'yes' : 'no' %>;
@@ -19,7 +19,7 @@ view "<%= @name %>" {
 	include "<%= @confdir %>/named.conf.default-zones";
 <%- end -%>
 
-<%- @zones.each do |zone| -%>
+<%- Array(@zones).each do |zone| -%>
 	include "<%= @confdir %>/zones/<%= zone %>.conf";
 <%- end -%>
 };

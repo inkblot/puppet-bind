@@ -5,9 +5,9 @@ include "<%= @confdir %>/views.conf";
 
 options {
 	directory "<%= @cachedir %>";
-<%- if not @forwarders.empty? -%>
+<%- if @forwarders and @forwarders != '' -%>
 	forwarders {
-<%-   @forwarders.each do |forwarder| -%>
+<%-   Array(@forwarders).each do |forwarder| -%>
 		<%= forwarder %>;
 <%-   end -%>
 	};
