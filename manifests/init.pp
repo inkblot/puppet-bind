@@ -1,7 +1,7 @@
 class bind (
 	$confdir    = $bind::params::confdir,
 	$cachedir   = $bind::params::cachedir,
-	$forwarders = [],
+	$forwarders = '',
 	$dnssec     = true,
 	$version    = '',
 ) inherits bind::params {

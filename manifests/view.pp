@@ -1,6 +1,6 @@
 define bind::view (
-	$match_clients      = [ 'any' ],
-	$match_destinations = [],
+	$match_clients      = 'any',
+	$match_destinations = '',
 	$zones              = [],
 	$recursion          = true,
 ) {

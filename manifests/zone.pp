@@ -1,15 +1,15 @@
 define bind::zone (
 	$zone_type,
 	$domain          = '',
-	$masters         = [],
-	$allow_updates   = [],
-	$allow_transfers = [],
+	$masters         = '',
+	$allow_updates   = '',
+	$allow_transfers = '',
 	$dnssec          = false,
 	$key_directory   = '',
 	$ns_notify       = true,
-	$also_notify     = [],
-	$allow_notify    = [],
-	$forwarders      = [],
+	$also_notify     = '',
+	$allow_notify    = '',
+	$forwarders      = '',
 	$forward         = '',
 ) {
 	$cachedir = $bind::cachedir
