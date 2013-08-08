@@ -6,9 +6,9 @@ zone "<%= @_domain %>" {
 <%-   if @dnssec -%>
 	auto-dnssec maintain;
 <%-     if @key_directory and @key_directory != '' -%>
-	key-directory "<%= @cachedir %>/<%= @name %>";
+	key-directory "<%= @key_directory %>";
 <%-     else -%>
-        key-directory "<%= @key_directory %>";
+	key-directory "<%= @cachedir %>/<%= @name %>";
 <%-     end -%>
 	file "<%= @cachedir %>/<%= @name %>/<%= @_domain %>.signed";
 <%-   else -%>
