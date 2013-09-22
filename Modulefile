@@ -7,4 +7,4 @@ summary 'BIND name server'
 description 'A Puppet module to deploy and manage the ISC BIND server'
 project_page 'https://github.com/inkblot/puppet-bind'
 
-dependency 'ripienaar/concat', '>= 0.1.0'
+dependency 'puppetlabs/concat', '>= 1.0.0'
