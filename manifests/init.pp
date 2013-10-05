@@ -31,39 +31,35 @@ class bind (
 		hasstatus  => true,
 		require    => Package[$bind::params::bind_package],
 	}
-	
-	file { $confdir:
-		ensure  => directory,
+
+	File {
+		ensure  => present,
 		owner   => 'root',
-		group   => $bind::params::bind_group,
-		mode    => '2755',
+		group   => $::bind::params::bind_group,
+		mode    => 0644,
+	}
+	
+	file { [ $confdir, "${confdir}/zones" ]:
+		ensure  => directory,
+		mode    => 2755,
 		purge   => true,
+		recurse => true,
 		require => Package[$bind::params::bind_package],
 	}
 
 	file { "${confdir}/named.conf":
-		ensure  => present,
-		owner   => 'root',
-		group   => $bind::params::bind_group,
-		mode    => '0644',
 		content => template('bind/named.conf.erb'),
 		notify  => Service[$bind::params::bind_service],
 		require => Package[$bind::params::bind_package],
 	}
 
-	file { [ "${confdir}/zones", "${confdir}/keys" ]:
+	file { "${confdir}/keys":
 		ensure  => directory,
-		owner   => 'root',
-		group   => $bind::params::bind_group,
-		mode    => '0755',
+		mode    => 0755,
 		require => Package[$bind::params::bind_package],
 	}
 
 	file { "${confdir}/named.conf.local":
-		ensure  => present,
-		owner   => 'root',
-		group   => $bind::params::bind_group,
-		mode    => '0644',
 		replace => false,
 		require => Package[$bind::params::bind_package],
 	}
