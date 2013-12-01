@@ -151,4 +151,34 @@ Another use for views is to control access to the DNS server's services.  In thi
             'example.org',
         ],
     }
-        
+
+###dns_rr
+
+Declares a resource record.  For exampmle:
+
+    dns_rr { 'IN/A/www.example.com':
+        ensure  => present,
+        rrdata  => [ '172.16.32.10', '172.16.32.11' ],
+        ttl     => 86400,
+        zone    => 'example.com',
+        server  => 'ns.example.com',
+        keyname => 'local',
+        hmac    => 'hmac-sha1',
+        secret  => 'aLE5LA=='
+    }
+
+This resource declaration will result in address records with the addresses 172.16.32.10 and 172.16.32.11 (`rrdata`), a TTL of 86400 (`ttl`) in the zone example.com (`zone`).  Any updates necessary to create, update, or destroy these records are authenticated using a TSIG key named 'local' (`keyname`) of the given type (`hmac`) with the given `secret`.
+
+`rrdata` is required, and may be a scalar value or an array of scalar values whose format conform to the type of DNS resource record being created.  `rrdata` is an ensurable property and changes will be reflected in DNS.
+
+`ttl` defaults to 43200 and need not be specified.  `ttl` is an ensurable property and changes will be reflected in DNS.
+
+`zone` is not required, and generally not needed.  It is only necessary to specify the zone to be updated if the target nameserver has the record in multiple zones, e.g. the NS records of a zone whose parent zone is served by the same nameserver.
+
+`server` defaults to "localhost" and need not be specified.  The value may be either a hostname or IP address.
+
+`keyname` defaults to "update" and need not be specified.  This parameter specifies the name of a TSIG key to be used to authenticate the update.  The resource only uses a TSIG key if a `secret` is specified.
+
+`hmac` defaults to "hmac-sha1" and need not be specified.  This parameter specifies the algorithm of the TSIG key to be used to authenticate the update.  The resource only uses a TSIG key if a `secret` is specified.
+
+`secret` is optional.  This parameter specifies the encoded cryptographic secret of the TSIG key to be used to authenticate the update.  If no `secret` is specified, then the update will not use TSIG authentication.
