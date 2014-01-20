@@ -108,7 +108,7 @@ private
   def query
     unless @query
       @query = dig("@#{server}", '-c', rrclass, '+noall', '+answer', name, type).lines.map do |line|
-        linearray = line.chomp.split /\t+/
+        linearray = line.chomp.split /\s+/
         {
           :name    => linearray[0],
           :ttl     => linearray[1],
