@@ -6,8 +6,6 @@ class bind (
 	$version    = '',
 ) inherits bind::params {
 
-	include concat::setup
-
 	$auth_nxdomain = false
 
 	package { $bind::params::bind_package:
