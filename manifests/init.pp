@@ -86,6 +86,12 @@ class bind (
 		content => "# This file is managed by puppet - changes will be lost\n",
 	}
 
+	concat::fragment { "named-keys-rndc":
+		order   => '99',
+		target  => "${confdir}/keys.conf",
+		content => "#include \"${confdir}/rndc.key\"\n",
+	}
+
 	concat::fragment { "named-views-header":
 		order   => '00',
 		target  => "${confdir}/views.conf",
