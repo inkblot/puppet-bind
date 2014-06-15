@@ -14,6 +14,11 @@ class bind (
         ensure => latest,
     }
 
+    file { $::bind::params::bind_files:
+        ensure  => present,
+        require => Package[$bind_package],
+    }
+
     if $dnssec {
         file { '/usr/local/bin/dnssec-init':
             ensure => present,
@@ -53,9 +58,8 @@ class bind (
         require => Package[$bind::params::bind_package],
     }
 
-    file { "${confdir}/keys":
-        ensure  => directory,
-        mode    => 0755,
+    class { 'bind::keydir':
+        keydir => "${confdir}/keys",
         require => Package[$bind::params::bind_package],
     }
 

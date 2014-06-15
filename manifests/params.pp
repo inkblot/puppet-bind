@@ -11,7 +11,9 @@ class bind::params {
             $bind_user    = 'bind'
             $bind_group   = 'bind'
 
-            file { [
+            $nsupdate_package = 'dnsutils'
+
+            $bind_files = [
                 "${confdir}/bind.keys",
                 "${confdir}/db.empty",
                 "${confdir}/db.local",
@@ -22,10 +24,7 @@ class bind::params {
                 "${confdir}/named.conf.default-zones",
                 "${confdir}/rndc.key",
                 "${confdir}/zones.rfc1918",
-                ]:
-                ensure  => present,
-                require => Package[$bind_package],
-            }
+            ]
         }
         default: {
             fail("Operating system is not supported ${::osfamily}")
