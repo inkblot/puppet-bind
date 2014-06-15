@@ -1,11 +1,13 @@
+# ex: syntax=puppet si ts=4 sw=4 et
+
 define bind::acl (
-	$addresses,
+    $addresses,
 ) {
 
-	concat::fragment { "bind-acl-${name}":
-		order   => '10',
-		target  => "${bind::params::confdir}/acls.conf",
-		content => template('bind/acl.erb'),
-	}
+    concat::fragment { "bind-acl-${name}":
+        order   => '10',
+        target  => "${bind::params::confdir}/acls.conf",
+        content => template('bind/acl.erb'),
+    }
 
 }
