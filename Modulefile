@@ -1,5 +1,5 @@
 name	'inkblot/bind'
-version '2.0.4'
+version '2.1.0'
 source	'git://github.com/inkblot/puppet-bind'
 author	'inkblot'
 license	'Apache 2.0'
