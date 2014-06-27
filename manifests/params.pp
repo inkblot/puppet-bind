@@ -10,6 +10,7 @@ class bind::params {
             $cachedir     = '/var/cache/bind'
             $bind_user    = 'bind'
             $bind_group   = 'bind'
+            $bind_rndc    = true
 
             $nsupdate_package = 'dnsutils'
 

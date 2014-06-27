@@ -1,16 +1,17 @@
 # ex: syntax=puppet si ts=4 sw=4 et
 
 class bind (
-    $confdir    = $bind::params::confdir,
-    $cachedir   = $bind::params::cachedir,
+    $confdir    = $::bind::params::confdir,
+    $cachedir   = $::bind::params::cachedir,
     $forwarders = '',
     $dnssec     = true,
     $version    = '',
+    $rndc       = $::bind::params::bind_rndc,
 ) inherits bind::params {
 
     $auth_nxdomain = false
 
-    package { $bind::params::bind_package:
+    package { $::bind::params::bind_package:
         ensure => latest,
     }
 
@@ -29,12 +30,12 @@ class bind (
         }
     }
 
-    service { $bind::params::bind_service:
+    service { $::bind::params::bind_service:
         ensure     => running,
         enable     => true,
         hasrestart => true,
         hasstatus  => true,
-        require    => Package[$bind::params::bind_package],
+        require    => Package[$::bind::params::bind_package],
     }
 
     File {
@@ -49,23 +50,23 @@ class bind (
         mode    => 2755,
         purge   => true,
         recurse => true,
-        require => Package[$bind::params::bind_package],
+        require => Package[$::bind::params::bind_package],
     }
 
     file { "${confdir}/named.conf":
         content => template('bind/named.conf.erb'),
-        notify  => Service[$bind::params::bind_service],
-        require => Package[$bind::params::bind_package],
+        notify  => Service[$::bind::params::bind_service],
+        require => Package[$::bind::params::bind_package],
     }
 
     class { 'bind::keydir':
         keydir => "${confdir}/keys",
-        require => Package[$bind::params::bind_package],
+        require => Package[$::bind::params::bind_package],
     }
 
     file { "${confdir}/named.conf.local":
         replace => false,
-        require => Package[$bind::params::bind_package],
+        require => Package[$::bind::params::bind_package],
     }
 
     concat { [
@@ -74,10 +75,10 @@ class bind (
         "${confdir}/views.conf",
         ]:
         owner   => 'root',
-        group   => $bind::params::bind_group,
+        group   => $::bind::params::bind_group,
         mode    => '0644',
-        notify  => Service[$bind::params::bind_service],
-        require => Package[$bind::params::bind_package],
+        notify  => Service[$::bind::params::bind_service],
+        require => Package[$::bind::params::bind_package],
     }
 
     concat::fragment { "named-acls-header":
