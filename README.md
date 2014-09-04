@@ -182,3 +182,28 @@ This resource declaration will result in address records with the addresses 172.
 `hmac` defaults to "hmac-sha1" and need not be specified.  This parameter specifies the algorithm of the TSIG key to be used to authenticate the update.  The resource only uses a TSIG key if a `secret` is specified.
 
 `secret` is optional.  This parameter specifies the encoded cryptographic secret of the TSIG key to be used to authenticate the update.  If no `secret` is specified, then the update will not use TSIG authentication.
+
+####dns_rr examples
+
+Mail exchangers for a domain. Declares three mail exchangers for the domain
+example.com, which are mx.example.com, mx2.example.com, and mx.mail-host.ex
+with priorities 10, 20, and 30, respectively:
+
+    dns_rr { 'IN/MX/example.com':
+        rrdata => [ '10 mx', '20 mx2', '20 mx.mail-host.ex.', ],
+    }
+
+Nameserver records for a zone. Declares three nameserver records for the zone
+example.com, which are ns1.example.com, ns2.example.com, and ns.dns-host.ex:
+
+    dns_rr { 'IN/NS/example.com':
+        rrdata => [ 'ns1', 'ns2', 'ns.dns-host.ex.' ],
+    }
+
+Service locators records for a domain. Declares a service locator for SIP over
+UDP to the domain example.com, in which the service located at port 5060 of
+inbound.sip-host.ex is given priority 5 and weight 100.
+
+    dns_rr { 'IN/SRV/_sip._udp.example.com':
+        rrdata => [ '5 100 5060 inbound.sip-host.ex.', ],
+    }
