@@ -107,7 +107,12 @@ private
 
   def query
     unless @query
-      @query = dig("@#{server}", '+noall', '+answer', name, type, '-c', rrclass).lines.map do |line|
+      if keyed?
+        dig_text = dig("@#{server}", '+noall', '+answer', name, type, '-c', rrclass, '-y', tsig_param)
+      else
+        dig_text = dig("@#{server}", '+noall', '+answer', name, type, '-c', rrclass)
+      end
+      @query = dig_text.lines.map do |line|
         linearray = line.chomp.split(/\s+/, 5)
         {
           :name    => linearray[0],
