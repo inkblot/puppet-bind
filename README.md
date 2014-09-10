@@ -152,13 +152,15 @@ Another use for views is to control access to the DNS server's services.  In thi
         ],
     }
 
-###dns_rr
+###resource_record
 
 Declares a resource record.  For exampmle:
 
-    dns_rr { 'IN/A/www.example.com':
+    resource_record { 'www.example.com address':
         ensure  => present,
-        rrdata  => [ '172.16.32.10', '172.16.32.11' ],
+        record  => 'www.example.com',
+        type    => 'A',
+        data    => [ '172.16.32.10', '172.16.32.11' ],
         ttl     => 86400,
         zone    => 'example.com',
         server  => 'ns.example.com',
@@ -167,9 +169,17 @@ Declares a resource record.  For exampmle:
         secret  => 'aLE5LA=='
     }
 
-This resource declaration will result in address records with the addresses 172.16.32.10 and 172.16.32.11 (`rrdata`), a TTL of 86400 (`ttl`) in the zone example.com (`zone`).  Any updates necessary to create, update, or destroy these records are authenticated using a TSIG key named 'local' (`keyname`) of the given type (`hmac`) with the given `secret`.
+This resource declaration will result in address records with the addresses 172.16.32.10 and 172.16.32.11 (`data`), a TTL of 86400 (`ttl`) in the zone example.com (`zone`).  Any updates necessary to create, update, or destroy these records are authenticated using a TSIG key named 'local' (`keyname`) of the given type (`hmac`) with the given `secret`.
 
-`rrdata` is required, and may be a scalar value or an array of scalar values whose format conform to the type of DNS resource record being created.  `rrdata` is an ensurable property and changes will be reflected in DNS.
+No semantic information is communicated in the resource title. It is strictly for disambiguation of resources within Puppet.
+
+`record` is required, and is the fully qualified record to be managed.
+
+`type` is required, and is the record type. It must be one of: `A` `AAAA` `CNAME` `NS` `MX` `SPF` `SRV` `NAPTR` `PTR` or `TXT`. Other DNS record types are not currently supported.
+
+`rrclass` is the class of the record. The default value is `IN` and allowed values are `IN`, `CH`, and `HS`.
+
+`data` is required, and may be a scalar value or an array of scalar values whose format conform to the type of DNS resource record being created.  `data` is an ensurable property and changes will be reflected in DNS.
 
 `ttl` defaults to 43200 and need not be specified.  `ttl` is an ensurable property and changes will be reflected in DNS.
 
@@ -183,27 +193,33 @@ This resource declaration will result in address records with the addresses 172.
 
 `secret` is optional.  This parameter specifies the encoded cryptographic secret of the TSIG key to be used to authenticate the update.  If no `secret` is specified, then the update will not use TSIG authentication.
 
-####dns_rr examples
+####resource_record examples
 
 Mail exchangers for a domain. Declares three mail exchangers for the domain
 `example.com`, which are `mx.example.com`, `mx2.example.com`, and `mx.mail-host.ex`
 with priorities `10`, `20`, and `30`, respectively:
 
-    dns_rr { 'IN/MX/example.com':
-        rrdata => [ '10 mx', '20 mx2', '20 mx.mail-host.ex.', ],
+    resource_record { 'example.com mail exchangers':
+        record => 'example.com',
+        type   => 'MX',
+        data   => [ '10 mx', '20 mx2', '20 mx.mail-host.ex.', ],
     }
 
 Nameserver records for a zone. Declares three nameserver records for the zone
 `example.com`, which are `ns1.example.com`, `ns2.example.com`, and `ns.dns-host.ex`:
 
-    dns_rr { 'IN/NS/example.com':
-        rrdata => [ 'ns1', 'ns2', 'ns.dns-host.ex.' ],
+    resource_record { 'example.com name servers':
+        record => 'example.com',
+        type   => 'NS',
+        data   => [ 'ns1', 'ns2', 'ns.dns-host.ex.' ],
     }
 
 Service locators records for a domain. Declares a service locator for SIP over
 UDP to the domain `example.com`, in which the service located at port `5060` of
 `inbound.sip-host.ex` is given priority `5` and weight `100`.
 
-    dns_rr { 'IN/SRV/_sip._udp.example.com':
-        rrdata => [ '5 100 5060 inbound.sip-host.ex.', ],
+    resource_record { 'example.com SIP service locator':
+        record => '_sip._udp.example.com',
+        type   => 'SRV',
+        data   => [ '5 100 5060 inbound.sip-host.ex.', ],
     }
