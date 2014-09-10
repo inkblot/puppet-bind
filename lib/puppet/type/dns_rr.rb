@@ -10,14 +10,14 @@ Puppet::Type.newtype(:dns_rr) do
       if (value =~ /^([A-Z]+)\/([A-Z]+)\/[a-zA-Z0-9._-]+$/)
         rrclass = $1
         if ( !%w(IN CH HS).include? rrclass )
-          raise ArgumentError, "Invalid resource record class: %s" % rrdata
+          Util::Errors.fail "Invalid resource record class: %s" % rrdata
         end
         type = $2
-        if ( !%w(A AAAA CNAME NS MX SRV NAPTR PTR).include? type)
-          raise ArgumentError, "Invalid resource record type: %s" % type
+        if ( !%w(A AAAA CNAME NS MX SPF SRV NAPTR PTR TXT).include? type)
+          Util::Errors.fail "Invalid resource record type: %s" % type
         end
       else
-        raise ArgumentError, "%s must be of the form Class/Type/Name" % value
+        Util::Errors.fail "%s must be of the form Class/Type/Name" % value
       end
     end
   end
@@ -33,6 +33,7 @@ Puppet::Type.newtype(:dns_rr) do
 
   newproperty(:rrdata, :array_matching => :all) do
     desc 'The resource record\'s data'
+    isrequired
 
     def insync?(is)
       Array(is).sort == Array(@should).sort
