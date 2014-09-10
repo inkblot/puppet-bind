@@ -1,6 +1,6 @@
 require 'puppet_bind/provider/nsupdate'
 
-Puppet::Type.type(:dns_rr).provide(:nsupdate) do
+Puppet::Type.type(:resource_record).provide(:nsupdate) do
 
   include PuppetBind::Provider::NsUpdate
 
@@ -11,34 +11,34 @@ Puppet::Type.type(:dns_rr).provide(:nsupdate) do
     @properties = {}
   end
 
-  def rrdata
+  def data
     query.map { |record| record[:rrdata] }.sort
   end
 
-  def rrdata=(rrdata)
-    @properties[:rrdata] = rrdata
+  def data=(data)
+    @properties[:rrdata] = data
   end
 
 private
 
-  def newdata
-    resource[:rrdata]
+  def rrdata
+    data
   end
 
-  def specarray
-    resource[:spec].split('/')
+  def newdata
+    resource[:data]
   end
 
   def rrclass
-    specarray[0]
+    resource[:rrclass]
   end
 
   def type
-    specarray[1]
+    resource[:type]
   end
 
   def name
-    specarray[2]
+    resource[:record]
   end
 
 end
