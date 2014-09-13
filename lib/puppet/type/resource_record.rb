@@ -24,7 +24,7 @@ Puppet::Type.newtype(:resource_record) do
     isrequired
 
     validate do |value|
-      Util::Errors.fail "Invalid value for record: #{value}" unless value =~ /^([a-zA-Z0-9_-]+\.)*[a-zA-Z0-9_-]+$/
+      Util::Errors.fail "Invalid value for record: #{value}" unless value =~ /^(\*\.)?([a-zA-Z0-9_-]+\.)*[a-zA-Z0-9_-]+$/
     end
   end
 
