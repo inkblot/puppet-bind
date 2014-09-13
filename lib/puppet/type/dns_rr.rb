@@ -7,7 +7,7 @@ Puppet::Type.newtype(:dns_rr) do
     desc "Class/Type/Name for the resource record"
 
     validate do |value|
-      if (value =~ /^([A-Z]+)\/([A-Z]+)\/[a-zA-Z0-9._-]+$/)
+      if (value =~ /^([A-Z]+)\/([A-Z]+)\/((\*\.)?([a-zA-Z0-9_-]+\.)*[a-zA-Z0-9_-]+)$/)
         rrclass = $1
         if ( !%w(IN CH HS).include? rrclass )
           Util::Errors.fail "Invalid resource record class: %s" % rrdata
