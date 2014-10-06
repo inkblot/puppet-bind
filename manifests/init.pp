@@ -7,6 +7,8 @@ class bind (
     $dnssec     = true,
     $version    = '',
     $rndc       = $::bind::params::bind_rndc,
+    $options    = [ ],
+    $template   = 'bind/named.conf.erb',
 ) inherits bind::params {
 
     $auth_nxdomain = false
@@ -44,7 +46,7 @@ class bind (
         group   => $::bind::params::bind_group,
         mode    => 0644,
     }
-    
+
     file { [ $confdir, "${confdir}/zones" ]:
         ensure  => directory,
         mode    => 2755,
@@ -54,7 +56,7 @@ class bind (
     }
 
     file { "${confdir}/named.conf":
-        content => template('bind/named.conf.erb'),
+        content => template($template),
         notify  => Service[$::bind::params::bind_service],
         require => Package[$::bind::params::bind_package],
     }
