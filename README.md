@@ -75,6 +75,23 @@ Declares an acl in the server's configuration.  The acl's name is the title of t
         addresses => '192.0.2.4/32',
     }
 
+    class { 'bind':
+        options => [
+            'allow-recursion { trusted; };',
+            'allow-query { any; };',
+            'allow-query-cache { trusted; };',
+        ]
+    }
+
+    bind::acl { 'trusted':
+        addresses => [
+            '10.0.0.0/8',
+            '172.16.0.0/12',
+            '192.168.0.0/16',
+        ]
+    }
+
+
 ###bind::zone
 
 Declares a zone in the server's configuration.  The corresponding zone file will be created if it is absent, but any existing file will not be overwritten.  Only the `zone_type` is required.  If `domain` is unspecified, the title of the `bind::zone` declaration will be used as the domain.

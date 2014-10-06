@@ -27,6 +27,9 @@ options {
 <%- if @version != '' -%>
 	version "<%= @version %>";
 <%- end -%>
+<% @options.each do |value| -%>
+<%=		value %>
+<% end -%>
 };
 
 include "<%= @confdir %>/named.conf.local";
