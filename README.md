@@ -102,7 +102,9 @@ A master zone with DNSSec enabled which allows updates using a TSIG key and zone
 	key_directory   => '/var/cache/bind/example.com',
     }
 
-A master zone which is initialized with a pre-existing zone file:
+A master zone which is initialized with a pre-existing zone file (for example,
+to migrate an existing zone to a bind-module controlled server or to recover
+from a backup):
 
     bind::zone { 'example.com':
         zone_type => 'master',
