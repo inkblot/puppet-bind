@@ -102,6 +102,13 @@ A master zone with DNSSec enabled which allows updates using a TSIG key and zone
 	key_directory   => '/var/cache/bind/example.com',
     }
 
+A master zone which is initialized with a pre-existing zone file:
+
+    bind::zone { 'example.com':
+        zone_type => 'master',
+        source    => 'puppet:///backups/dns/example.com',
+    }
+
 A slave zone which allows notifications from servers matched by IP:
 
     bind::zone { 'example.net':
