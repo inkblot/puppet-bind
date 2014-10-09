@@ -13,6 +13,7 @@ define bind::zone (
     $allow_notify    = '',
     $forwarders      = '',
     $forward         = '',
+    $source          = '',
 ) {
     $cachedir = $bind::cachedir
 
@@ -31,6 +32,12 @@ define bind::zone (
     }
 
     if $has_zone_file {
+        if $zone_type == 'master' and  $source != '' {
+            $_source = $source
+        } else {
+            $_source = 'puppet:///modules/bind/db.empty'
+        }
+
         file { "${cachedir}/${name}":
             ensure  => directory,
             owner   => $bind::params::bind_user,
@@ -45,7 +52,7 @@ define bind::zone (
             group   => $bind::params::bind_group,
             mode    => '0644',
             replace => false,
-            source  => 'puppet:///modules/bind/db.empty',
+            source  => $_source,
             audit   => [ content ],
         }
 
