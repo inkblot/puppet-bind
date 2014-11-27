@@ -43,6 +43,7 @@ class bind (
         owner   => 'root',
         group   => $::bind::params::bind_group,
         mode    => 0644,
+        require => Package[$::bind::params::bind_package],
     }
     
     file { [ $confdir, "${confdir}/zones" ]:
