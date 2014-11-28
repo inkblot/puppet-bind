@@ -11,13 +11,22 @@ class bind (
 
     $auth_nxdomain = false
 
-    package { $::bind::params::bind_package:
+    File {
+        ensure  => present,
+        owner   => 'root',
+        group   => $::bind::params::bind_group,
+        mode    => 0644,
+        require => Package['bind'],
+        notify  => Service['bind'],
+    }
+
+    package { 'bind':
+        name   => $::bind::params::bind_package,
         ensure => latest,
     }
 
     file { $::bind::params::bind_files:
         ensure  => present,
-        require => Package[$bind_package],
     }
 
     if $dnssec {
@@ -30,43 +39,23 @@ class bind (
         }
     }
 
-    service { $::bind::params::bind_service:
-        ensure     => running,
-        enable     => true,
-        hasrestart => true,
-        hasstatus  => true,
-        require    => Package[$::bind::params::bind_package],
-    }
-
-    File {
-        ensure  => present,
-        owner   => 'root',
-        group   => $::bind::params::bind_group,
-        mode    => 0644,
-    }
-    
     file { [ $confdir, "${confdir}/zones" ]:
         ensure  => directory,
         mode    => 2755,
         purge   => true,
         recurse => true,
-        require => Package[$::bind::params::bind_package],
     }
 
     file { "${confdir}/named.conf":
         content => template('bind/named.conf.erb'),
-        notify  => Service[$::bind::params::bind_service],
-        require => Package[$::bind::params::bind_package],
     }
 
     class { 'bind::keydir':
         keydir => "${confdir}/keys",
-        require => Package[$::bind::params::bind_package],
     }
 
     file { "${confdir}/named.conf.local":
         replace => false,
-        require => Package[$::bind::params::bind_package],
     }
 
     concat { [
@@ -77,8 +66,8 @@ class bind (
         owner   => 'root',
         group   => $::bind::params::bind_group,
         mode    => '0644',
-        notify  => Service[$::bind::params::bind_service],
-        require => Package[$::bind::params::bind_package],
+        require => Package['bind'],
+        notify  => Service['bind'],
     }
 
     concat::fragment { "named-acls-header":
@@ -103,5 +92,13 @@ class bind (
         order   => '00',
         target  => "${confdir}/views.conf",
         content => "# This file is managed by puppet - changes will be lost\n",
+    }
+
+    service { 'bind':
+        name       => $::bind::params::bind_service,
+        ensure     => running,
+        enable     => true,
+        hasrestart => true,
+        hasstatus  => true,
     }
 }
