@@ -16,18 +16,20 @@ view "<%= @name %>" {
 <%- end -%>
 	recursion <%= @recursion ? 'yes' : 'no' %>;
 <%- if @recursion -%>
-<%-   if @match_clients and @match_clients != '' -%>
+<%-   if @recursion_match_clients and @recursion_match_clients != '' -%>
 	allow-recursion {
-<%-     Array(@match_clients).each do |match_client| -%>
+<%-     Array(@recursion_match_clients).each do |match_client| -%>
 		<%= match_client %>;
 <%-     end -%>
-<%-   elsif @match_destinations and @match_destinations != '' -%>
+	};
+<%-   end -%>
+<%-   if @recursion_match_destinations and @recursion_match_destinations != '' -%>
 	allow-recursion-on {
-<%-     Array(@match_destinations).each do |match_destination| -%>
+<%-     Array(@recursion_match_destinations).each do |match_destination| -%>
 		<%= match_destination %>;
 <%-     end -%>
-<%-   end -%>
 	};
+<%-   end -%>
 <%- end -%>
 <%- if scope.lookupvar('osfamily') == 'Debian' -%>
 	include "<%= @confdir %>/named.conf.default-zones";
