@@ -14,6 +14,8 @@ define bind::zone (
     $forwarders      = '',
     $forward         = '',
     $source          = '',
+    $soa_host        = 'localhost.',
+    $soa_mail        = 'root.localhost.',
 ) {
     $cachedir = $bind::cachedir
 
@@ -33,9 +35,25 @@ define bind::zone (
 
     if $has_zone_file {
         if $zone_type == 'master' and  $source != '' {
-            $_source = $source
+            file { "${cachedir}/${name}/${_domain}":
+                ensure  => present,
+                owner   => $bind::params::bind_user,
+                group   => $bind::params::bind_group,
+                mode    => '0644',
+                replace => false,
+                source  => $source,
+                audit   => [ content ],
+          }
         } else {
-            $_source = 'puppet:///modules/bind/db.empty'
+            file { "${cachedir}/${name}/${_domain}":
+                ensure  => present,
+                owner   => $bind::params::bind_user,
+                group   => $bind::params::bind_group,
+                mode    => '0644',
+                replace => false,
+                content => template( 'bind/db.empty.erb' ),
+                audit   => [ content ],
+            }
         }
 
         file { "${cachedir}/${name}":
