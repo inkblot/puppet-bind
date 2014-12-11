@@ -4,7 +4,7 @@ class bind::keydir (
     $keydir = "${::bind::params::confdir}/keys",
 ) {
     file { $keydir:
-        ensure  => directory,
-        mode    => 0755,
+        ensure => directory,
+        mode   => 0755,
     }
 }

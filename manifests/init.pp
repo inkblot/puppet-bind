@@ -15,14 +15,14 @@ class bind (
         ensure  => present,
         owner   => 'root',
         group   => $::bind::params::bind_group,
-        mode    => 0644,
+        mode    => '0644',
         require => Package['bind'],
         notify  => Service['bind'],
     }
 
     package { 'bind':
-        name   => $::bind::params::bind_package,
         ensure => latest,
+        name   => $::bind::params::bind_package,
     }
 
     file { $::bind::params::bind_files:
@@ -41,7 +41,7 @@ class bind (
 
     file { [ $confdir, "${confdir}/zones" ]:
         ensure  => directory,
-        mode    => 2755,
+        mode    => '2755',
         purge   => true,
         recurse => true,
     }
@@ -70,33 +70,33 @@ class bind (
         notify  => Service['bind'],
     }
 
-    concat::fragment { "named-acls-header":
+    concat::fragment { 'named-acls-header':
         order   => '00',
         target  => "${confdir}/acls.conf",
         content => "# This file is managed by puppet - changes will be lost\n",
     }
 
-    concat::fragment { "named-keys-header":
+    concat::fragment { 'named-keys-header':
         order   => '00',
         target  => "${confdir}/keys.conf",
         content => "# This file is managed by puppet - changes will be lost\n",
     }
 
-    concat::fragment { "named-keys-rndc":
+    concat::fragment { 'named-keys-rndc':
         order   => '99',
         target  => "${confdir}/keys.conf",
         content => "#include \"${confdir}/rndc.key\"\n",
     }
 
-    concat::fragment { "named-views-header":
+    concat::fragment { 'named-views-header':
         order   => '00',
         target  => "${confdir}/views.conf",
         content => "# This file is managed by puppet - changes will be lost\n",
     }
 
     service { 'bind':
-        name       => $::bind::params::bind_service,
         ensure     => running,
+        name       => $::bind::params::bind_service,
         enable     => true,
         hasrestart => true,
         hasstatus  => true,

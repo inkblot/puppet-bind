@@ -2,9 +2,9 @@
 
 define bind::key (
     $algorithm = 'hmac-sha256',
-    $secret,
     $owner     = 'root',
     $group     = $bind::params::bind_group,
+    $secret,
 ) {
     $keydir = $::bind::keydir::keydir
 

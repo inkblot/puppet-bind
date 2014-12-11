@@ -5,8 +5,8 @@ class bind::updater (
     $keydir           = "${::bind::params::confdir}/keys",
 ) inherits bind::params {
     package {'nsupdate':
-        name => $nsupdate_package,
         ensure => present,
+        name   => $nsupdate_package,
     }
 
     file { $::bind::params::confdir:

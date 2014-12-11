@@ -1,7 +1,6 @@
 # ex: syntax=puppet si ts=4 sw=4 et
 
 define bind::zone (
-    $zone_type,
     $domain          = '',
     $masters         = '',
     $allow_updates   = '',
@@ -14,6 +13,7 @@ define bind::zone (
     $forwarders      = '',
     $forward         = '',
     $source          = '',
+    $zone_type,
 ) {
     $cachedir = $bind::cachedir
 
@@ -25,14 +25,14 @@ define bind::zone (
 
     $has_zone_file = $zone_type ? {
         'master' => true,
-        'slave' => true,
-        'hint' => true,
-        'stub' => true,
-        default => false,
+        'slave'  => true,
+        'hint'   => true,
+        'stub'   => true,
+        default  => false,
     }
 
     if $has_zone_file {
-        if $zone_type == 'master' and  $source != '' {
+        if $zone_type == 'master' and $source != '' {
             $_source = $source
         } else {
             $_source = 'puppet:///modules/bind/db.empty'
@@ -58,12 +58,16 @@ define bind::zone (
 
         if $dnssec {
             exec { "dnssec-keygen-${name}":
-                command => "/usr/local/bin/dnssec-init '${cachedir}' '${name}' '${_domain}' '${key_directory}'",
+                command => "/usr/local/bin/dnssec-init '${cachedir}' '${name}'\
+                    '${_domain}' '${key_directory}'",
                 cwd     => $cachedir,
                 user    => $bind::params::bind_user,
                 creates => "${cachedir}/${name}/${_domain}.signed",
                 timeout => 0, # crypto is hard
-                require => [ File['/usr/local/bin/dnssec-init'], File["${cachedir}/${name}/${_domain}"] ],
+                require => [
+                    File['/usr/local/bin/dnssec-init'],
+                    File["${cachedir}/${name}/${_domain}"]
+                ],
             }
 
             file { "${cachedir}/${name}/${_domain}.signed":
