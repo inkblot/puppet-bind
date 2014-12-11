@@ -1,6 +1,8 @@
 Puppet::Type.newtype(:dns_rr) do
   @doc = "A Resource Record in the DNS"
 
+  Puppet.warning('The dns_rr resource type is deprecated. Use resource_record instead')
+
   ensurable
 
   newparam(:spec, :namevar => true) do
