@@ -1,0 +1,7 @@
+rvm: 1.9.3
+notifications:
+  email:
+    - 'inkblot@movealong.org'
+env:
+  - PUPPET_VERSION=3.3.0
+  - PUPPET_VERSION=3.4.0
