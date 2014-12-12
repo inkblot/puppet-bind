@@ -5,6 +5,6 @@ class bind::keydir (
 ) {
     file { $keydir:
         ensure => directory,
-        mode   => 0755,
+        mode   => '0755',
     }
 }

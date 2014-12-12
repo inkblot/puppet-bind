@@ -1,6 +1,7 @@
 # ex: syntax=puppet si ts=4 sw=4 et
 
 define bind::zone (
+    $zone_type,
     $domain          = '',
     $masters         = '',
     $allow_updates   = '',
@@ -13,7 +14,6 @@ define bind::zone (
     $forwarders      = '',
     $forward         = '',
     $source          = '',
-    $zone_type,
 ) {
     $cachedir = $bind::cachedir
 

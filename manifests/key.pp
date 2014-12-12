@@ -1,10 +1,10 @@
 # ex: syntax=puppet si ts=4 sw=4 et
 
 define bind::key (
+    $secret,
     $algorithm = 'hmac-sha256',
     $owner     = 'root',
     $group     = $bind::params::bind_group,
-    $secret,
 ) {
     $keydir = $::bind::keydir::keydir
 

@@ -7,7 +7,8 @@ class bind (
     $dnssec     = true,
     $version    = '',
     $rndc       = $::bind::params::bind_rndc,
-) inherits bind::params {
+) {
+    include params
 
     $auth_nxdomain = false
 
