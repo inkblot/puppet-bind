@@ -7,7 +7,8 @@ PuppetLint::RakeTask.new :lint do |config|
 	config.disable_checks = [
 		'80chars',
 		'class_parameter_defaults',
-		'documentation'
+		'documentation',
+		'autoloader_layout'
 	]
 end
 
