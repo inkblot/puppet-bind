@@ -1,10 +1,6 @@
 # ex: syntax=ruby ts=2 ts=2 si et
 require 'puppet-lint/tasks/puppet-lint'
-require 'rspec/core/rake_task'
-
-RSpec::Core::RakeTask.new :spec do |t|
-  t.pattern = 'spec/*/*_spec.rb'
-end
+require 'puppetlabs_spec_helper/rake_tasks'
 
 Rake::Task[:lint].clear
 PuppetLint::RakeTask.new :lint do |config|
