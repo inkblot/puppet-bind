@@ -4,8 +4,19 @@ rvm:
   - 2.0.0
   - 2.1.1
 gemfile:
-  - gemfiles/Gemfile.puppet-3.3.0
-  - gemfiles/Gemfile.puppet-3.4.0
+  - gemfiles/Gemfile.puppet-3.3
+  - gemfiles/Gemfile.puppet-3.4
+  - gemfiles/Gemfile.puppet-3.5
+  - gemfiles/Gemfile.puppet-3.6
+  - gemfiles/Gemfile.puppet-3.7
 notifications:
   email:
     - 'inkblot@movealong.org'
+matrix:
+  exclude:
+    - rvm: 2.1.1
+      gemfile: gemfiles/Gemfile.puppet-3.3
+    - rvm: 2.1.1
+      gemfile: gemfiles/Gemfile.puppet-3.4
+  allow_failures:
+    - rvm: 2.1.1
