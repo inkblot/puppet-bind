@@ -1,6 +1,8 @@
 bind
 ====
 
+[![Build Status](https://secure.travis-ci.org/inkblot/puppet-bind.png)](http://travis-ci.org/inkblot/puppet-bind)
+
 ## Description
 Control BIND name servers and zones
 =======
