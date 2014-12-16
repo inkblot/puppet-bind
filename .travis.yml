@@ -3,12 +3,14 @@ rvm:
   - 1.9.3
   - 2.0.0
   - 2.1.1
-gemfile:
-  - gemfiles/Gemfile.puppet-3.3
-  - gemfiles/Gemfile.puppet-3.4
-  - gemfiles/Gemfile.puppet-3.5
-  - gemfiles/Gemfile.puppet-3.6
-  - gemfiles/Gemfile.puppet-3.7
+env:
+  - PUPPET_VERSION=3.3.0
+  - PUPPET_VERSION=3.4.0
+  - PUPPET_VERSION=3.5.0
+  - PUPPET_VERSION=3.6.0
+  - PUPPET_VERSION=3.7.0
+gemfile: Gemfile.travis
+before_install: 'cp Gemfile Gemfile.travis'
 notifications:
   email:
     - 'inkblot@movealong.org'
