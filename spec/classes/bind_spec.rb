@@ -7,8 +7,16 @@ describe 'bind' do
   context 'on Debian-derived systems' do
     let(:facts) { super().merge({ :osfamily => 'Debian' }) }
     
-    it { should contain_package('bind').with({
+    it {
+       should contain_package('bind').with({
         'ensure' => 'latest',
+        'name' => 'bind9'
+      })
+    }
+
+    it {
+      should contain_service('bind').with({
+        'ensure' => 'running',
         'name' => 'bind9'
       })
     }
