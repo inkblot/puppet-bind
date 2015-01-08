@@ -4,6 +4,7 @@ define bind::zone (
     $zone_type,
     $domain          = '',
     $masters         = '',
+    $transfer_source = '',
     $allow_updates   = '',
     $allow_transfers = '',
     $dnssec          = false,
