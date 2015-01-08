@@ -20,6 +20,6 @@
   ],
   "dependencies": [
     { "name": "puppetlabs/concat", "version_requirement": ">=1.0.0 <2.0.0" },
-    { "name": "ripienaar/module_data", "version_requirement": ">=0.0.4" }
+    { "name": "ripienaar/module_data" }
   ]
 }
