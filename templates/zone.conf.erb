@@ -38,7 +38,7 @@ zone "<%= @_domain %>" {
 	};
 <%- end -%>
 <%- if @transfer_source and @transfer_source != ''-%>
-	transfer-source <%= @transfer_source %>
+	transfer-source <%= @transfer_source %>;
 <%- end -%>
 <%- if @allow_updates and @allow_updates != '' -%>
 	allow-update {
