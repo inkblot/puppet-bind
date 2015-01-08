@@ -1,0 +1,13 @@
+---
+bind::params::supported: true
+bind::params::bind_user: 'bind'
+bind::params::bind_group: 'bind'
+bind::params::bind_package: 'bind9'
+bind::params::bind_service: 'bind9'
+bind::params::nsupdate_package: 'dnsutils'
+
+bind::confdir: '/etc/bind'
+bind::cachedir: '/var/cache/bind'
+bind::rndc: true
+
+bind::updater::keydir: '/etc/bind/keys'

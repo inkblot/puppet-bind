@@ -8,11 +8,11 @@ define bind::view (
     $recursion_match_clients      = 'any',
     $recursion_match_destinations = '',
 ) {
-    $confdir = $bind::params::confdir
+    $confdir = $::bind::confdir
 
     concat::fragment { "bind-view-${name}":
         order   => '10',
-        target  => "${bind::params::confdir}/views.conf",
+        target  => "${::bind::confdir}/views.conf",
         content => template('bind/view.erb'),
     }
 }

@@ -1,9 +1,9 @@
----
 fixtures:
   forge_modules:
     concat:
       repo: "puppetlabs/concat"
       ref: "1.0.0"
     stdlib: "puppetlabs/stdlib"
+    module_data: "ripienaar/module_data"
   symlinks:
     bind: "#{source_dir}"

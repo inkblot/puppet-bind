@@ -3,28 +3,22 @@ require 'spec_helper'
 
 describe 'bind' do
   let(:facts) { { :concat_basedir => '/wtf' } }
-  let(:params) { { :confdir => '_CONFDIR_' } }
 
+  it {
+    should contain_package('bind').with({
+      'ensure' => 'latest',
+      'name' => 'bind9'
+    })
+  }
 
-  context 'on Debian-derived systems' do
-    let(:facts) { super().merge({ :osfamily => 'Debian' }) }
-    
-    it {
-      should contain_package('bind').with({
-        'ensure' => 'latest',
-        'name' => 'bind9'
-      })
-    }
+  it { should contain_file('_CONFDIR_/named.conf').that_requires('Package[bind]') }
+  it { should contain_file('_CONFDIR_/named.conf').that_notifies('Service[bind]') }
 
-    it { should contain_file('_CONFDIR_/named.conf').that_requires('Package[bind]') }
-    it { should contain_file('_CONFDIR_/named.conf').that_notifies('Service[bind]') }
-
-    it {
-      should contain_service('bind').with({
-        'ensure' => 'running',
-        'name' => 'bind9'
-      })
-    }
-  end
+  it {
+    should contain_service('bind').with({
+      'ensure' => 'running',
+      'name' => 'bind9'
+    })
+  }
 
 end

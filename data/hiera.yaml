@@ -1,0 +1,6 @@
+# ex: si ts=2 sw=2 et
+:hierarchy:
+  - osfamily/%{::osfamily}/%{::operatingsystem}/%{lsbdistrelease}
+  - osfamily/%{::osfamily}/%{::operatingsystem}
+  - osfamily/%{::osfamily}
+  - common

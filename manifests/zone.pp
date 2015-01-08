@@ -43,7 +43,7 @@ define bind::zone (
             owner   => $bind::params::bind_user,
             group   => $bind::params::bind_group,
             mode    => '0755',
-            require => Package[$bind::params::bind_package],
+            require => Package['bind'],
         }
 
         file { "${cachedir}/${name}/${_domain}":
@@ -85,8 +85,8 @@ define bind::zone (
         group   => $bind::params::bind_group,
         mode    => '0644',
         content => template('bind/zone.conf.erb'),
-        notify  => Service[$bind::params::bind_service],
-        require => Package[$bind::params::bind_package],
+        notify  => Service['bind'],
+        require => Package['bind'],
     }
 
 }

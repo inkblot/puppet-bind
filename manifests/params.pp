@@ -1,35 +1,29 @@
 # ex: syntax=puppet si ts=4 sw=4 et
 
-class bind::params {
-
-    case $::osfamily {
-        'Debian': {
-            $bind_package = 'bind9'
-            $bind_service = 'bind9'
-            $confdir      = '/etc/bind'
-            $cachedir     = '/var/cache/bind'
-            $bind_user    = 'bind'
-            $bind_group   = 'bind'
-            $bind_rndc    = true
-
-            $nsupdate_package = 'dnsutils'
-
-            $bind_files = [
-                "${confdir}/bind.keys",
-                "${confdir}/db.empty",
-                "${confdir}/db.local",
-                "${confdir}/db.root",
-                "${confdir}/db.0",
-                "${confdir}/db.127",
-                "${confdir}/db.255",
-                "${confdir}/named.conf.default-zones",
-                "${confdir}/rndc.key",
-                "${confdir}/zones.rfc1918",
-            ]
-        }
-        default: {
-            fail("Operating system is not supported ${::osfamily}")
-        }
+class bind::params (
+    $supported,
+    $bind_user,
+    $bind_group,
+    $bind_package,
+    $bind_service,
+    $nsupdate_package,
+) {
+    unless $supported {
+        fail('Platform is not supported')
     }
 
+    if $::osfamily == 'Debian' {
+        $bind_files = [
+            "${::bind::confdir}/bind.keys",
+            "${::bind::confdir}/db.empty",
+            "${::bind::confdir}/db.local",
+            "${::bind::confdir}/db.root",
+            "${::bind::confdir}/db.0",
+            "${::bind::confdir}/db.127",
+            "${::bind::confdir}/db.255",
+            "${::bind::confdir}/named.conf.default-zones",
+            "${::bind::confdir}/rndc.key",
+            "${::bind::confdir}/zones.rfc1918",
+        ]
+    }
 }

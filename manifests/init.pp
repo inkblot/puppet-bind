@@ -1,12 +1,12 @@
 # ex: syntax=puppet si ts=4 sw=4 et
 
 class bind (
-    $confdir    = $::bind::params::confdir,
-    $cachedir   = $::bind::params::cachedir,
-    $forwarders = '',
-    $dnssec     = true,
-    $version    = '',
-    $rndc       = $::bind::params::bind_rndc,
+    $confdir    = undef,
+    $cachedir   = undef,
+    $forwarders = undef,
+    $dnssec     = undef,
+    $version    = undef,
+    $rndc       = undef,
 ) {
     include params
 

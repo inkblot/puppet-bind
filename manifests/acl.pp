@@ -6,7 +6,7 @@ define bind::acl (
 
     concat::fragment { "bind-acl-${name}":
         order   => '10',
-        target  => "${bind::params::confdir}/acls.conf",
+        target  => "${bind::confdir}/acls.conf",
         content => template('bind/acl.erb'),
     }
 

@@ -1,0 +1,8 @@
+---
+bind::params::supported: false
+
+bind::forwarders: ''
+bind::dnssec: true
+bind::version: ''
+
+bind::updater::keydir: '/etc/nsupdate-keys'

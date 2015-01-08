@@ -17,9 +17,7 @@ define bind::key (
     }
 
     if (defined(Class['bind'])) {
-        Package[$bind::params::bind_package] ->
-        File["${keydir}/${name}"] ~>
-        Service[$bind::params::bind_service]
+        Package['bind'] -> File["${keydir}/${name}"] ~> Service['bind']
 
         concat::fragment { "bind-key-${name}":
             order   => '10',
