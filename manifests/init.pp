@@ -7,6 +7,7 @@ class bind (
     $dnssec     = undef,
     $version    = undef,
     $rndc       = undef,
+    $statistics_port = undef,
 ) {
     include params
 

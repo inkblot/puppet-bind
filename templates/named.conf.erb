@@ -3,6 +3,12 @@ include "<%= @confdir %>/acls.conf";
 include "<%= @confdir %>/keys.conf";
 include "<%= @confdir %>/views.conf";
 
+<%- if @statistics_port -%>
+statistics-channels {
+    inet 127.0.0.1 port <%= @statistics_port %> allow { 127.0.0.1; };
+};
+<%- end -%>
+
 options {
 	directory "<%= @cachedir %>";
 <%- if @forwarders and @forwarders != '' -%>
