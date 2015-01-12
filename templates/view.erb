@@ -15,6 +15,9 @@ view "<%= @name %>" {
 	};
 <%- end -%>
 	recursion <%= @recursion ? 'yes' : 'no' %>;
+<%- if @recursion_match_only -%>
+	match-recursive-only yes;
+<%- end -%>
 <%- if @recursion -%>
 <%-   if @recursion_match_clients and @recursion_match_clients != '' -%>
 	allow-recursion {
