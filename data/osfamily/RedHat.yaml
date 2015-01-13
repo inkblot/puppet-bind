@@ -1,0 +1,13 @@
+---
+bind::params::supported: true
+bind::params::bind_user: 'named'
+bind::params::bind_group: 'named'
+bind::params::bind_package: 'bind'
+bind::params::bind_service: 'named'
+bind::params::nsupdate_package: 'bind-utils'
+
+bind::confdir: '/etc/named'
+bind::cachedir: '/var/named/data'
+bind::rndc: true
+
+bind::updater::keydir: '/etc/named/keys'
