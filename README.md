@@ -55,10 +55,16 @@ Puppet will manage the entire `named.conf` file and its includes.  Most paramete
 Creates a TSIG key file.  Only the `secret` parameter is required, but it is recommended to explicitly supply the `algorithm` as well.  The key file will be stored in `${::bind::confdir}/keys` with a filename derived from the title of the `bind::key` declaration.
 
     bind::key { 'local-update':
-        algorithm => 'hmac-sha256',
+        algorithm => 'hmac-sha256', # default: 'hmac-sha256'
         secret    => '012345678901345678901234567890123456789=',
         owner     => 'root',
         group     => 'bind',
+    }
+
+If no secret is specified, the bind::key define will generate one. The secret_bits parameter controls the size of the secret.
+
+    bind::key { 'local-update':
+        secret_bits => 512, # default: 256
     }
 
 ###bind::acl
