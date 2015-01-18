@@ -22,7 +22,6 @@ class bind::params (
             "${::bind::confdir}/db.127",
             "${::bind::confdir}/db.255",
             "${::bind::confdir}/named.conf.default-zones",
-            "${::bind::confdir}/rndc.key",
             "${::bind::confdir}/zones.rfc1918",
         ]
     }

@@ -2,13 +2,6 @@
 include "<%= @confdir %>/acls.conf";
 include "<%= @confdir %>/keys.conf";
 include "<%= @confdir %>/views.conf";
-<%- if @rndc -%>
-
-include "<%= @confdir %>/rndc.key";
-controls {
-	inet 127.0.0.1 allow { localhost; } keys { rndc-key; };
-};
-<%- end -%>
 
 options {
 	directory "<%= @cachedir %>";
