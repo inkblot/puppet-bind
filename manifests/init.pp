@@ -40,6 +40,17 @@ class bind (
         }
     }
 
+    if $rndc {
+        # rndc only supports HMAC-MD5
+        bind::key { 'rndc-key':
+            algorithm   => 'hmac-md5',
+            secret_bits => '512',
+            keydir      => $confdir,
+            keyfile     => 'rndc.key',
+            include     => false,
+        }
+    }
+
     file { [ $confdir, "${confdir}/zones" ]:
         ensure  => directory,
         mode    => '2755',
@@ -81,12 +92,6 @@ class bind (
         order   => '00',
         target  => "${confdir}/keys.conf",
         content => "# This file is managed by puppet - changes will be lost\n",
-    }
-
-    concat::fragment { 'named-keys-rndc':
-        order   => '99',
-        target  => "${confdir}/keys.conf",
-        content => "#include \"${confdir}/rndc.key\"\n",
     }
 
     concat::fragment { 'named-views-header':
