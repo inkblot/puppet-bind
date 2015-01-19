@@ -100,10 +100,12 @@ the `bind::acl` declaration.
 
 ###bind::zone
 
-Declares a zone in the server's configuration. The corresponding zone file will
-be created if it is absent, but any existing file will not be overwritten. Only
-the `zone_type` is required. If `domain` is unspecified, the title of the
-`bind::zone` declaration will be used as the domain.
+Declares a zone. Each zone must be included in at least one view in order to be
+included in the server's configuration, and may be included in multiple views.
+The corresponding zone file will be created if it is absent, but any existing
+file will not be overwritten. Only the `zone_type` is required. If `domain` is
+unspecified, the title of the `bind::zone` declaration will be used as the
+domain.
 
 A master zone with DNSSec disabled which allows updates using a TSIG key and
 zone transfers to servers matching an acl:
@@ -158,8 +160,9 @@ A forward zone:
 
 ###bind::view
 
-Declares a view in the BIND configuration. There must be at least one view
-declaration.
+Declares a view in the BIND configuration. In order to declare zones in a
+server configuration there must be at least one view declaration which includes
+the zones.
 
 A common use for views is to use a single dual-homed nameserver as a resolver
 on a private network and an authoritative non-resolving nameserver on the
