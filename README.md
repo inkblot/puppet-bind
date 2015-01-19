@@ -9,7 +9,9 @@ Control BIND name servers and zones
 Overview
 --------
 
-The BIND module provides an interface for managing a BIND name server, including installation of software, configuration of the server, creation of keys, and definitions for zones.
+The BIND module provides an interface for managing a BIND name server,
+including installation of software, configuration of the server, creation of
+keys, and definitions for zones.
 
 Module Description
 ------------------
@@ -31,11 +33,14 @@ To begin using the BIND module with default parameters, declare the class
 
     class { 'bind': }
 
-Puppet code that uses anything from the BIND module requires that the core bind classes be declared.
+Puppet code that uses anything from the BIND module requires that the core bind
+classes be declared.
 
 ###bind
 
-`bind` provides a few parameters that control server-level configuration parameters in the `named.conf` file, and also defines the overall structure of DNS service on the node.
+`bind` provides a few parameters that control server-level configuration
+parameters in the `named.conf` file, and also defines the overall structure of
+DNS service on the node.
 
     class { 'bind':
         confdir    => '/etc/bind',
@@ -48,11 +53,19 @@ Puppet code that uses anything from the BIND module requires that the core bind 
         version    => 'Controlled by Puppet',
     }
 
-Puppet will manage the entire `named.conf` file and its includes.  Most parameters are set to a fixed value, but the server's upstream resolvers are controlled using `forwarders`, enabling of DNSSec signature validation is controlled using `dnssec`, and the reported version is controlled using `version`.  It is unlikely that you will need to define an alternate value for `confdir` or `cachedir`.
+Puppet will manage the entire `named.conf` file and its includes. Most
+parameters are set to a fixed value, but the server's upstream resolvers are
+controlled using `forwarders`, enabling of DNSSec signature validation is
+controlled using `dnssec`, and the reported version is controlled using
+`version`. It is unlikely that you will need to define an alternate value for
+`confdir` or `cachedir`.
 
 ###bind::key
 
-Creates a TSIG key file.  Only the `secret` parameter is required, but it is recommended to explicitly supply the `algorithm` as well.  The key file will be stored in `${::bind::confdir}/keys` with a filename derived from the title of the `bind::key` declaration.
+Creates a TSIG key file. Only the `secret` parameter is required, but it is
+recommended to explicitly supply the `algorithm` as well. The key file will be
+stored in `${::bind::confdir}/keys` with a filename derived from the title of
+the `bind::key` declaration.
 
     bind::key { 'local-update':
         algorithm => 'hmac-sha256', # default: 'hmac-sha256'
@@ -61,7 +74,8 @@ Creates a TSIG key file.  Only the `secret` parameter is required, but it is rec
         group     => 'bind',
     }
 
-If no secret is specified, the bind::key define will generate one. The secret_bits parameter controls the size of the secret.
+If no secret is specified, the bind::key define will generate one. The
+secret_bits parameter controls the size of the secret.
 
     bind::key { 'local-update':
         secret_bits => 512, # default: 256
@@ -69,7 +83,8 @@ If no secret is specified, the bind::key define will generate one. The secret_bi
 
 ###bind::acl
 
-Declares an acl in the server's configuration.  The acl's name is the title of the `bind::acl` declaration.
+Declares an acl in the server's configuration. The acl's name is the title of
+the `bind::acl` declaration.
 
     bind::acl { 'rfc1918':
         addresses => [
@@ -85,9 +100,13 @@ Declares an acl in the server's configuration.  The acl's name is the title of t
 
 ###bind::zone
 
-Declares a zone in the server's configuration.  The corresponding zone file will be created if it is absent, but any existing file will not be overwritten.  Only the `zone_type` is required.  If `domain` is unspecified, the title of the `bind::zone` declaration will be used as the domain.
+Declares a zone in the server's configuration. The corresponding zone file will
+be created if it is absent, but any existing file will not be overwritten. Only
+the `zone_type` is required. If `domain` is unspecified, the title of the
+`bind::zone` declaration will be used as the domain.
 
-A master zone with DNSSec disabled which allows updates using a TSIG key and zone transfers to servers matching an acl:
+A master zone with DNSSec disabled which allows updates using a TSIG key and
+zone transfers to servers matching an acl:
 
     bind::zone { 'example.com-internal':
         zone_type       => 'master',
@@ -98,7 +117,8 @@ A master zone with DNSSec disabled which allows updates using a TSIG key and zon
         dnssec          => false,
     }
 
-A master zone with DNSSec enabled which allows updates using a TSIG key and zone transfers to servers matching an acl:
+A master zone with DNSSec enabled which allows updates using a TSIG key and
+zone transfers to servers matching an acl:
 
     bind::zone { 'example.com-external':
         zone_type       => 'master',
@@ -138,9 +158,16 @@ A forward zone:
 
 ###bind::view
 
-Declares a view in the BIND configuration.  There must be at least one view declaration.
+Declares a view in the BIND configuration. There must be at least one view
+declaration.
 
-A common use for views is to use a single dual-homed nameserver as a resolver on a private network and an authoritative non-resolving nameserver on the Internet.  Furthermore, the Internet-facing and private network-facing views may present different authoritative results for a domain.  Given a BIND server connected to the internet with the address 198.0.2.2 and connected to a private network with the address 10.0.2.2, here are the `bind::view` declarations that would create this configuration:
+A common use for views is to use a single dual-homed nameserver as a resolver
+on a private network and an authoritative non-resolving nameserver on the
+Internet. Furthermore, the Internet-facing and private network-facing views may
+present different authoritative results for a domain. Given a BIND server
+connected to the internet with the address 198.0.2.2 and connected to a private
+network with the address 10.0.2.2, here are the `bind::view` declarations that
+would create this configuration:
 
     bind::view { 'internet':
         recursion          => false,
@@ -154,9 +181,17 @@ A common use for views is to use a single dual-homed nameserver as a resolver on
         zones              => [ 'example.net', 'example.com-internal', ],
     }
 
-In this scenario, the example.com domain has two separate zones that are presented in each of the `internet` and `private` views.  These two zones are independent, and TSIG-signed updates to example.com must be made to either 198.0.2.2 or 10.0.2.2, to change the `internet` or `private` views of this domain.  Updates to `example.net` may be made via either address, since the zone is included in both views.
+In this scenario, the example.com domain has two separate zones that are
+presented in each of the `internet` and `private` views. These two zones are
+independent, and TSIG-signed updates to example.com must be made to either
+198.0.2.2 or 10.0.2.2, to change the `internet` or `private` views of this
+domain. Updates to `example.net` may be made via either address, since the zone
+is included in both views.
 
-Another use for views is to control access to the DNS server's services.  In this example, service is restricted to a specific set of client address ranges, and queries for the `example.org` domain are handled using a declared zone (see `bind::zone` declaration for `example.org` above):
+Another use for views is to control access to the DNS server's services. In
+this example, service is restricted to a specific set of client address ranges,
+and queries for the `example.org` domain are handled using a declared zone (see
+`bind::zone` declaration for `example.org` above):
 
     bind::view { 'clients':
         recursion     => true,
@@ -171,7 +206,7 @@ Another use for views is to control access to the DNS server's services.  In thi
 
 ###resource_record
 
-Declares a resource record.  For exampmle:
+Declares a resource record. For exampmle:
 
     resource_record { 'www.example.com address':
         ensure  => present,
@@ -186,29 +221,50 @@ Declares a resource record.  For exampmle:
         secret  => 'aLE5LA=='
     }
 
-This resource declaration will result in address records with the addresses 172.16.32.10 and 172.16.32.11 (`data`), a TTL of 86400 (`ttl`) in the zone example.com (`zone`).  Any updates necessary to create, update, or destroy these records are authenticated using a TSIG key named 'local' (`keyname`) of the given type (`hmac`) with the given `secret`.
+This resource declaration will result in address records with the addresses
+172.16.32.10 and 172.16.32.11 (`data`), a TTL of 86400 (`ttl`) in the zone
+example.com (`zone`). Any updates necessary to create, update, or destroy these
+records are authenticated using a TSIG key named 'local' (`keyname`) of the
+given type (`hmac`) with the given `secret`.
 
-No semantic information is communicated in the resource title. It is strictly for disambiguation of resources within Puppet.
+No semantic information is communicated in the resource title. It is strictly
+for disambiguation of resources within Puppet.
 
 `record` is required, and is the fully qualified record to be managed.
 
-`type` is required, and is the record type. It must be one of: `A` `AAAA` `CNAME` `NS` `MX` `SPF` `SRV` `NAPTR` `PTR` or `TXT`. Other DNS record types are not currently supported.
+`type` is required, and is the record type. It must be one of: `A` `AAAA`
+`CNAME` `NS` `MX` `SPF` `SRV` `NAPTR` `PTR` or `TXT`. Other DNS record types
+are not currently supported.
 
-`rrclass` is the class of the record. The default value is `IN` and allowed values are `IN`, `CH`, and `HS`.
+`rrclass` is the class of the record. The default value is `IN` and allowed
+values are `IN`, `CH`, and `HS`.
 
-`data` is required, and may be a scalar value or an array of scalar values whose format conform to the type of DNS resource record being created.  `data` is an ensurable property and changes will be reflected in DNS.
+`data` is required, and may be a scalar value or an array of scalar values
+whose format conform to the type of DNS resource record being created. `data`
+is an ensurable property and changes will be reflected in DNS.
 
-`ttl` defaults to 43200 and need not be specified.  `ttl` is an ensurable property and changes will be reflected in DNS.
+`ttl` defaults to 43200 and need not be specified. `ttl` is an ensurable
+property and changes will be reflected in DNS.
 
-`zone` is not required, and generally not needed.  It is only necessary to specify the zone to be updated if the target nameserver has the record in multiple zones, e.g. the NS records of a zone whose parent zone is served by the same nameserver.
+`zone` is not required, and generally not needed. It is only necessary to
+specify the zone to be updated if the target nameserver has the record in
+multiple zones, e.g. the NS records of a zone whose parent zone is served by
+the same nameserver.
 
-`server` defaults to "localhost" and need not be specified.  The value may be either a hostname or IP address.
+`server` defaults to "localhost" and need not be specified. The value may be
+either a hostname or IP address.
 
-`keyname` defaults to "update" and need not be specified.  This parameter specifies the name of a TSIG key to be used to authenticate the update.  The resource only uses a TSIG key if a `secret` is specified.
+`keyname` defaults to "update" and need not be specified. This parameter
+specifies the name of a TSIG key to be used to authenticate the update. The
+resource only uses a TSIG key if a `secret` is specified.
 
-`hmac` defaults to "hmac-sha1" and need not be specified.  This parameter specifies the algorithm of the TSIG key to be used to authenticate the update.  The resource only uses a TSIG key if a `secret` is specified.
+`hmac` defaults to "hmac-sha1" and need not be specified. This parameter
+specifies the algorithm of the TSIG key to be used to authenticate the update.
+The resource only uses a TSIG key if a `secret` is specified.
 
-`secret` is optional.  This parameter specifies the encoded cryptographic secret of the TSIG key to be used to authenticate the update.  If no `secret` is specified, then the update will not use TSIG authentication.
+`secret` is optional. This parameter specifies the encoded cryptographic secret
+of the TSIG key to be used to authenticate the update. If no `secret` is
+specified, then the update will not use TSIG authentication.
 
 ####resource_record examples
 
