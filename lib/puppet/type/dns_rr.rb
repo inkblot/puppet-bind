@@ -15,7 +15,7 @@ Puppet::Type.newtype(:dns_rr) do
           Util::Errors.fail "Invalid resource record class: %s" % rrdata
         end
         type = $2
-        if ( !%w(A AAAA CNAME NS MX SPF SRV NAPTR PTR TXT).include? type)
+        if ( !%w(A AAAA CNAME NS MX SPF SRV NAPTR PTR TXT DS).include? type)
           Util::Errors.fail "Invalid resource record type: %s" % type
         end
       else
