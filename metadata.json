@@ -1,6 +1,6 @@
 {
   "name": "inkblot/bind",
-  "version": "3.5.0",
+  "version": "3.6.0",
   "author": "inkblot",
   "license": "Apache-2.0",
   "summary": "A Puppet module to deploy and manage the ISC BIND server",
