@@ -16,7 +16,7 @@ Puppet::Type.newtype(:resource_record) do
   newparam(:type) do
     desc 'The record type'
     isrequired
-    newvalues 'A', 'AAAA', 'CNAME', 'NS', 'MX', 'SPF', 'SRV', 'NAPTR', 'PTR', 'TXT'
+    newvalues 'A', 'AAAA', 'CNAME', 'NS', 'MX', 'SPF', 'SRV', 'NAPTR', 'PTR', 'TXT', 'DS'
   end
 
   newparam(:record) do
