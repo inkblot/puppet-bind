@@ -38,15 +38,15 @@ define bind::zone (
         } else {
             $_source = 'puppet:///modules/bind/db.empty'
         }
-        unless $zone_type == 'stub' {
-            file { "${cachedir}/${name}":
-                ensure  => directory,
-                owner   => $bind::params::bind_user,
-                group   => $bind::params::bind_group,
-                mode    => '0755',
-                require => Package['bind'],
-            }
+        file { "${cachedir}/${name}":
+            ensure  => directory,
+            owner   => $bind::params::bind_user,
+            group   => $bind::params::bind_group,
+            mode    => '0755',
+            require => Package['bind'],
+        }
 
+        unless $zone_type == 'stub' {
             file { "${cachedir}/${name}/${_domain}":
                 ensure  => present,
                 owner   => $bind::params::bind_user,
