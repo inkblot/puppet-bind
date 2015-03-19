@@ -2,7 +2,7 @@
 
 class bind (
     $confdir         = undef,
-    $namedonf        = undef,
+    $namedconf        = undef,
     $cachedir        = undef,
     $forwarders      = undef,
     $dnssec          = undef,
