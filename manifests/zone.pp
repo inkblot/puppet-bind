@@ -28,7 +28,7 @@ define bind::zone (
         'master' => true,
         'slave'  => true,
         'hint'   => true,
-        'stub'   => false,
+        'stub'   => true,
         default  => false,
     }
 
@@ -38,44 +38,45 @@ define bind::zone (
         } else {
             $_source = 'puppet:///modules/bind/db.empty'
         }
-
-        file { "${cachedir}/${name}":
-            ensure  => directory,
-            owner   => $bind::params::bind_user,
-            group   => $bind::params::bind_group,
-            mode    => '0755',
-            require => Package['bind'],
-        }
-
-        file { "${cachedir}/${name}/${_domain}":
-            ensure  => present,
-            owner   => $bind::params::bind_user,
-            group   => $bind::params::bind_group,
-            mode    => '0644',
-            replace => false,
-            source  => $_source,
-            audit   => [ content ],
-        }
-
-        if $dnssec {
-            exec { "dnssec-keygen-${name}":
-                command => "/usr/local/bin/dnssec-init '${cachedir}' '${name}'\
-                    '${_domain}' '${key_directory}'",
-                cwd     => $cachedir,
-                user    => $bind::params::bind_user,
-                creates => "${cachedir}/${name}/${_domain}.signed",
-                timeout => 0, # crypto is hard
-                require => [
-                    File['/usr/local/bin/dnssec-init'],
-                    File["${cachedir}/${name}/${_domain}"]
-                ],
+        unless $zone_type == 'stub' {
+            file { "${cachedir}/${name}":
+                ensure  => directory,
+                owner   => $bind::params::bind_user,
+                group   => $bind::params::bind_group,
+                mode    => '0755',
+                require => Package['bind'],
             }
 
-            file { "${cachedir}/${name}/${_domain}.signed":
-                owner => $bind::params::bind_user,
-                group => $bind::params::bind_group,
-                mode  => '0644',
-                audit => [ content ],
+            file { "${cachedir}/${name}/${_domain}":
+                ensure  => present,
+                owner   => $bind::params::bind_user,
+                group   => $bind::params::bind_group,
+                mode    => '0644',
+                replace => false,
+                source  => $_source,
+                audit   => [ content ],
+            }
+
+            if $dnssec {
+                exec { "dnssec-keygen-${name}":
+                    command => "/usr/local/bin/dnssec-init '${cachedir}' '${name}'\
+                        '${_domain}' '${key_directory}'",
+                    cwd     => $cachedir,
+                    user    => $bind::params::bind_user,
+                    creates => "${cachedir}/${name}/${_domain}.signed",
+                    timeout => 0, # crypto is hard
+                    require => [
+                        File['/usr/local/bin/dnssec-init'],
+                        File["${cachedir}/${name}/${_domain}"]
+                    ],
+                }
+
+                file { "${cachedir}/${name}/${_domain}.signed":
+                    owner => $bind::params::bind_user,
+                    group => $bind::params::bind_group,
+                    mode  => '0644',
+                    audit => [ content ],
+                }
             }
         }
     }
