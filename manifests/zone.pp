@@ -28,7 +28,7 @@ define bind::zone (
         'master' => true,
         'slave'  => true,
         'hint'   => true,
-        'stub'   => true,
+        'stub'   => false,
         default  => false,
     }
 
@@ -79,7 +79,7 @@ define bind::zone (
             }
         }
     }
-
+    
     file { "${bind::confdir}/zones/${name}.conf":
         ensure  => present,
         owner   => 'root',
