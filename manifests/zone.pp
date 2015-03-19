@@ -2,6 +2,7 @@
 
 define bind::zone (
     $zone_type,
+    $ensure          = 'present',
     $domain          = '',
     $masters         = '',
     $transfer_source = '',
@@ -81,13 +82,22 @@ define bind::zone (
     }
 
     file { "${bind::confdir}/zones/${name}.conf":
-        ensure  => present,
+        ensure  => $ensure,
         owner   => 'root',
         group   => $bind::params::bind_group,
         mode    => '0644',
         content => template('bind/zone.conf.erb'),
         notify  => Service['bind'],
         require => Package['bind'],
+    }
+
+    ini_setting { "${name}::include":
+        ensure            => $ensure,
+        path              => "${bind::confdir}/zones.conf",
+        section           => '',
+        key_val_separator => ' ',
+        value             => "${bind::confdir}/zones/${name}.conf;",
+        notify            => Service['bind'],
     }
 
 }
