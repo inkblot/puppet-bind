@@ -91,13 +91,11 @@ define bind::zone (
         require => Package['bind'],
     }
 
-    ini_setting { "${name}::include":
-        ensure            => $ensure,
-        path              => "${bind::confdir}/zones.conf",
-        section           => '',
-        key_val_separator => ' ',
-        value             => "${bind::confdir}/zones/${name}.conf;",
-        notify            => Service['bind'],
+    file_line { "${name}::include_line":
+        ensure  => $ensure,
+        path    => "${bind::confdir}/include_zones.conf",
+        line    => "include \"${bind::confdir}/zones/${name}.conf\";",
+        notify  => Service['bind'],
+        require => File["${bind::confdir}/include_zones.conf"],
     }
-
 }
