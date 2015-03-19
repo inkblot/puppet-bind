@@ -2,6 +2,7 @@
 
 class bind (
     $confdir         = undef,
+    $namedonf        = undef,
     $cachedir        = undef,
     $forwarders      = undef,
     $dnssec          = undef,
@@ -59,7 +60,7 @@ class bind (
         recurse => true,
     }
 
-    file { "${confdir}/named.conf":
+    file { "${namedconf}":
         content => template('bind/named.conf.erb'),
     }
 
