@@ -11,8 +11,8 @@ describe 'bind' do
     })
   }
 
-  it { should contain_file('_CONFDIR_/named.conf').that_requires('Package[bind]') }
-  it { should contain_file('_CONFDIR_/named.conf').that_notifies('Service[bind]') }
+  it { should contain_file('_NAMEDCONF_').that_requires('Package[bind]') }
+  it { should contain_file('_NAMEDCONF_').that_notifies('Service[bind]') }
 
   it {
     should contain_service('bind').with({
