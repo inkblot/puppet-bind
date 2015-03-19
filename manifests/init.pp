@@ -10,7 +10,7 @@ class bind (
     $rndc            = undef,
     $statistics_port = undef,
 ) {
-    include params
+    include ::bind::params
 
     $auth_nxdomain = false
 
