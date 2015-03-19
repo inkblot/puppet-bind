@@ -14,6 +14,7 @@ zone "<%= @_domain %>" {
 <%-   else -%>
 	file "<%= @cachedir %>/<%= @name %>/<%= @_domain %>";
 <%-   end -%>
+<%-   unless @zone_type == 'stub' -%>
 	notify <%= @ns_notify ? 'yes' : 'no' %>;
 <%-   if @also_notify and @also_notify != '' -%>
 	also-notify {
