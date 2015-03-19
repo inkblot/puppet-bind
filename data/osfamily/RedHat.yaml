@@ -5,7 +5,7 @@ bind::params::bind_group: 'named'
 bind::params::bind_package: 'bind'
 bind::params::bind_service: 'named'
 bind::params::nsupdate_package: 'bind-utils'
-
+bind::namedonf: '/etc/named.conf'
 bind::confdir: '/etc/named'
 bind::cachedir: '/var/named'
 bind::rndc: true
