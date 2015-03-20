@@ -17,6 +17,9 @@ define bind::zone (
     $forward         = '',
     $source          = '',
 ) {
+
+    validate_re($ensure, ['^present$','^absent$'])
+
     $cachedir = $bind::cachedir
 
     if $domain == '' {
@@ -91,11 +94,11 @@ define bind::zone (
         require => Package['bind'],
     }
 
-    file_line { "${name}::include_line":
+    concat::fragment { "include_zones-${name}":
         ensure  => $ensure,
-        path    => "${bind::confdir}/include_zones.conf",
-        line    => "include \"${bind::confdir}/zones/${name}.conf\";",
-        notify  => Service['bind'],
-        require => File["${bind::confdir}/include_zones.conf"],
+        order   => '10',
+        target  => "${bind::confdir}/include_zones.conf",
+        content => template('bind/include_zones.erb'),
     }
+
 }
