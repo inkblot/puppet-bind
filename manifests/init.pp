@@ -2,6 +2,7 @@
 
 class bind (
     $confdir         = undef,
+    $namedconf        = undef,
     $cachedir        = undef,
     $forwarders      = undef,
     $dnssec          = undef,
@@ -9,7 +10,7 @@ class bind (
     $rndc            = undef,
     $statistics_port = undef,
 ) {
-    include params
+    include ::bind::params
 
     $auth_nxdomain = false
 
@@ -59,7 +60,7 @@ class bind (
         recurse => true,
     }
 
-    file { "${confdir}/named.conf":
+    file { "${namedconf}":
         content => template('bind/named.conf.erb'),
     }
 
