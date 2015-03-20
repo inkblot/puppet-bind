@@ -74,6 +74,7 @@ class bind (
     concat { [
         "${confdir}/acls.conf",
         "${confdir}/keys.conf",
+        "${confdir}/masters.conf",
         "${confdir}/views.conf",
         ]:
         owner   => 'root',
@@ -92,6 +93,12 @@ class bind (
     concat::fragment { 'named-keys-header':
         order   => '00',
         target  => "${confdir}/keys.conf",
+        content => "# This file is managed by puppet - changes will be lost\n",
+    }
+
+    concat::fragment { 'named-masters-header':
+        order   => '00',
+        target  => "${confdir}/masters.conf",
         content => "# This file is managed by puppet - changes will be lost\n",
     }
 
