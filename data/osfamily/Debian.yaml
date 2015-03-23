@@ -5,7 +5,7 @@ bind::params::bind_group: 'bind'
 bind::params::bind_package: 'bind9'
 bind::params::bind_service: 'bind9'
 bind::params::nsupdate_package: 'dnsutils'
-
+bind::namedconf: '/etc/bind/named.conf'
 bind::confdir: '/etc/bind'
 bind::cachedir: '/var/cache/bind'
 bind::rndc: true
