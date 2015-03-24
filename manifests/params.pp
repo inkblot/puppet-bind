@@ -26,6 +26,6 @@ class bind::params (
         ]
     }
     elsif $::osfamily == 'RedHat' {
-        $bind_files = ["/etc/named.root.key"]
+        $bind_files = ['/etc/named.root.key']
     }
 }

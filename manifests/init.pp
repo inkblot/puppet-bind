@@ -60,7 +60,7 @@ class bind (
         recurse => true,
     }
 
-    file { "${namedconf}":
+    file { $namedconf:
         content => template('bind/named.conf.erb'),
     }
 
