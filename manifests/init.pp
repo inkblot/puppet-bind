@@ -76,6 +76,7 @@ class bind (
         "${confdir}/acls.conf",
         "${confdir}/keys.conf",
         "${confdir}/views.conf",
+        "${confdir}/include_zones.conf",
         ]:
         owner   => 'root',
         group   => $::bind::params::bind_group,
@@ -99,6 +100,12 @@ class bind (
     concat::fragment { 'named-views-header':
         order   => '00',
         target  => "${confdir}/views.conf",
+        content => "# This file is managed by puppet - changes will be lost\n",
+    }
+
+    concat::fragment { 'named-include_zones-header':
+        order   => '00',
+        target  => "${confdir}/include_zones.conf",
         content => "# This file is managed by puppet - changes will be lost\n",
     }
 

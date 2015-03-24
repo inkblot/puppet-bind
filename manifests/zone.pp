@@ -2,6 +2,7 @@
 
 define bind::zone (
     $zone_type,
+    $ensure          = 'present',
     $domain          = '',
     $masters         = '',
     $transfer_source = '',
@@ -16,6 +17,9 @@ define bind::zone (
     $forward         = '',
     $source          = '',
 ) {
+
+    validate_re($ensure, ['^present$','^absent$'])
+
     $cachedir = $bind::cachedir
 
     if $domain == '' {
@@ -81,13 +85,20 @@ define bind::zone (
     }
 
     file { "${bind::confdir}/zones/${name}.conf":
-        ensure  => present,
+        ensure  => $ensure,
         owner   => 'root',
         group   => $bind::params::bind_group,
         mode    => '0644',
         content => template('bind/zone.conf.erb'),
         notify  => Service['bind'],
         require => Package['bind'],
+    }
+
+    concat::fragment { "include_zones-${name}":
+        ensure  => $ensure,
+        order   => '10',
+        target  => "${bind::confdir}/include_zones.conf",
+        content => template('bind/include_zones.erb'),
     }
 
 }
