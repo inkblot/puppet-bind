@@ -15,6 +15,7 @@ define bind::zone (
     $forwarders      = '',
     $forward         = '',
     $source          = '',
+    $manage_file     = false,
 ) {
     $cachedir = $bind::cachedir
 
@@ -39,6 +40,10 @@ define bind::zone (
             $_source = 'puppet:///modules/bind/db.empty'
         }
 
+        if $manage_file and $source == '' {
+            fail('Zone file cannot be managed without a source')
+        }
+
         file { "${cachedir}/${name}":
             ensure  => directory,
             owner   => $bind::params::bind_user,
@@ -52,7 +57,7 @@ define bind::zone (
             owner   => $bind::params::bind_user,
             group   => $bind::params::bind_group,
             mode    => '0644',
-            replace => false,
+            replace => $manage_file,
             source  => $_source,
             audit   => [ content ],
         }
