@@ -1,3 +1,4 @@
+# ex: syntax=ruby si sw=2 ts=2 et
 require 'tempfile'
 
 module PuppetBind
@@ -27,8 +28,8 @@ module PuppetBind
       def flush
         return if @properties.empty?
         update do |file|
-          destructo(file)
           accio(file)
+          destructo(file)
         end
       end
 
@@ -58,15 +59,23 @@ module PuppetBind
       end
 
       def accio(file)
-        newdata.each do |datum|
+        rrdata_adds.each do |datum|
           file.write "update add #{name}. #{resource[:ttl]} #{rrclass} #{type} #{datum}\n"
         end
       end
 
       def destructo(file)
-        rrdata.each do |datum|
+        rrdata_deletes.each do |datum|
           file.write "update delete #{name}. #{ttl} #{rrclass} #{type} #{datum}\n"
         end
+      end
+
+      def rrdata_adds
+        newdata - rrdata
+      end
+
+      def rrdata_deletes
+        type === 'SOA' ? [] : rrdata - newdata
       end
 
       def server
