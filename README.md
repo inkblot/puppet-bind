@@ -257,6 +257,10 @@ the same nameserver.
 `server` defaults to "localhost" and need not be specified. The value may be
 either a hostname or IP address.
 
+`query_section` indicates the section of the DNS response to check for existing
+record values. It must be one of `answer`, `authority`, or `additional`.
+Defaults to: `answer`
+
 `keyname` defaults to "update" and need not be specified. This parameter
 specifies the name of a TSIG key to be used to authenticate the update. The
 resource only uses a TSIG key if a `secret` is specified.
