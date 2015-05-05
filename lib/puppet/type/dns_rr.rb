@@ -51,6 +51,12 @@ Puppet::Type.newtype(:dns_rr) do
     defaultto 'localhost'
   end
 
+  newparam(:query_section) do
+    desc 'The DNS response section to check for existing record values'
+    defaultto 'answer'
+    newvalues 'answer', 'authority', 'additional'
+  end
+
   newparam(:keyname) do
     desc 'Keyname for the TSIG key used to update the record'
     defaultto 'update'

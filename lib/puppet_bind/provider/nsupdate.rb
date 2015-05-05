@@ -86,6 +86,10 @@ module PuppetBind
         resource[:zone]
       end
 
+      def query_section
+        resource[:query_section]
+      end
+
       def keyname
         resource[:keyname]
       end
@@ -109,9 +113,9 @@ module PuppetBind
       def query
         unless @query
           if keyed?
-            dig_text = dig("@#{server}", '+noall', '+answer', name, type, '-c', rrclass, '-y', tsig_param)
+            dig_text = dig("@#{server}", '+noall', '+nosearch', "+#{query_section}", name, type, '-c', rrclass, '-y', tsig_param)
           else
-            dig_text = dig("@#{server}", '+noall', '+answer', name, type, '-c', rrclass)
+            dig_text = dig("@#{server}", '+noall', '+nosearch', "+#{query_section}", name, type, '-c', rrclass)
           end
           @query = dig_text.lines.map do |line|
             linearray = line.chomp.split(/\s+/, 5)
