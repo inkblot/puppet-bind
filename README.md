@@ -107,6 +107,15 @@ file will not be overwritten. Only the `zone_type` is required. If `domain` is
 unspecified, the title of the `bind::zone` declaration will be used as the
 domain.
 
+A master zone with a zone file managed directly by Puppet:
+
+    bind::zone { 'example.org':
+        zone_type       => 'master',
+        dynamic         => false,
+        source          => 'puppet:///dns/db.example.org',
+        allow_transfers => [ 'secondary-dns', ],
+    }
+
 A master zone with DNSSec disabled which allows updates using a TSIG key and
 zone transfers to servers matching an acl:
 
