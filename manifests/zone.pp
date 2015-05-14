@@ -83,6 +83,16 @@ define bind::zone (
                 audit   => [ content ],
             }
         }
+
+        if $zone_file_mode == 'managed' {
+            exec { "rndc refresh ${_domain}":
+                command     => "/usr/sbin/rndc refresh ${_domain}",
+                user        => $::bind::params::bind_user,
+                refreshonly => true,
+                require     => Service['bind'],
+                subscribe   => File["${cachedir}/${name}/${_domain}"],
+            }
+        }
     } elsif $zone_file_mode == 'absent' {
         file { "${cachedir}/${name}":
             ensure => absent,
