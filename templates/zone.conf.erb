@@ -2,35 +2,33 @@
 # This file managed by puppet - changes will be lost
 zone "<%= @_domain %>" {
 	type <%= @zone_type %>;
-<%- if @has_zone_file -%>
-<%-   if @dnssec -%>
+<%- if @dnssec -%>
 	auto-dnssec maintain;
-<%-     if @key_directory and @key_directory != '' -%>
+<%-   if @key_directory and @key_directory != '' -%>
 	key-directory "<%= @key_directory %>";
-<%-     else -%>
-	key-directory "<%= @cachedir %>/<%= @name %>";
-<%-     end -%>
-	file "<%= @cachedir %>/<%= @name %>/<%= @_domain %>.signed";
 <%-   else -%>
+	key-directory "<%= @cachedir %>/<%= @name %>";
+<%-   end -%>
+	file "<%= @cachedir %>/<%= @name %>/<%= @_domain %>.signed";
+<%- elsif %w(init managed allowed).include? @zone_file_mode -%>
 	file "<%= @cachedir %>/<%= @name %>/<%= @_domain %>";
-<%-   end -%>
-<%-   unless @zone_type == 'stub' -%>
+<%- end -%>
+<%- if %w(master slave).include? @zone_type -%>
 	notify <%= @ns_notify ? 'yes' : 'no' %>;
-<%-   end -%>
-<%-   if @also_notify and @also_notify != '' -%>
+<%- end -%>
+<%- if @also_notify and @also_notify != '' -%>
 	also-notify {
-<%-     Array(@also_notify).each do |server| -%>
+<%-   Array(@also_notify).each do |server| -%>
 		<%= server %>;
-<%-     end -%>
-	};
 <%-   end -%>
-<%-   if @allow_notify and @allow_notify != '' -%>
+	};
+<%- end -%>
+<%- if @allow_notify and @allow_notify != '' -%>
 	allow-notify {
-<%-     Array(@allow_notify).each do |server| -%>
+<%-   Array(@allow_notify).each do |server| -%>
 		<%= server %>;
-<%-     end -%>
-	};
 <%-   end -%>
+	};
 <%- end -%>
 <%- if @masters and @masters != '' -%>
 	masters {
