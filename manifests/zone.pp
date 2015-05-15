@@ -22,35 +22,41 @@ define bind::zone (
     $cachedir = $::bind::cachedir
     $_domain = pick($domain, $name)
 
-    # dynamic implies master zone
-    validate_bool(!($dynamic and $zone_type != 'master'))
+    unless !($masters != '' and ! member(['slave', 'stub'], $zone_type)) {
+        fail("masters may only be provided for bind::zone resources with zone_type 'slave' or 'stub'")
+    }
 
-    # masters implies slave/stub zone
-    validate_bool(!($masters != '' and ! member(['slave', 'stub'], $zone_type)))
+    unless !($transfer_source != '' and ! member(['slave', 'stub'], $zone_type)) {
+        fail("transfer_source may only be provided for bind::zone resources with zone_type 'slave' or 'stub'")
+    }
 
-    # transfer_source implies slave/stub zone
-    validate_bool(!($transfer_source != '' and ! member(['slave', 'stub'], $zone_type)))
+    unless !($allow_update != '' and ! $dynamic) {
+        fail("allow_update may only be provided for bind::zone resources with dynamic set to true")
+    }
 
-    # allow_updates implies dynamic
-    validate_bool(!($allow_update != '' and ! $dynamic))
+    unless !($dnssec and ! $dynamic) {
+        fail("dnssec may only be true for bind::zone resources with dynamic set to true")
+    }
 
-    # dnssec implies dynamic zone
-    validate_bool(!($dnssec and ! $dynamic))
+    unless !($key_directory != '' and ! $dnssec) {
+        fail("key_directory may only be provided for bind::zone resources with dnssec set to true")
+    }
 
-    # key_directory implies dnssec
-    validate_bool(!($key_directory != '' and ! $dnssec))
+    unless !($allow_notify != '' and ! member(['slave', 'stub'], $zone_type)) {
+        fail("allow_notify may only be provided for bind::zone resources with zone_type 'slave' or 'stub'")
+    }
 
-    # allow_notify implies slave/stub zone
-    validate_bool(!($allow_notify != '' and ! member(['slave', 'stub'], $zone_type)))
+    unless !($forwarders != '' and $zone_type != 'forward') {
+        fail("forwarders may only be provided for bind::zone resources with zone_type 'forward'")
+    }
 
-    # forwarders implies forward zone
-    validate_bool(!($forwarders != '' and $zone_type != 'forward'))
+    unless !($forward != '' and $zone_type != 'forward') {
+        fail("forward may only be provided for bind::zone resources with zone_type 'forward'")
+    }
 
-    # forward implies forward zone
-    validate_bool(!($forward != '' and $zone_type != 'forward'))
-
-    # source implies master/hint zone
-    validate_bool(!($source != '' and ! member(['master', 'hint'], $zone_type)))
+    unless !($source != '' and ! member(['master', 'hint'], $zone_type)) {
+        fail("source may only be provided for bind::zone resources with zone_type 'master' or 'hint'")
+    }
 
     $zone_file_mode = $zone_type ? {
         'master' => $dynamic ? {
