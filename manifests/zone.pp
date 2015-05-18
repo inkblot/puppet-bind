@@ -30,8 +30,8 @@ define bind::zone (
         fail("transfer_source may only be provided for bind::zone resources with zone_type 'slave' or 'stub'")
     }
 
-    unless !($allow_update != '' and ! $dynamic) {
-        fail("allow_update may only be provided for bind::zone resources with dynamic set to true")
+    unless !($allow_updates != '' and ! $dynamic) {
+        fail("allow_updates may only be provided for bind::zone resources with dynamic set to true")
     }
 
     unless !($dnssec and ! $dynamic) {
