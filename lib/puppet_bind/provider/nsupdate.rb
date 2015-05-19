@@ -60,14 +60,26 @@ module PuppetBind
 
       def accio(file)
         rrdata_adds.each do |datum|
-          file.write "update add #{name}. #{resource[:ttl]} #{rrclass} #{type} #{datum}\n"
+          file.write "update add #{name}. #{resource[:ttl]} #{rrclass} #{type} #{maybe_quote(type, datum)}\n"
         end
       end
 
       def destructo(file)
         rrdata_deletes.each do |datum|
-          file.write "update delete #{name}. #{ttl} #{rrclass} #{type} #{datum}\n"
+          file.write "update delete #{name}. #{ttl} #{rrclass} #{type} #{maybe_quote(type, datum)}\n"
         end
+      end
+
+      def quoted_type?(type)
+        %(TXT SPF).include?(type)
+      end
+
+      def maybe_quote(type, datum)
+        quoted_type?(type) ? "\"#{datum}\"" : datum
+      end
+
+      def maybe_unquote(type, datum)
+        quoted_type?(type) ? datum.gsub(/^\"(.*)\"$/, '\1') : datum
       end
 
       def rrdata_adds
@@ -124,7 +136,7 @@ module PuppetBind
               :ttl     => linearray[1],
               :rrclass => linearray[2],
               :type    => linearray[3],
-              :rrdata  => linearray[4]
+              :rrdata  => maybe_unquote(linearray[3], linearray[4])
             }
           end.select do |record|
             record[:name] == "#{name}."
