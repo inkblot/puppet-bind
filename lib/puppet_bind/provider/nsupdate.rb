@@ -71,7 +71,7 @@ module PuppetBind
       end
 
       def quoted_type?(type)
-        %(TXT SPF).include?(type)
+        %w(TXT SPF).include?(type)
       end
 
       def maybe_quote(type, datum)
