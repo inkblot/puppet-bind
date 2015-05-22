@@ -71,7 +71,7 @@ module PuppetBind
       end
 
       def quoted_type?(type)
-        %(TXT SPF).include?(type)
+        %w(TXT SPF).include?(type)
       end
 
       def maybe_quote(type, datum)
@@ -83,11 +83,11 @@ module PuppetBind
       end
 
       def rrdata_adds
-        newdata - rrdata
+        resource[:ensure] === :absent ? [] : newdata - rrdata
       end
 
       def rrdata_deletes
-        type === 'SOA' ? [] : rrdata - newdata
+        resource[:ensure] === :absent ? rrdata : (type === 'SOA' ? [] : rrdata - newdata)
       end
 
       def server

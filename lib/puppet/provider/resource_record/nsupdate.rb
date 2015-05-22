@@ -34,7 +34,7 @@ private
   end
 
   def type
-    resource[:type]
+    resource[:type].to_s
   end
 
   def name
