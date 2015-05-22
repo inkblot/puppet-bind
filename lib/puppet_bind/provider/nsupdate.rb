@@ -83,11 +83,11 @@ module PuppetBind
       end
 
       def rrdata_adds
-        newdata - rrdata
+        resource[:ensure] === :absent ? [] : newdata - rrdata
       end
 
       def rrdata_deletes
-        type === 'SOA' ? [] : rrdata - newdata
+        resource[:ensure] === :absent ? rrdata : (type === 'SOA' ? [] : rrdata - newdata)
       end
 
       def server
