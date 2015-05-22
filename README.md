@@ -253,7 +253,13 @@ values are `IN`, `CH`, and `HS`.
 
 `data` is required, and may be a scalar value or an array of scalar values
 whose format conform to the type of DNS resource record being created. `data`
-is an ensurable property and changes will be reflected in DNS.
+is an ensurable property and changes will be reflected in DNS. **Note**: for
+record types that have a DNS name as either the whole value or a component of
+the value (e.g. `NS`, 'MX', `CNAME`, `PTR`, `NAPTR`, or `SRV`) you must specify
+the name as a fully-qualified name with a trailing dot in order to satisfy
+both BIND, which will otherwise consider it a name relative, and Puppet, which
+will not consider the dot-qualified output of dig equal to a non-dot-qualified
+value in the manifest.
 
 `ttl` defaults to 43200 and need not be specified. `ttl` is an ensurable
 property and changes will be reflected in DNS.
@@ -285,22 +291,35 @@ specified, then the update will not use TSIG authentication.
 ####resource_record examples
 
 Mail exchangers for a domain. Declares three mail exchangers for the domain
-`example.com`, which are `mx.example.com`, `mx2.example.com`, and `mx.mail-host.ex`
-with priorities `10`, `20`, and `30`, respectively:
+`example.com`, which are `mx.example.com`, `mx2.example.com`, and
+`mx.mail-host.ex` with priorities `10`, `20`, and `30`, respectively (note the
+trailing dots in the values to denote fully-qualified names):
 
     resource_record { 'example.com mail exchangers':
         record => 'example.com',
         type   => 'MX',
-        data   => [ '10 mx', '20 mx2', '20 mx.mail-host.ex.', ],
+        data   => [ '10 mx.example.com.', '20 mx2.example.com.', '20 mx.mail-host.ex.', ],
     }
 
 Nameserver records for a zone. Declares three nameserver records for the zone
-`example.com`, which are `ns1.example.com`, `ns2.example.com`, and `ns.dns-host.ex`:
+`example.com`, which are `ns1.example.com`, `ns2.example.com`, and
+`ns.dns-host.ex`:
 
     resource_record { 'example.com name servers':
         record => 'example.com',
         type   => 'NS',
-        data   => [ 'ns1', 'ns2', 'ns.dns-host.ex.' ],
+        data   => [ 'ns1.example.com.', 'ns2.example.com.', 'ns.dns-host.ex.' ],
+    }
+
+Delegating nameserver records in a parent zone. Declares a nameserver record in
+the parent zone in order to delegate authority for a subdomain:
+
+    resource_record { 'sub.example.com delegation':
+        record        => 'sub.example.com'
+        type          => 'NS',
+        zone          => 'example.com',
+        query_section => 'authority',
+        data          => 'sub-ns.example.com.',
     }
 
 Service locators records for a domain. Declares a service locator for SIP over
