@@ -7,6 +7,7 @@ define bind::zone (
     $masters         = '',
     $transfer_source = '',
     $allow_updates   = '',
+    $update_policies = '',
     $allow_transfers = '',
     $dnssec          = false,
     $key_directory   = '',
