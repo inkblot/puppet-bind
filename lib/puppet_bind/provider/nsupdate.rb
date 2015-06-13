@@ -52,6 +52,8 @@ module PuppetBind
         file.close
         if keyed?
           nsupdate('-y', tsig_param, file.path)
+        elsif keyfile?
+          nsupdate('-k', kfile, file.path)
         else
           nsupdate(file.path)
         end
@@ -104,6 +106,14 @@ module PuppetBind
 
       def keyname
         resource[:keyname]
+      end
+
+      def kfile
+        resource[:keyfile]
+      end
+
+      def keyfile?
+        !kfile.nil?
       end
 
       def hmac

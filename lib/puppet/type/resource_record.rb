@@ -48,6 +48,10 @@ Puppet::Type.newtype(:resource_record) do
     defaultto 'update'
   end
 
+  newparam(:keyfile) do
+    desc 'Keyfile used to update the record'
+  end
+
   newparam(:hmac) do
     desc 'The HMAC type of the update key'
     defaultto 'HMAC-SHA1'
