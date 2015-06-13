@@ -135,7 +135,6 @@ zone transfers to servers matching an acl:
         zone_type       => 'master',
         domain          => 'example.com',
         allow_updates   => [ 'key local-update', ],
-        update_policies => [ 'grant test.example.net name example.net MX', ],
         allow_transfers => [ 'secondary-dns', ],
 	ns_notify       => true,
         dnssec          => true,
@@ -280,6 +279,9 @@ Defaults to: `answer`
 `keyname` defaults to "update" and need not be specified. This parameter
 specifies the name of a TSIG key to be used to authenticate the update. The
 resource only uses a TSIG key if a `secret` is specified.
+
+`keyfile` specifies the name of a key file to use to sign requests. This
+parameter has no effect if a `secret` is specified.
 
 `hmac` defaults to "hmac-sha1" and need not be specified. This parameter
 specifies the algorithm of the TSIG key to be used to authenticate the update.
