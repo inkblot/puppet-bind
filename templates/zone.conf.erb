@@ -47,6 +47,13 @@ zone "<%= @_domain %>" {
 <%-   end -%>
 	};
 <%- end -%>
+<%- if @update_policies and @update_policies != '' -%>
+	update-policy {
+<%-   Array(@update_policies).each do |update_policy| -%>
+		<%= update_policy %>;
+<%-   end -%>
+	};
+<%- end -%>
 <%- if @allow_transfers and @allow_transfers != '' -%>
 	allow-transfer {
 <%-   Array(@allow_transfers).each do |allow_transfer| -%>

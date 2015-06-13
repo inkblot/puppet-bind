@@ -135,6 +135,7 @@ zone transfers to servers matching an acl:
         zone_type       => 'master',
         domain          => 'example.com',
         allow_updates   => [ 'key local-update', ],
+        update_policies => [ 'grant test.example.net name example.net MX', ],
         allow_transfers => [ 'secondary-dns', ],
 	ns_notify       => true,
         dnssec          => true,
