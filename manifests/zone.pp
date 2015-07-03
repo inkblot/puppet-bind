@@ -21,6 +21,7 @@ define bind::zone (
     # where there is a zone, there is a server
     include bind
     $cachedir = $::bind::cachedir
+    $random_device = $::bind::random_device
     $_domain = pick($domain, $name)
 
     unless !($masters != '' and ! member(['slave', 'stub'], $zone_type)) {
@@ -109,7 +110,7 @@ define bind::zone (
     if $dnssec {
         exec { "dnssec-keygen-${name}":
             command => "/usr/local/bin/dnssec-init '${cachedir}' '${name}'\
-                '${_domain}' '${key_directory}'",
+                '${_domain}' '${key_directory}' '${random_device}'",
             cwd     => $cachedir,
             user    => $::bind::params::bind_user,
             creates => "${cachedir}/${name}/${_domain}.signed",
