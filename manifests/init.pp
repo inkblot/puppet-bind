@@ -2,13 +2,14 @@
 
 class bind (
     $confdir         = undef,
-    $namedconf        = undef,
+    $namedconf       = undef,
     $cachedir        = undef,
     $forwarders      = undef,
     $dnssec          = undef,
     $version         = undef,
     $rndc            = undef,
     $statistics_port = undef,
+    $random_device   = undef,
 ) {
     include ::bind::params
 
