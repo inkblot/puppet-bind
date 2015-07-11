@@ -24,6 +24,12 @@ class bind (
         notify  => Service['bind'],
     }
 
+    package{'bind-tools':
+        ensure => latest,
+        name   => $::bind::params::nsupdate_package,
+        before => Package['bind'],
+    }
+
     package { 'bind':
         ensure => latest,
         name   => $::bind::params::bind_package,
