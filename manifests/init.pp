@@ -60,7 +60,7 @@ class bind (
         }
     }
 
-    file { [ $confdir, "${confdir}/zones" ]:
+    file { [ "${confdir}/zones" ]:
         ensure  => directory,
         mode    => '2755',
         purge   => true,
