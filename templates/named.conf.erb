@@ -29,5 +29,7 @@ options {
 	version "<%= @version %>";
 <%- end -%>
 };
+<%- if @include_local -%>
 
 include "<%= @confdir %>/named.conf.local";
+<%- end -%>

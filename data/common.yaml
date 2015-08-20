@@ -5,5 +5,6 @@ bind::forwarders: ''
 bind::dnssec: true
 bind::version: ''
 bind::random_device: '/dev/random'
+bind::include_local: false
 
 bind::updater::keydir: '/etc/nsupdate-keys'

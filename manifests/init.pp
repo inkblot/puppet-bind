@@ -10,6 +10,7 @@ class bind (
     $rndc            = undef,
     $statistics_port = undef,
     $random_device   = undef,
+    $include_local   = undef,
 ) {
     include ::bind::params
 
@@ -35,10 +36,6 @@ class bind (
         name   => $::bind::params::bind_package,
     }
 
-    file { $::bind::params::bind_files:
-        ensure  => present,
-    }
-
     if $dnssec {
         file { '/usr/local/bin/dnssec-init':
             ensure => present,
@@ -60,11 +57,9 @@ class bind (
         }
     }
 
-    file { [ "${confdir}/zones" ]:
+    file { "${confdir}/zones":
         ensure  => directory,
         mode    => '2755',
-        purge   => true,
-        recurse => true,
     }
 
     file { $namedconf:
@@ -73,10 +68,6 @@ class bind (
 
     class { 'bind::keydir':
         keydir => "${confdir}/keys",
-    }
-
-    file { "${confdir}/named.conf.local":
-        replace => false,
     }
 
     concat { [
