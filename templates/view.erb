@@ -34,6 +34,15 @@ view "<%= @name %>" {
 	};
 <%-   end -%>
 <%- end -%>
+<%- if @server -%>
+<%-   @server.each_pair do |srv, srv_values| -%>
+	server <%= srv %> {
+<%-		Array(srv_values).each do |srv_value| -%>
+		<%= srv_value %>;
+<%-		end -%>
+	};
+<%-	  end -%>
+<%- end -%>
 <%- if scope.lookupvar('osfamily') == 'Debian' -%>
 	include "<%= @confdir %>/named.conf.default-zones";
 <%- end -%>
