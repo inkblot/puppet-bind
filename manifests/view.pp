@@ -3,6 +3,7 @@
 define bind::view (
     $match_clients                = 'any',
     $match_destinations           = '',
+    $servers                      = {},
     $zones                        = [],
     $recursion                    = true,
     $recursion_match_clients      = 'any',
