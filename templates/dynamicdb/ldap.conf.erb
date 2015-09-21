@@ -1,0 +1,52 @@
+
+# This file managed by puppet - changes will be lost
+dynamic-db "<%= @dbname %>" {
+	library "ldap.so";
+	arg "uri <%= @uri %>";
+	arg "base <%= @base_dn %>";
+<%- if @connections != '' -%>
+	arg "connections <%= @connections %>";
+<%- end -%>
+<%- if @auth_method != '' -%>
+	arg "auth_method <%= @auth_method %>";
+<%- end -%>
+<%- if @bind_dn != '' -%>
+	arg "bind_dn <%= @bind_dn %>";
+<%- end -%>
+<%- if @bind_password != '' -%>
+	arg "password <%= @bind_password %>";
+<%- end -%>
+<%- if @sasl_mech != '' -%>
+	arg "sasl_mech <%= @sasl_mech %>";
+<%- end -%>
+<%- if @sasl_user != '' -%>
+	arg "sasl_user <%= @sasl_user %>";
+<%- end -%>
+<%- if @sasl_realm != '' -%>
+	arg "sasl_realm <%= @sasl_realm %>";
+<%- end -%>
+<%- if @krb5_keytab != '' -%>
+	arg "krb5_keytab <%= @krb5_keytab %>";
+<%- end -%>
+<%- if @krb5_principal != '' -%>
+	arg "krb5_principal <%= @krb5_principal %>";
+<%- end -%>
+<%- if @timeout != '' -%>
+	arg "timeout <%= @timeout %>";
+<%- end -%>
+<%- if @reconnect_interval != '' -%>
+	arg "reconnect_interval <%= @reconnect_interval %>";
+<%- end -%>
+<%- if @ldap_hostname != '' -%>
+	arg "ldap_hostname <%= @ldap_hostname %>";
+<%- end -%>
+<%- if @fake_mname != '' -%>
+	arg "fake_mname <%= @fake_mname %>";
+<%- end -%>
+<%- if @dynamic_updates != '' -%>
+	arg "dyn_update <%= @dynamic_updates ? 'yes' : 'no' %>";
+<%- end -%>
+<%- if @sync_ptr != '' -%>
+	arg "sync_ptr <%= @sync_ptr ? 'yes' : 'no' %>";
+<%- end -%>
+};
