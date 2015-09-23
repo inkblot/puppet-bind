@@ -11,6 +11,9 @@ statistics-channels {
 
 options {
 	directory "<%= @cachedir %>";
+<%- if @managed_keys_directory and @managed_keys_directory != '' -%>
+	managed-keys-directory "<%= @managed_keys_directory %>";
+<%- end -%>
 <%- if @forwarders and @forwarders != '' -%>
 	forwarders {
 <%-   Array(@forwarders).each do |forwarder| -%>
