@@ -10,6 +10,7 @@ define bind::view (
     $recursion_match_destinations = '',
     $recursion_match_only         = false,
     $order                        = '10',
+    $minimal_responses            = false,
 ) {
     $confdir = $::bind::confdir
 
