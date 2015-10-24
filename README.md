@@ -227,6 +227,30 @@ and queries for the `example.org` domain are handled using a declared zone (see
         ],
     }
 
+View declarations can also include server clause configuration. The `servers`
+property of `bind::view` accepts an array value which specifies each `server`
+clause in the view as a hash. The hash must contain an `ip_addr` key which
+specifies the IP address (optionally, a CIDR address range), and may contain a
+`keys` key with a string value. The value of `keys` will be used as the name of
+a key in the `server` clause. In this example, the `ns` view will contain a
+`server` clause that configures BIND to use the key `internal-ns` to TSIG-sign
+transactions with `192.168.24.2` and the key `hurricane-electric` to TSIG-sign
+transactions with `216.218.130.2`:
+
+    bind::view { 'ns':
+        servers => [
+            {
+                'ip_addr' => '192.168.24.2',
+                'keys'    => 'internal-ns',
+            },
+            {
+                'ip_addr' => '216.218.130.2',
+                'keys'    => 'hurricane-electric',
+            }
+        ],
+        ...
+    }
+
 ###resource_record
 
 Declares a resource record. For exampmle:

@@ -34,6 +34,16 @@ view "<%= @name %>" {
 	};
 <%-   end -%>
 <%- end -%>
+<%- if @servers and @servers.is_a?(Array) -%>
+<%-   @servers.each do |properties| -%>
+<%-     raise Puppet::Error, 'view servers must have an ip_addr key' unless properties.has_key?('ip_addr') -%>
+	server <%= properties['ip_addr'] %> {
+<%-     if properties.has_key?('keys') and properties['keys'] != '' -%>
+		keys { <%= properties['keys'] %>; };
+<%-     end -%>
+	};
+<%-   end -%>
+<%- end -%>
 <%- if scope.lookupvar('osfamily') == 'Debian' -%>
 	include "<%= @confdir %>/named.conf.default-zones";
 <%- end -%>
