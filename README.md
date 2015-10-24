@@ -27,6 +27,17 @@ Setup
 * configuration of the server, zones, acls, keys, and views
 * creation of TSIG and DNSSEC keys
 
+Dependencies
+------------
+
+The BIND module depends on
+[ripienaar/module_data]](https://forge.puppetlabs.com/ripienaar/module_data)
+for hiera module data support and
+[puppetlabs/stdlib](https://forge.puppetlabs.com/puppetlabs/stdlib) for certain
+parser functions. When using the BIND module, please install the module using
+`puppet module install` or an equivalent substitute in order to ensure that its
+dependencies are met.
+
 ###Getting started
 
 To begin using the BIND module with default parameters, declare the class
