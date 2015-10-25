@@ -76,12 +76,28 @@ module PuppetBind
         %w(TXT SPF).include?(type)
       end
 
+      def escaped_type?(type)
+        %w(TXT).include?(type)
+      end
+
+      def spaced_type?(type)
+        %w(DS TLSA).include?(type)
+      end
+
       def maybe_quote(type, datum)
         quoted_type?(type) ? "\"#{datum}\"" : datum
       end
 
       def maybe_unquote(type, datum)
         quoted_type?(type) ? datum.gsub(/^\"(.*)\"$/, '\1') : datum
+      end
+
+      def maybe_unescape(type, datum)
+        escaped_type?(type) ? datum.gsub(/\\;/, ';') : datum
+      end
+
+      def maybe_unspace(type, datum)
+        spaced_type?(type) ? datum.gsub(/^(\d+)\s+(\d+)\s+(\d+)\s+(\w+)\s+(\w+)$/, '\1 \2 \3 \4\5') : datum
       end
 
       def rrdata_adds
@@ -141,12 +157,15 @@ module PuppetBind
           end
           @query = dig_text.lines.map do |line|
             linearray = line.chomp.split(/\s+/, 5)
+            linearray[4] = maybe_unquote(linearray[3], linearray[4])
+            linearray[4] = maybe_unescape(linearray[3], linearray[4])
+            linearray[4] = maybe_unspace(linearray[3], linearray[4])
             {
               :name    => linearray[0],
               :ttl     => linearray[1],
               :rrclass => linearray[2],
               :type    => linearray[3],
-              :rrdata  => maybe_unquote(linearray[3], linearray[4])
+              :rrdata  => linearray[4]
             }
           end.select do |record|
             record[:name] == "#{name}."
