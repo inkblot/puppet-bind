@@ -71,6 +71,12 @@ controlled using `dnssec`, and the reported version is controlled using
 `version`. It is unlikely that you will need to define an alternate value for
 `confdir` or `cachedir`.
 
+###bind::updater
+
+The `bind::updater` class is an alternate entrypoint into the module. This
+class installs the BIND client tools but not a name server. The installed tools
+are sufficient to allow the use of the `resource_record` custom resource.
+
 ###bind::key
 
 Creates a TSIG key file. Only the `secret` parameter is required, but it is
