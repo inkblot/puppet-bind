@@ -14,6 +14,9 @@ class bind (
 ) {
     include ::bind::params
 
+    # Re-scope members of bind::params for templating
+    $managed_keys_directory = $::bind::params::managed_keys_directory
+
     $auth_nxdomain = false
 
     File {
