@@ -18,6 +18,7 @@ define bind::zone (
     $forwarders      = '',
     $forward         = '',
     $source          = '',
+	$zonePath        = '', #add file already presend on system and don't manage zone file with puppet
 ) {
     # where there is a zone, there is a server
     include bind
@@ -61,18 +62,25 @@ define bind::zone (
         fail("source may only be provided for bind::zone resources with zone_type 'master' or 'hint'")
     }
 
-    $zone_file_mode = $zone_type ? {
-        'master' => $dynamic ? {
-            true  => 'init',
-            false => 'managed',
-        },
-        'slave'  => 'allowed',
-        'hint'   => 'managed',
-        'stub'   => 'allowed',
-        default  => 'absent',
-    }
+	if ($zonePath != '') {
+		$zone_file_mode = 'static'
+		$_zoneFilePath = $zonePath
+	}
+	else {
+		$zone_file_mode = $zone_type ? {
+			'master' => $dynamic ? {
+				true  => 'init',
+				false => 'managed',
+			},
+			'slave'  => 'allowed',
+			'hint'   => 'managed',
+			'stub'   => 'allowed',
+			default  => 'absent',
+		}
+	}
 
     if member(['init', 'managed', 'allowed'], $zone_file_mode) {
+	    $_zoneFilePath = "${cachedir}/${name}/${_domain}"
         file { "${cachedir}/${name}":
             ensure  => directory,
             owner   => $::bind::params::bind_user,
@@ -82,7 +90,7 @@ define bind::zone (
         }
 
         if member(['init', 'managed'], $zone_file_mode) {
-            file { "${cachedir}/${name}/${_domain}":
+            file { "$_zoneFilePath":
                 ensure  => present,
                 owner   => $::bind::params::bind_user,
                 group   => $::bind::params::bind_group,
@@ -99,11 +107,12 @@ define bind::zone (
                 user        => $::bind::params::bind_user,
                 refreshonly => true,
                 require     => Service['bind'],
-                subscribe   => File["${cachedir}/${name}/${_domain}"],
+                subscribe   => File["$_zoneFilePath"],
             }
         }
     } elsif $zone_file_mode == 'absent' {
-        file { "${cachedir}/${name}":
+	    $_zoneFilePath = "${cachedir}/${name}"
+        file { "$_zoneFilePath":
             ensure => absent,
         }
     }
@@ -114,15 +123,15 @@ define bind::zone (
                 '${_domain}' '${key_directory}' '${random_device}' '${nsec3_salt}'",
             cwd     => $cachedir,
             user    => $::bind::params::bind_user,
-            creates => "${cachedir}/${name}/${_domain}.signed",
+            creates => "$_zoneFilePath",
             timeout => 0, # crypto is hard
             require => [
                 File['/usr/local/bin/dnssec-init'],
-                File["${cachedir}/${name}/${_domain}"]
+                File["$_zoneFilePath"]
             ],
         }
 
-        file { "${cachedir}/${name}/${_domain}.signed":
+        file { "$_zoneFilePath.signed":
             owner => $::bind::params::bind_user,
             group => $::bind::params::bind_group,
             mode  => '0644',

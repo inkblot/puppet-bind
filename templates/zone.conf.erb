@@ -9,9 +9,9 @@ zone "<%= @_domain %>" {
 <%-   else -%>
 	key-directory "<%= @cachedir %>/<%= @name %>";
 <%-   end -%>
-	file "<%= @cachedir %>/<%= @name %>/<%= @_domain %>.signed";
-<%- elsif %w(init managed allowed).include? @zone_file_mode -%>
-	file "<%= @cachedir %>/<%= @name %>/<%= @_domain %>";
+	file "<%= @_zoneFilePath %>.signed";
+<%- elsif %w(init managed allowed static).include? @zone_file_mode -%>
+	file "<%= @_zoneFilePath %>";
 <%- end -%>
 <%- if %w(master slave).include? @zone_type -%>
 	notify <%= @ns_notify ? 'yes' : 'no' %>;
