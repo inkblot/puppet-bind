@@ -1,13 +1,12 @@
 ---
-bind::params::supported: true
-bind::params::bind_user: 'bind'
-bind::params::bind_group: 'bind'
-bind::params::bind_package: 'bind9'
-bind::params::bind_service: 'bind9'
-bind::params::nsupdate_package: 'dnsutils'
-bind::params::confdir: '/etc/bind'
-bind::namedconf: '/etc/bind/named.conf'
-bind::cachedir: '/var/cache/bind'
-bind::rndc: true
+bind::defaults::supported: true
+bind::defaults::bind_user: 'bind'
+bind::defaults::bind_group: 'bind'
+bind::defaults::bind_package: 'bind9'
+bind::defaults::bind_service: 'bind9'
+bind::defaults::nsupdate_package: 'dnsutils'
+bind::defaults::confdir: '/etc/bind'
+bind::defaults::namedconf: '/etc/bind/named.conf'
+bind::defaults::cachedir: '/var/cache/bind'
 
 bind::updater::keydir: '/etc/bind/keys'

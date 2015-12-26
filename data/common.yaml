@@ -1,10 +1,11 @@
 ---
-bind::params::supported: false
+bind::defaults::supported: false
+bind::defaults::random_device: '/dev/random'
+bind::defaults::rndc: true
 
 bind::forwarders: ''
 bind::dnssec: true
 bind::version: ''
-bind::random_device: '/dev/random'
 bind::include_local: false
 
 bind::updater::keydir: '/etc/nsupdate-keys'

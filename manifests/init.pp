@@ -1,17 +1,14 @@
 # ex: syntax=puppet si ts=4 sw=4 et
 
 class bind (
-    $namedconf       = undef,
-    $cachedir        = undef,
-    $forwarders      = undef,
-    $dnssec          = undef,
-    $version         = undef,
+    $forwarders      = '',
+    $dnssec          = true,
+    $version         = '',
     $rndc            = undef,
     $statistics_port = undef,
-    $random_device   = undef,
-    $include_local   = undef,
-) inherits bind::params {
-    $auth_nxdomain = false
+    $auth_nxdomain   = false,
+    $include_local   = false,
+) inherits bind::defaults {
 
     File {
         ensure  => present,

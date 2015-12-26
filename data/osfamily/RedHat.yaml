@@ -1,14 +1,13 @@
 ---
-bind::params::supported: true
-bind::params::bind_user: 'named'
-bind::params::bind_group: 'named'
-bind::params::bind_package: 'bind'
-bind::params::bind_service: 'named'
-bind::params::nsupdate_package: 'bind-utils'
-bind::params::managed_keys_directory: '/var/named/dynamic'
-bind::params::confdir: '/etc/named'
-bind::namedconf: '/etc/named.conf'
-bind::cachedir: '/var/named'
-bind::rndc: true
+bind::defaults::supported: true
+bind::defaults::bind_user: 'named'
+bind::defaults::bind_group: 'named'
+bind::defaults::bind_package: 'bind'
+bind::defaults::bind_service: 'named'
+bind::defaults::nsupdate_package: 'bind-utils'
+bind::defaults::managed_keys_directory: '/var/named/dynamic'
+bind::defaults::confdir: '/etc/named'
+bind::defaults::namedconf: '/etc/named.conf'
+bind::defaults::cachedir: '/var/named'
 
 bind::updater::keydir: '/etc/named/keys'

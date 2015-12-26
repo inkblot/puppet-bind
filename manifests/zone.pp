@@ -21,8 +21,13 @@ define bind::zone (
 ) {
     # where there is a zone, there is a server
     include bind
-    $cachedir = $::bind::cachedir
-    $random_device = $::bind::random_device
+
+    # Pull some platform defaults into the local scope
+    $cachedir = $::bind::defaults::cachedir
+    $random_device = $::bind::defaults::random_device
+    $bind_user = $::bind::defaults::bind_user
+    $bind_group = $::bind::defaults::bind_group
+
     $_domain = pick($domain, $name)
 
     unless !($masters != '' and ! member(['slave', 'stub'], $zone_type)) {
@@ -75,8 +80,8 @@ define bind::zone (
     if member(['init', 'managed', 'allowed'], $zone_file_mode) {
         file { "${cachedir}/${name}":
             ensure  => directory,
-            owner   => $::bind::params::bind_user,
-            group   => $::bind::params::bind_group,
+            owner   => $bind_user,
+            group   => $bind_group,
             mode    => '0755',
             require => Package['bind'],
         }
@@ -84,8 +89,8 @@ define bind::zone (
         if member(['init', 'managed'], $zone_file_mode) {
             file { "${cachedir}/${name}/${_domain}":
                 ensure  => present,
-                owner   => $::bind::params::bind_user,
-                group   => $::bind::params::bind_group,
+                owner   => $bind_user,
+                group   => $bind_group,
                 mode    => '0644',
                 replace => ($zone_file_mode == 'managed'),
                 source  => pick($source, 'puppet:///modules/bind/db.empty'),
@@ -96,7 +101,7 @@ define bind::zone (
         if $zone_file_mode == 'managed' {
             exec { "rndc reload ${_domain}":
                 command     => "/usr/sbin/rndc reload ${_domain}",
-                user        => $::bind::params::bind_user,
+                user        => $bind_user,
                 refreshonly => true,
                 require     => Service['bind'],
                 subscribe   => File["${cachedir}/${name}/${_domain}"],
@@ -113,7 +118,7 @@ define bind::zone (
             command => "/usr/local/bin/dnssec-init '${cachedir}' '${name}'\
                 '${_domain}' '${key_directory}' '${random_device}' '${nsec3_salt}'",
             cwd     => $cachedir,
-            user    => $::bind::params::bind_user,
+            user    => $bind_user,
             creates => "${cachedir}/${name}/${_domain}.signed",
             timeout => 0, # crypto is hard
             require => [
@@ -123,8 +128,8 @@ define bind::zone (
         }
 
         file { "${cachedir}/${name}/${_domain}.signed":
-            owner => $::bind::params::bind_user,
-            group => $::bind::params::bind_group,
+            owner => $bind_user,
+            group => $bind_group,
             mode  => '0644',
             audit => [ content ],
         }
@@ -133,7 +138,7 @@ define bind::zone (
     file { "${::bind::confdir}/zones/${name}.conf":
         ensure  => present,
         owner   => 'root',
-        group   => $::bind::params::bind_group,
+        group   => $bind_group,
         mode    => '0644',
         content => template('bind/zone.conf.erb'),
         notify  => Service['bind'],
