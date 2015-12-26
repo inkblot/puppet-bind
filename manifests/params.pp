@@ -7,7 +7,8 @@ class bind::params (
     $bind_package,
     $bind_service,
     $nsupdate_package,
-    $managed_keys_directory = nil,
+    $managed_keys_directory = undef,
+    $confdir,
 ) {
     unless $supported {
         fail('Platform is not supported')

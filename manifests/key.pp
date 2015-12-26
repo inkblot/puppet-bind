@@ -10,6 +10,8 @@ define bind::key (
     $keyfile     = undef,
     $include     = true,
 ) {
+    include bind::params
+    $confdir = $::bind::params::confdir
 
     # Generate a key of size $secret_bits if no $secret
     $secret_actual = $secret ? {
@@ -43,7 +45,7 @@ define bind::key (
 
         concat::fragment { "bind-key-${name}":
             order   => '10',
-            target  => "${bind::confdir}/keys.conf",
+            target  => "${bind::params::confdir}/keys.conf",
             content => "include \"${keydir}/${key_file_name}\";\n",
         }
     }

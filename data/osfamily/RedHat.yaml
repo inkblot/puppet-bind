@@ -6,8 +6,8 @@ bind::params::bind_package: 'bind'
 bind::params::bind_service: 'named'
 bind::params::nsupdate_package: 'bind-utils'
 bind::params::managed_keys_directory: '/var/named/dynamic'
+bind::params::confdir: '/etc/named'
 bind::namedconf: '/etc/named.conf'
-bind::confdir: '/etc/named'
 bind::cachedir: '/var/named'
 bind::rndc: true
 
