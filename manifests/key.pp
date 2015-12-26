@@ -5,13 +5,13 @@ define bind::key (
     $secret_bits = 256,
     $algorithm   = 'hmac-sha256',
     $owner       = 'root',
-    $group       = $bind::params::bind_group,
+    $group       = $::bind::defaults::bind_group,
     $keydir      = $::bind::keydir::keydir,
     $keyfile     = undef,
     $include     = true,
 ) {
-    include bind::params
-    $confdir = $::bind::params::confdir
+    # Pull some platform defaults into the local scope
+    $confdir = $::bind::defaults::confdir
 
     # Generate a key of size $secret_bits if no $secret
     $secret_actual = $secret ? {
@@ -45,7 +45,7 @@ define bind::key (
 
         concat::fragment { "bind-key-${name}":
             order   => '10',
-            target  => "${bind::params::confdir}/keys.conf",
+            target  => "${confdir}/keys.conf",
             content => "include \"${keydir}/${key_file_name}\";\n",
         }
     }

@@ -2,7 +2,7 @@
 
 class bind::updater (
     $keydir = undef,
-) inherits bind::params {
+) inherits bind::defaults {
 
     if $nsupdate_package {
         package { 'nsupdate':
