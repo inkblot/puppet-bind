@@ -2,13 +2,12 @@
 
 class bind::updater (
     $keydir = undef,
-) {
-    include params
+) inherits bind::params {
 
-    if $::bind::params::nsupdate_package {
+    if $nsupdate_package {
         package { 'nsupdate':
             ensure => present,
-            name   => $::bind::params::nsupdate_package,
+            name   => $nsupdate_package,
         }
     }
 

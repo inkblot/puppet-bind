@@ -1,7 +1,6 @@
 # ex: syntax=puppet si ts=4 sw=4 et
 
 class bind (
-    $confdir         = undef,
     $namedconf       = undef,
     $cachedir        = undef,
     $forwarders      = undef,
@@ -11,18 +10,13 @@ class bind (
     $statistics_port = undef,
     $random_device   = undef,
     $include_local   = undef,
-) {
-    include ::bind::params
-
-    # Re-scope members of bind::params for templating
-    $managed_keys_directory = $::bind::params::managed_keys_directory
-
+) inherits bind::params {
     $auth_nxdomain = false
 
     File {
         ensure  => present,
         owner   => 'root',
-        group   => $::bind::params::bind_group,
+        group   => $bind_group,
         mode    => '0644',
         require => Package['bind'],
         notify  => Service['bind'],
@@ -30,13 +24,13 @@ class bind (
 
     package{'bind-tools':
         ensure => latest,
-        name   => $::bind::params::nsupdate_package,
+        name   => $nsupdate_package,
         before => Package['bind'],
     }
 
     package { 'bind':
         ensure => latest,
-        name   => $::bind::params::bind_package,
+        name   => $bind_package,
     }
 
     if $dnssec {
@@ -79,7 +73,7 @@ class bind (
         "${confdir}/views.conf",
         ]:
         owner   => 'root',
-        group   => $::bind::params::bind_group,
+        group   => $bind_group,
         mode    => '0644',
         require => Package['bind'],
         notify  => Service['bind'],
@@ -105,7 +99,7 @@ class bind (
 
     service { 'bind':
         ensure     => running,
-        name       => $::bind::params::bind_service,
+        name       => $bind_service,
         enable     => true,
         hasrestart => true,
         hasstatus  => true,
