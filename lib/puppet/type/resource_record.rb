@@ -1,5 +1,19 @@
+require 'socket'
+require 'resolv'
+
 Puppet::Type.newtype(:resource_record) do
   @doc = 'A Resource Record in the Domain Name System'
+
+  autorequire(:service) do
+    reqs = []
+    # Depend on the bind service if the record is local
+    reqs << 'bind' if Socket.ip_address_list.any? do |intf|
+      Resolv.getaddresses(self[:server]).any? do |addr|
+        intf.ip_address === addr
+      end
+    end
+    reqs
+  end
 
   ensurable
 
