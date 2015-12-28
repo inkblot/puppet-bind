@@ -31,6 +31,10 @@ define bind::zone (
     $include_default_zones = $::bind::include_default_zones
 
     $_domain = pick($domain, $name)
+    $zone_file = $_domain ? {
+        '.'     => 'root',
+        default => $_domain
+    }
 
     if $include_default_zones and $default_zones_warning and member(['.', 'localhost', '127.in-addr.arpa', '0.in-addr.arpa', '255.in-addr.arpa'], $_domain) {
         warning("The bind module will include a default definition for zone \"${_domain}\" starting in version 6.0.0. Please see https://github.com/inkblot/puppet-bind/blob/master/DEFAULT_ZONES.md for more information about how this will affect your configuration.")
@@ -93,7 +97,7 @@ define bind::zone (
         }
 
         if member(['init', 'managed'], $zone_file_mode) {
-            file { "${cachedir}/${name}/${_domain}":
+            file { "${cachedir}/${name}/${zone_file}":
                 ensure  => present,
                 owner   => $bind_user,
                 group   => $bind_group,
@@ -110,7 +114,7 @@ define bind::zone (
                 user        => $bind_user,
                 refreshonly => true,
                 require     => Service['bind'],
-                subscribe   => File["${cachedir}/${name}/${_domain}"],
+                subscribe   => File["${cachedir}/${name}/${zone_file}"],
             }
         }
     } elsif $zone_file_mode == 'absent' {
@@ -125,15 +129,15 @@ define bind::zone (
                 '${_domain}' '${key_directory}' '${random_device}' '${nsec3_salt}'",
             cwd     => $cachedir,
             user    => $bind_user,
-            creates => "${cachedir}/${name}/${_domain}.signed",
+            creates => "${cachedir}/${name}/${zone_file}.signed",
             timeout => 0, # crypto is hard
             require => [
                 File['/usr/local/bin/dnssec-init'],
-                File["${cachedir}/${name}/${_domain}"]
+                File["${cachedir}/${name}/${zone_file}"]
             ],
         }
 
-        file { "${cachedir}/${name}/${_domain}.signed":
+        file { "${cachedir}/${name}/${zone_file}.signed":
             owner => $bind_user,
             group => $bind_group,
             mode  => '0644',
