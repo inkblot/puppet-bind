@@ -7,9 +7,11 @@ Puppet::Type.newtype(:resource_record) do
   autorequire(:service) do
     reqs = []
     # Depend on the bind service if the record is local
-    reqs << 'bind' if Socket.ip_address_list.any? do |intf|
-      Resolv.getaddresses(self[:server]).any? do |addr|
-        intf.ip_address === addr
+    if Socket.respond_to? :ip_address_list
+      reqs << 'bind' if Socket.ip_address_list.any? do |intf|
+        Resolv.getaddresses(self[:server]).any? do |addr|
+          intf.ip_address === addr
+        end
       end
     end
     reqs
