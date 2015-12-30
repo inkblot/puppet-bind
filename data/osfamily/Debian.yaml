@@ -8,5 +8,6 @@ bind::defaults::nsupdate_package: 'dnsutils'
 bind::defaults::confdir: '/etc/bind'
 bind::defaults::namedconf: '/etc/bind/named.conf'
 bind::defaults::cachedir: '/var/cache/bind'
+bind::defaults::default_zones_include: '/etc/bind/named.conf.default-zones'
 
 bind::updater::keydir: '/etc/bind/keys'

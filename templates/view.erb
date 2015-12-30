@@ -44,8 +44,8 @@ view "<%= @name %>" {
 	};
 <%-   end -%>
 <%- end -%>
-<%- if scope.lookupvar('osfamily') == 'Debian' -%>
-	include "<%= @confdir %>/named.conf.default-zones";
+<%- if @default_zones_include -%>
+	include "<%= @default_zones_include %>";
 <%- end -%>
 
 <%- Array(@zones).each do |zone| -%>

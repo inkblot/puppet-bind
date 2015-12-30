@@ -62,6 +62,12 @@ class bind (
         content => template('bind/named.conf.erb'),
     }
 
+    if $default_zones_source {
+        file { $default_zones_include:
+            source => $default_zones_source,
+        }
+    }
+
     class { 'bind::keydir':
         keydir => "${confdir}/keys",
     }

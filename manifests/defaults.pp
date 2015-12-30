@@ -13,6 +13,8 @@ class bind::defaults (
     $nsupdate_package       = undef,
     $managed_keys_directory = undef,
     $default_zones_warning  = undef,
+    $default_zones_include  = undef,
+    $default_zones_source   = undef,
 ) {
     unless is_bool($supported) {
         fail('Please ensure that the dependencies of the bind module are installed and working correctly')
