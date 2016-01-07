@@ -4,8 +4,9 @@ bind
 [![Build Status](https://secure.travis-ci.org/inkblot/puppet-bind.png)](http://travis-ci.org/inkblot/puppet-bind)
 
 ## Description
+
 Control BIND name servers and zones
-=======
+
 Overview
 --------
 
@@ -54,8 +55,6 @@ parameters in the `named.conf` file, and also defines the overall structure of
 DNS service on the node.
 
     class { 'bind':
-        confdir    => '/etc/bind',
-        cachedir   => '/var/lib/bind',
         forwarders => [
             '8.8.8.8',
             '8.8.4.4',
