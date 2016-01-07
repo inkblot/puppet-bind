@@ -44,7 +44,7 @@ view "<%= @name %>" {
 	};
 <%-   end -%>
 <%- end -%>
-<%- if @default_zones_include -%>
+<%- if @include_default_zones and @default_zones_include -%>
 	include "<%= @default_zones_include %>";
 <%- end -%>
 
