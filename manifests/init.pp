@@ -1,13 +1,14 @@
 # ex: syntax=puppet si ts=4 sw=4 et
 
 class bind (
-    $forwarders      = '',
-    $dnssec          = true,
-    $version         = '',
-    $rndc            = undef,
-    $statistics_port = undef,
-    $auth_nxdomain   = false,
-    $include_local   = false,
+    $forwarders            = '',
+    $dnssec                = true,
+    $version               = '',
+    $rndc                  = undef,
+    $statistics_port       = undef,
+    $auth_nxdomain         = false,
+    $include_local         = false,
+    $include_default_zones = true,
 ) inherits bind::defaults {
 
     File {

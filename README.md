@@ -2,6 +2,11 @@
 
 [![Build Status](https://secure.travis-ci.org/inkblot/puppet-bind.png)](http://travis-ci.org/inkblot/puppet-bind)
 
+**IMPORTANT UPGRADE INFORMATION:** In a future version of this module there
+will be significant changes to the handling of default zones that may require
+preparations prior to upgrading. See [DEFAULT_ZONES.md](DEFAULT_ZONES.md) for
+details.
+
 ## Summary
 
 Control BIND name servers and zones
