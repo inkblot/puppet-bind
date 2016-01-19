@@ -370,7 +370,7 @@ resource_record { 'example.com SIP service locator':
 
 ## Troubleshooting
 
-### Error message: "Please ensure that the dependencies of the bind module are installed and working correctly
+### Error message: "Please ensure that the dependencies of the bind module are installed and working correctly"
 
 This error usually has one of two causes.
 
