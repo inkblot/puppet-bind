@@ -9,5 +9,6 @@ bind::defaults::managed_keys_directory: '/var/named/dynamic'
 bind::defaults::confdir: '/etc/named'
 bind::defaults::namedconf: '/etc/named.conf'
 bind::defaults::cachedir: '/var/named'
+bind::defaults::default_zones_warning: true
 
 bind::updater::keydir: '/etc/named/keys'

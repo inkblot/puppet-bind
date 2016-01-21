@@ -22,13 +22,19 @@ define bind::zone (
     # where there is a zone, there is a server
     include bind
 
-    # Pull some platform defaults into the local scope
+    # Pull some platform defaults and `bind` class parameters into the local scope
     $cachedir = $::bind::defaults::cachedir
     $random_device = $::bind::defaults::random_device
     $bind_user = $::bind::defaults::bind_user
     $bind_group = $::bind::defaults::bind_group
+    $default_zones_warning = $::bind::defaults::default_zones_warning
+    $include_default_zones = $::bind::include_default_zones
 
     $_domain = pick($domain, $name)
+
+    if $include_default_zones and $default_zones_warning and member(['.', 'localhost', '127.in-addr.arpa', '0.in-addr.arpa', '255.in-addr.arpa'], $_domain) {
+        warning("The bind module will include a default definition for zone \"${_domain}\" starting in version 6.0.0. Please see https://github.com/inkblot/puppet-bind/blob/master/DEFAULT_ZONES.md for more information about how this will affect your configuration.")
+    }
 
     unless !($masters != '' and ! member(['slave', 'stub'], $zone_type)) {
         fail("masters may only be provided for bind::zone resources with zone_type 'slave' or 'stub'")
