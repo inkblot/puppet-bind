@@ -5,13 +5,13 @@ class bind::updater (
 ) inherits bind::defaults {
 
     if $nsupdate_package {
-        package { 'nsupdate':
+        package { 'bind-tools':
             ensure => present,
             name   => $nsupdate_package,
         }
     }
 
-    class { 'bind::keydir':
-        keydir => $keydir,
-    }
+    # class { 'bind::keydir':
+    #     keydir => $keydir,
+    # }
 }

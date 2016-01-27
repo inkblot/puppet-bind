@@ -20,11 +20,12 @@ class bind (
         notify  => Service['bind'],
     }
 
-    package{'bind-tools':
-        ensure => latest,
-        name   => $nsupdate_package,
-        before => Package['bind'],
-    }
+    include ::bind::updater
+    # package{'bind-tools':
+    #     ensure => latest,
+    #     name   => $nsupdate_package,
+    #     before => Package['bind'],
+    # }
 
     package { 'bind':
         ensure => latest,
