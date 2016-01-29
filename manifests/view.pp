@@ -12,6 +12,8 @@ define bind::view (
     $order                        = '10',
 ) {
     $confdir = $::bind::confdir
+    $default_zones_include = $::bind::default_zones_include
+    $include_default_zones = $::bind::include_default_zones
 
     concat::fragment { "bind-view-${name}":
         order   => $order,
