@@ -7,8 +7,8 @@ class bind (
     $rndc                  = undef,
     $statistics_port       = undef,
     $auth_nxdomain         = false,
-    $include_local         = false,
     $include_default_zones = true,
+    $include_local         = false,
 ) inherits bind::defaults {
 
     File {
@@ -60,6 +60,12 @@ class bind (
 
     file { $namedconf:
         content => template('bind/named.conf.erb'),
+    }
+
+    if $include_default_zones and $default_zones_source {
+        file { $default_zones_include:
+            source => $default_zones_source,
+        }
     }
 
     class { 'bind::keydir':
