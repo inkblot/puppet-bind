@@ -126,7 +126,8 @@ define bind::zone (
     if $dnssec {
         exec { "dnssec-keygen-${name}":
             command => "/usr/local/bin/dnssec-init '${cachedir}' '${name}'\
-                '${_domain}' '${key_directory}' '${random_device}' '${nsec3_salt}'",
+                '${_domain}' '${key_directory}' '${random_device}' '${nsec3_salt}'\
+                '${zone_file}'",
             cwd     => $cachedir,
             user    => $bind_user,
             creates => "${cachedir}/${name}/${zone_file}.signed",
