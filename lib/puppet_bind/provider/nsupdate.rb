@@ -81,7 +81,7 @@ module PuppetBind
       end
 
       def spaced_type?(type)
-        %w(DS TLSA).include?(type)
+        %w(DS TLSA SSHFP).include?(type)
       end
 
       def maybe_quote(type, datum)
@@ -97,7 +97,16 @@ module PuppetBind
       end
 
       def maybe_unspace(type, datum)
-        spaced_type?(type) ? datum.gsub(/^(\d+)\s+(\d+)\s+(\d+)\s+(\w+)\s+(\w+)$/, '\1 \2 \3 \4\5') : datum
+        if spaced_type?(type)
+          case type
+          when 'DS', 'TLSA'
+            datum.gsub(/^(\d+)\s+(\d+)\s+(\d+)\s+(\w+)\s+(\w+)$/, '\1 \2 \3 \4\5')
+          when 'SSHFP'
+            datum.gsub(/^(\d+)\s+(\d+)\s+(\w+)\s+(\w+)$/, '\1 \2 \3\4')
+          end
+        else
+          datum
+        end
       end
 
       def rrdata_adds
