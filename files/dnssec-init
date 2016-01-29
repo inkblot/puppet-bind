@@ -6,13 +6,14 @@ DOMAIN="$3"
 KEY_DIRECTORY="${4:-${CACHEDIR}/${NAME}}"
 RANDOM_DEVICE="$5"
 NSEC3_SALT="$6"
+ZONE_FILE="$7"
 PATH=/bin:/sbin:/usr/bin:/usr/sbin
 
 dnssec-keygen -a RSASHA256 -b 1024 -r "${RANDOM_DEVICE}" -K "${KEY_DIRECTORY}" "${DOMAIN}"
 dnssec-keygen -a RSASHA256 -b 2048 -r "${RANDOM_DEVICE}" -f KSK -K "${KEY_DIRECTORY}" "${DOMAIN}"
 
 if [ $NSEC3_SALT != '' ]; then
-    dnssec-signzone -S -u -3 ${NSEC3_SALT} -d "${CACHEDIR}" -K "${KEY_DIRECTORY}" -o "${DOMAIN}" "${CACHEDIR}/${NAME}/${DOMAIN}"
+    dnssec-signzone -S -u -3 ${NSEC3_SALT} -d "${CACHEDIR}" -K "${KEY_DIRECTORY}" -o "${DOMAIN}" "${CACHEDIR}/${NAME}/${ZONE_FILE}"
 else
-    dnssec-signzone -S -d "${CACHEDIR}" -K "${KEY_DIRECTORY}" -o "${DOMAIN}" "${CACHEDIR}/${NAME}/${DOMAIN}"
+    dnssec-signzone -S -d "${CACHEDIR}" -K "${KEY_DIRECTORY}" -o "${DOMAIN}" "${CACHEDIR}/${NAME}/${ZONE_FILE}"
 fi
