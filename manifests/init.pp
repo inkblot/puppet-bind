@@ -3,6 +3,7 @@
 class bind (
     $forwarders            = '',
     $dnssec                = true,
+    $filter_ipv6           = false,
     $version               = '',
     $rndc                  = undef,
     $statistics_port       = undef,

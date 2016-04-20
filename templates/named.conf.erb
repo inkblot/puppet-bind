@@ -24,6 +24,9 @@ options {
 	auth-nxdomain <%= @auth_nxdomain ? 'yes' : 'no' %>;
 	listen-on-v6 { any; };
 	dnssec-enable <%= @dnssec ? 'yes' : 'no' %>;
+<%- if @filter_ipv6 -%>
+	filter-aaaa-on-v4 yes;
+<%- end -%>
 <%- if @dnssec -%>
 	dnssec-validation yes;
 	dnssec-lookaside auto;
