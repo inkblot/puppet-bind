@@ -34,6 +34,9 @@ view "<%= @name %>" {
 	};
 <%-   end -%>
 <%- end -%>
+<%- if @empty_zones != '' -%>
+	empty-zones-enable <%= @empty_zones ? 'yes' : 'no' %>;
+<%- end -%>
 <%- if @servers and @servers.is_a?(Array) -%>
 <%-   @servers.each do |properties| -%>
 <%-     raise Puppet::Error, 'view servers must have an ip_addr key' unless properties.has_key?('ip_addr') -%>
