@@ -67,7 +67,7 @@ zone "<%= @_domain %>" {
 <%- if @forwarders and @forwarders != '' -%>
 	forwarders {
 <%-   Array(@forwarders).each do |forwarder| -%>
-		<%= forwarder %>;
+		<%= forwarder %><%-if @forwarders_port != 53 -%> port <%= @forwarders_port %><%- end -%>;
 <%-   end -%>
 	};
 <%- end -%>
