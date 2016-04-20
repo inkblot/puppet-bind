@@ -53,6 +53,9 @@ view "<%= @name %>" {
 <%- if @notify_source and @notify_source != '' -%>
 	notify-source <%= @notify_source %>;
 <%- end -%>
+<%- if @minimal_responses -%>
+	minimal-responses yes;
+<%- end -%>
 <%- if scope.lookupvar('osfamily') == 'Debian' -%>
 	include "<%= @confdir %>/named.conf.default-zones";
 <%- end -%>
