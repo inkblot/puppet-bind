@@ -43,6 +43,9 @@ view "<%= @name %>" {
 <%-     end -%>
 	};
 <%- end -%>
+<%- if @minimal_responses -%>
+	minimal-responses yes;
+<%- end -%>
 <%- if @also_notify and @also_notify != '' -%>
 	also-notify {
 <%-     Array(@also_notify).each do |server| -%>

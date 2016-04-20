@@ -12,6 +12,7 @@ define bind::view (
     $notify_source                = '',
     $also_notify                  = [],
     $order                        = '10',
+    $minimal_responses            = false,
 ) {
     $confdir = $::bind::confdir
     $default_zones_include = $::bind::default_zones_include
