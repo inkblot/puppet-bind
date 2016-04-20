@@ -6,6 +6,7 @@ define bind::zone (
     $dynamic         = true,
     $masters         = '',
     $transfer_source = '',
+    $notify_source   = '',
     $allow_updates   = '',
     $update_policies = '',
     $allow_transfers = '',
@@ -47,6 +48,10 @@ define bind::zone (
 
     unless !($transfer_source != '' and ! member(['slave', 'stub'], $zone_type)) {
         fail("transfer_source may only be provided for bind::zone resources with zone_type 'slave' or 'stub'")
+    }
+
+    unless !($notify_source != '' and ! member(['master', 'slave'], $zone_type)) {
+        fail("notify_source may only be provided for bind::zone resources with zone_type 'master' or 'slave'")
     }
 
     unless !($allow_updates != '' and ! $dynamic) {
