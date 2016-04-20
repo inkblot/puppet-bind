@@ -40,6 +40,9 @@ zone "<%= @_domain %>" {
 <%- if @transfer_source and @transfer_source != ''-%>
 	transfer-source <%= @transfer_source %>;
 <%- end -%>
+<%- if @notify_source and @notify_source != ''-%>
+	notify-source <%= @notify_source %>;
+<%- end -%>
 <%- if @allow_updates and @allow_updates != '' -%>
 	allow-update {
 <%-   Array(@allow_updates).each do |allow_update| -%>
