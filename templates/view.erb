@@ -45,15 +45,16 @@ view "<%= @name %>" {
 		keys { <%= properties['keys'] %>; };
 <%-     end -%>
 	};
+<%-   end -%>
 <%- end -%>
 <%- if @minimal_responses -%>
 	minimal-responses yes;
 <%- end -%>
 <%- if @also_notify and @also_notify != '' -%>
 	also-notify {
-<%-     Array(@also_notify).each do |server| -%>
+<%-   Array(@also_notify).each do |server| -%>
 		<%= server %>;
-<%-     end -%>
+<%-   end -%>
 	};
 <%- end -%>
 <%- if @notify_source and @notify_source != '' -%>
