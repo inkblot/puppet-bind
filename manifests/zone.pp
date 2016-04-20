@@ -18,6 +18,7 @@ define bind::zone (
     $forwarders      = '',
     $forward         = '',
     $source          = '',
+    $forwarders_port = 53,
 ) {
     # where there is a zone, there is a server
     include bind
