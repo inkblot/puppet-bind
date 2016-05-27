@@ -263,7 +263,7 @@ bind::view { 'ns':
 
 ### `resource_record`
 
-Declares a resource record. For exampmle:
+Declares a resource record. For example:
 
 ```
 resource_record { 'www.example.com address':
