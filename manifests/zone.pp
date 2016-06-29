@@ -115,7 +115,7 @@ define bind::zone (
         }
 
         if $zone_file_mode == 'managed' {
-            exec { "rndc reload ${_domain}":
+            exec { "rndc reload ${name}":
                 command     => "/usr/sbin/rndc reload ${_domain}",
                 user        => $bind_user,
                 refreshonly => true,

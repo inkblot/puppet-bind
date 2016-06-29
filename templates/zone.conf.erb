@@ -14,7 +14,11 @@ zone "<%= @_domain %>" {
 	file "<%= @cachedir %>/<%= @name %>/<%= @zone_file %>";
 <%- end -%>
 <%- if %w(master slave).include? @zone_type -%>
+	<%- if (@ns_notify == 'explicit') -%>
+	notify explicit;
+	<%- else -%>
 	notify <%= @ns_notify ? 'yes' : 'no' %>;
+	<%- end -%>
 <%- end -%>
 <%- if @also_notify and @also_notify != '' -%>
 	also-notify {
