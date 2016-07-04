@@ -13,13 +13,13 @@ zone "<%= @_domain %>" {
 <%- elsif %w(init managed allowed).include? @zone_file_mode -%>
 	file "<%= @cachedir %>/<%= @name %>/<%= @zone_file %>";
 <%- end -%>
-<%- if %w(master slave).include? @zone_type -%>
-	<%- if (@ns_notify == 'explicit') -%>
+<%- if %w(master slave).include? @zone_type
+      if (@ns_notify == 'explicit') -%>
 	notify explicit;
-	<%- else -%>
+<%-   else -%>
 	notify <%= @ns_notify ? 'yes' : 'no' %>;
-	<%- end -%>
-<%- end -%>
+<%-   end
+    end -%>
 <%- if @also_notify and @also_notify != '' -%>
 	also-notify {
 <%-   Array(@also_notify).each do |server| -%>
