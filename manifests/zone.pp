@@ -29,7 +29,6 @@ define bind::zone (
     $random_device = $::bind::defaults::random_device
     $bind_user = $::bind::defaults::bind_user
     $bind_group = $::bind::defaults::bind_group
-    $default_zones_warning = $::bind::defaults::default_zones_warning
     $include_default_zones = $::bind::include_default_zones
 
     $_domain = pick($domain, $name)
@@ -38,8 +37,8 @@ define bind::zone (
         default => $_domain
     }
 
-    if $include_default_zones and $default_zones_warning and member(['.', 'localhost', '127.in-addr.arpa', '0.in-addr.arpa', '255.in-addr.arpa'], $_domain) {
-        warning("The bind module will include a default definition for zone \"${_domain}\" starting in version 6.0.0. Please see https://github.com/inkblot/puppet-bind/blob/master/DEFAULT_ZONES.md for more information about how this will affect your configuration.")
+    if $include_default_zones and member(['.', 'localhost', '127.in-addr.arpa', '0.in-addr.arpa', '255.in-addr.arpa'], $_domain) {
+        fail("The bind module includes a default definition for zone \"${_domain}\" starting in version 6.0.0. Please see https://github.com/inkblot/puppet-bind/blob/master/DEFAULT_ZONES.md for more information about how this affects your configuration.")
     }
 
     unless !($masters != '' and ! member(['slave', 'stub'], $zone_type)) {

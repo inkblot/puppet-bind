@@ -12,7 +12,6 @@ class bind::defaults (
     $bind_service           = undef,
     $nsupdate_package       = undef,
     $managed_keys_directory = undef,
-    $default_zones_warning  = undef,
     $default_zones_include  = undef,
     $default_zones_source   = undef,
 ) {
