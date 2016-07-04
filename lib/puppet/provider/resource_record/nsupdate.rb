@@ -1,4 +1,11 @@
-require 'puppet_bind/provider/nsupdate'
+begin
+  require 'puppet_bind/provider/nsupdate'
+rescue LoadError
+  require 'pathname' # WORK_AROUND #14073 and #7788
+  nsupdate = Puppet::Module.find('dns', Puppet[:environment].to_s)
+  raise(LoadError, "Unable to find nsupdate module in modulepath #{Puppet[:basemodulepath] || Puppet[:modulepath]}") unless nsupdate
+  require File.join nsupdate.path, 'lib/puppet_bind/provider/nsupdate'
+end
 
 Puppet::Type.type(:resource_record).provide(:nsupdate) do
 
