@@ -34,6 +34,13 @@ view "<%= @name %>" {
 	};
 <%-   end -%>
 <%- end -%>
+<%- if @allow_transfers and @allow_transfers != '' -%>
+	allow-transfer {
+<%-   Array(@allow_transfers).each do |allow_transfer| -%>
+		<%= allow_transfer %>;
+<%-   end -%>
+	};
+<%- end -%>
 <%- if @empty_zones != '' -%>
 	empty-zones-enable <%= @empty_zones ? 'yes' : 'no' %>;
 <%- end -%>
