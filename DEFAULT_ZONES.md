@@ -13,7 +13,7 @@ compliance with [RFC 1912](https://www.ietf.org/rfc/rfc1912.txt). The content
 of these zones is standardized, and the zone files for them are maintained by
 the package distributor.
 
-## Change Is Coming
+## Version 5.x vs. version 6.x of `puppet-bind`
 
 <a name="warning"></a>
 ### The Warning
@@ -30,10 +30,10 @@ If you are seeing this warning, it is because starting in version 6.0.0 certain
 catalog application failures. There are [steps](#configuration-changes) to take
 prior to version 6.0.0 to prepare for it.
 
-### The Present: Debian and Red Hat Divergence
+### Older versions: Debian and Red Hat Divergence
 
-The treatment of default zones in this module has been different between Debian
-and Red Hat systems until now.
+The treatment of default zones in versions 5.x and earlier of this module has
+differed between Debian and Red Hat systems.
 
 On Debian systems, the `bind9` package installs a separate configuration file
 at `/etc/bind/named.conf.default-zones` which defines these zones and also
@@ -49,7 +49,7 @@ rewrites this file, these definitions are lost.
 
 In both cases, the current behavior is not configurable and always happens.
 
-### The Future: Consistency with Flexibility
+### Version 6.x and later: Consistency with Flexibility
 
 Starting in version 6.0.0 of this module, default zones will be preserved on
 both Debian and Red Hat, with the option of disabling them. This will not

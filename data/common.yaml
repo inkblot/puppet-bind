@@ -2,7 +2,6 @@
 bind::defaults::supported: false
 bind::defaults::random_device: '/dev/random'
 bind::defaults::rndc: true
-bind::defaults::default_zones_warning: false
 
 bind::forwarders: ''
 bind::dnssec: true

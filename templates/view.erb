@@ -47,6 +47,9 @@ view "<%= @name %>" {
 	};
 <%-   end -%>
 <%- end -%>
+<%- if @minimal_responses -%>
+	minimal-responses yes;
+<%- end -%>
 <%- if @also_notify and @also_notify != '' -%>
 	also-notify {
 <%-   Array(@also_notify).each do |server| -%>
@@ -57,11 +60,8 @@ view "<%= @name %>" {
 <%- if @notify_source and @notify_source != '' -%>
 	notify-source <%= @notify_source %>;
 <%- end -%>
-<%- if @minimal_responses -%>
-	minimal-responses yes;
-<%- end -%>
-<%- if scope.lookupvar('osfamily') == 'Debian' -%>
-	include "<%= @confdir %>/named.conf.default-zones";
+<%- if @include_default_zones and @default_zones_include -%>
+	include "<%= @default_zones_include %>";
 <%- end -%>
 
 <%- Array(@zones).each do |zone| -%>
