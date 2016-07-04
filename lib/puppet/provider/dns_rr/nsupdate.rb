@@ -1,4 +1,10 @@
-require 'puppet_bind/provider/nsupdate'
+begin
+  require 'puppet_bind/provider/nsupdate'
+rescue LoadError => e
+  # work around for puppet bug SERVER-973
+  Puppet.info('Puppet did not autoload from the lib directory... falling back to relative path load.')
+  require File.join(File.expand_path(File.join(__FILE__, '../../../..')), 'puppet_bind/provider/nsupdate')
+end
 
 Puppet::Type.type(:dns_rr).provide(:nsupdate) do
 
