@@ -69,12 +69,12 @@ define bind::zone (
         fail("allow_notify may only be provided for bind::zone resources with zone_type 'slave' or 'stub'")
     }
 
-    unless !($forwarders != '' and $zone_type != 'forward') {
-        fail("forwarders may only be provided for bind::zone resources with zone_type 'forward'")
+    unless !($forwarders != '' and ! member(['master', 'slave', 'forward'], $zone_type)) {
+        fail("forwarders may only be provided for bind::zone resources with zone_type 'forward' or 'master' or 'slave'")
     }
 
-    unless !($forward != '' and $zone_type != 'forward') {
-        fail("forward may only be provided for bind::zone resources with zone_type 'forward'")
+    unless !($forward != '' and ! member(['master', 'slave', 'forward'], $zone_type)) {
+        fail("forward may only be provided for bind::zone resources with zone_type 'forward' or 'master' or 'slave'")
     }
 
     unless !($source != '' and ! member(['master', 'hint'], $zone_type)) {
