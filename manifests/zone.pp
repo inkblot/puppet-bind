@@ -115,7 +115,7 @@ define bind::zone (
 
         if $zone_file_mode == 'managed' {
             exec { "rndc reload ${_domain}":
-                command     => "/usr/sbin/rndc reload ${_domain}",
+                command     => "/usr/local/bin/rndc-helper reload ${name}",
                 user        => $bind_user,
                 refreshonly => true,
                 require     => Service['bind'],
@@ -161,4 +161,8 @@ define bind::zone (
         require => Package['bind'],
     }
 
+    concat::fragment { "bind-zone-mapping-${name}":
+        target  => "${::bind::confdir}/domain-mappings.txt",
+        content => "${name}:${_domain}\n",
+    }
 }
