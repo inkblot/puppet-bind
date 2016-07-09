@@ -1,0 +1,19 @@
+#!/bin/bash
+
+CONFDIR=<%= @confdir %>
+
+function param_lookup() {
+  local zone_name="${1}"
+  local domain="$(grep "^${zone_name}:" ${CONFDIR}/domain-mappings.txt | cut -f2 -d:)"
+  grep "^${zone_name}:" ${CONFDIR}/view-mappings.txt | cut -f2 -d: | sed -e "s/\(.*\)/${domain} IN \1/"
+}
+
+zone_name="${!#}"
+
+param_lookup "${zone_name}" | while read Z; do
+  if [ $# == 1 ]; then
+    echo $Z
+  else
+    /usr/sbin/rndc "${@:1:$(($# - 1))}" $Z
+  fi
+done

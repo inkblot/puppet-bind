@@ -5,7 +5,6 @@ class bind (
     $dnssec                = true,
     $filter_ipv6           = false,
     $version               = '',
-    $rndc                  = undef,
     $statistics_port       = undef,
     $auth_nxdomain         = false,
     $include_default_zones = true,
@@ -43,15 +42,21 @@ class bind (
         }
     }
 
-    if $rndc {
-        # rndc only supports HMAC-MD5
-        bind::key { 'rndc-key':
-            algorithm   => 'hmac-md5',
-            secret_bits => '512',
-            keydir      => $confdir,
-            keyfile     => 'rndc.key',
-            include     => false,
-        }
+    # rndc only supports HMAC-MD5
+    bind::key { 'rndc-key':
+        algorithm   => 'hmac-md5',
+        secret_bits => '512',
+        keydir      => $confdir,
+        keyfile     => 'rndc.key',
+        include     => false,
+    }
+
+    file { '/usr/local/bin/rndc-helper':
+        ensure  => present,
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0755',
+        content => template('bind/rndc-helper.erb'),
     }
 
     file { "${confdir}/zones":
@@ -77,6 +82,8 @@ class bind (
         "${confdir}/acls.conf",
         "${confdir}/keys.conf",
         "${confdir}/views.conf",
+        "${confdir}/view-mappings.txt",
+        "${confdir}/domain-mappings.txt",
         ]:
         owner   => 'root',
         group   => $bind_group,

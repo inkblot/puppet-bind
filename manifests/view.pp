@@ -25,4 +25,9 @@ define bind::view (
         target  => "${::bind::confdir}/views.conf",
         content => template('bind/view.erb'),
     }
+
+    concat::fragment { "bind-view-mappings-${name}":
+        target  => "${::bind::confdir}/view-mappings.txt",
+        content => template('bind/view-mappings.erb'),
+    }
 }

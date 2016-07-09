@@ -1,7 +1,6 @@
 ---
 bind::defaults::supported: false
 bind::defaults::random_device: '/dev/random'
-bind::defaults::rndc: true
 
 bind::forwarders: ''
 bind::dnssec: true
