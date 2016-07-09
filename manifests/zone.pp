@@ -114,12 +114,21 @@ define bind::zone (
         }
 
         if $zone_file_mode == 'managed' {
-            exec { "rndc reload ${_domain}":
-                command     => "/usr/sbin/rndc reload ${_domain}",
+            exec { "rndc reload ${name}":
+                command     => "/bin/grep \"; Zone dump of '${_domain}\" ${cachedir}/named_dump.db | while read -r line; do VIEW=`echo \"\$line\" | /usr/bin/awk -F \"/\" '{ print substr(\$NF,1,length(\$NF)-1) }'`; /usr/sbin/rndc reload \"${_domain}\" IN \"\$VIEW\"; done",
                 user        => $bind_user,
                 refreshonly => true,
                 require     => Service['bind'],
                 subscribe   => File["${cachedir}/${name}/${zone_file}"],
+            }
+            
+            exec{"rndc-dump-zones ${name}":
+                command => '/usr/sbin/rndc dumpdb -zones',
+                user  => $bind_user,
+                refreshonly => true,
+                require    => Service['bind'],
+                subscribe  => File ["${::bind::confdir}/zones/${name}.conf"],
+                before     => Exec["rndc reload ${name}"],
             }
         }
     } elsif $zone_file_mode == 'absent' {
