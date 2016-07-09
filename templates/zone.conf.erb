@@ -73,8 +73,10 @@ zone "<%= @_domain %>" {
 <%- end -%>
 <%- if @forwarders and @forwarders != '' -%>
 	forwarders {
+<%- if @forwarders != 'none' -%>
 <%-   Array(@forwarders).each do |forwarder| -%>
 		<%= forwarder %><%-if @forwarders_port != 53 -%> port <%= @forwarders_port %><%- end -%>;
+<%-   end -%>
 <%-   end -%>
 	};
 <%- end -%>
