@@ -9,6 +9,7 @@ class bind (
     $auth_nxdomain         = false,
     $include_default_zones = true,
     $include_local         = false,
+    $local_options         = {},
 ) inherits bind::defaults {
 
     File {
