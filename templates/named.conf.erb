@@ -2,6 +2,11 @@
 include "<%= @confdir %>/acls.conf";
 include "<%= @confdir %>/keys.conf";
 include "<%= @confdir %>/views.conf";
+<%- if @include_custom -%>
+<%-   Array(@include_custom).each do |inc| -%>
+include "<%= @confdir %>/<%= inc %>";
+<%-   end -%>
+<%- end -%>
 <%- if @statistics_port -%>
 
 statistics-channels {
