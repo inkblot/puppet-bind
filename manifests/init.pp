@@ -7,6 +7,7 @@ class bind (
     $version               = '',
     $statistics_port       = undef,
     $auth_nxdomain         = false,
+    $include_custom        = undef,
     $include_default_zones = true,
     $include_local         = false,
 ) inherits bind::defaults {
