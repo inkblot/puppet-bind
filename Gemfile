@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 if ENV.include?('PUPPET_VERSION')
   puppetversion = "~>#{ENV['PUPPET_VERSION']}"
 else
-  puppetversion = '~>3.7.0'
+  puppetversion = '~>4.5.0'
 end
 
 gem 'rake'
