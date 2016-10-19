@@ -21,6 +21,9 @@ options {
 <%-   end -%>
 	};
 <%- end -%>
+<%- if @forward != '' -%>
+	forward <%= @forward %>;
+<%- end -%>
 	auth-nxdomain <%= @auth_nxdomain ? 'yes' : 'no' %>;
 	listen-on-v6 { any; };
 	dnssec-enable <%= @dnssec ? 'yes' : 'no' %>;
