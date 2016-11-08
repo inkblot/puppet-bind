@@ -1,13 +1,13 @@
 # ex: syntax=puppet si ts=4 sw=4 et
 
 class bind (
-    $forwarders            = '',
+    $forwarders            = undef,
     $forward               = undef,
-    $dnssec                = true,
-    $filter_ipv6           = false,
-    $version               = '',
+    $dnssec                = undef,
+    $filter_ipv6           = undef,
+    $version               = undef,
     $statistics_port       = undef,
-    $auth_nxdomain         = false,
+    $auth_nxdomain         = undef,
     $include_default_zones = true,
     $include_local         = false,
 ) inherits bind::defaults {
@@ -22,11 +22,6 @@ class bind (
     }
 
     include ::bind::updater
-    # package{'bind-tools':
-    #     ensure => latest,
-    #     name   => $nsupdate_package,
-    #     before => Package['bind'],
-    # }
 
     package { 'bind':
         ensure => latest,

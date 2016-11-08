@@ -21,7 +21,7 @@ options {
 <%-   end -%>
 	};
 <%- end -%>
-<%- if @forward and @forward != '' -%>
+<%- if @forward != '' -%>
 	forward <%= @forward %>;
 <%- end -%>
 	auth-nxdomain <%= @auth_nxdomain ? 'yes' : 'no' %>;
