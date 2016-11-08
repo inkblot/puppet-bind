@@ -1,6 +1,6 @@
 {
   "name": "inkblot/bind",
-  "version": "7.0.0",
+  "version": "7.1.0",
   "author": "inkblot",
   "license": "Apache-2.0",
   "summary": "ISC BIND name server",
