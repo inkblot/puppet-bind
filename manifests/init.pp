@@ -2,6 +2,7 @@
 
 class bind (
     $forwarders            = '',
+    $forward               = undef,
     $dnssec                = true,
     $filter_ipv6           = false,
     $version               = '',
