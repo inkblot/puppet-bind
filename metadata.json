@@ -1,6 +1,6 @@
 {
   "name": "inkblot/bind",
-  "version": "7.1.0",
+  "version": "7.1.1",
   "author": "inkblot",
   "license": "Apache-2.0",
   "summary": "ISC BIND name server",
@@ -15,7 +15,7 @@
     },
     {
       "operatingsystem": "Ubuntu",
-      "operatingsystemrelease": [ "12.04", "14.04" ]
+      "operatingsystemrelease": [ "12.04", "14.04", "16.04" ]
     },
     {
       "operatingsystem": "CentOS",
