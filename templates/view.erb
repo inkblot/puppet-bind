@@ -33,6 +33,34 @@ view "<%= @name %>" {
 <%-     end -%>
 	};
 <%-   end -%>
+<%-   if @allow_query and @allow_query != '' -%>
+	allow-query {
+<%-     Array(@allow_query).each do |query_client| -%>
+		<%= query_client %>;
+<%-     end -%>
+	};
+<%-   end -%>
+<%-   if @allow_query_on and @allow_query_on != '' -%>
+	allow-query-on {
+<%-     Array(@allow_query_on).each do |query_server| -%>
+		<%= match_server %>;
+<%-     end -%>
+	};
+<%-   end -%>
+<%-   if @allow_query_cache and @allow_query_cache != '' -%>
+	allow-query-cache {
+<%-     Array(@allow_query_cache).each do |query_client| -%>
+		<%= query_client %>;
+<%-     end -%>
+	};
+<%-   end -%>
+<%-   if @allow_query_cache_on and @allow_query_cache_on != '' -%>
+	allow-query-cache-on {
+<%-     Array(@allow_query_cache_on).each do |query_server| -%>
+		<%= query_server %>;
+<%-     end -%>
+	};
+<%-   end -%>
 <%- end -%>
 <%- if @allow_transfers and @allow_transfers != '' -%>
 	allow-transfer {
