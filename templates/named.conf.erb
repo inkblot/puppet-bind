@@ -37,7 +37,52 @@ options {
 <%- if @version != '' -%>
 	version "<%= @version %>";
 <%- end -%>
+<%- if @options -%>
+<%-
+  @options.sort.each do |key, value|
+    if value.is_a?(Array)
+-%>
+	<%=key%> {
+<%-
+  value.each do |i|
+-%>
+		<%=i%>;
+<% end -%>
+	};
+<% else -%>
+	<%=key%> <%=value%>;
+<%end -%>
+<%end -%>
+<%end -%>
 };
+
+<% if @logging -%>
+logging {
+<% @logging['channels'].sort.each do |key, hash| -%>
+	channel <%=key%> {
+<% hash.sort.each do |directive, value| -%>
+<% if value.is_a?(Array) %>
+		<%=directive%> {
+<% value.each do |i| -%>
+			<%=i%>;
+<% end -%>
+		};
+<% else -%>
+		<%=directive%> <%=value%>;
+<%end -%>
+<%end -%>
+	};
+<%end -%>
+<%-
+  @logging['categories'].sort.each do |key, value|
+-%>
+	category <%=key%> {
+		<%=Array(value).join(';')%>;
+	};
+<%end -%>
+};
+<%end -%>
+
 <%- if @include_local -%>
 
 include "<%= @confdir %>/named.conf.local";

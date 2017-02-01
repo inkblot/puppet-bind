@@ -10,7 +10,27 @@ class bind (
     $auth_nxdomain         = undef,
     $include_default_zones = true,
     $include_local         = false,
+    $options               = undef,
+    $logging               = undef,
 ) inherits bind::defaults {
+
+    if $logging {
+      validate_hash($logging)
+
+      if has_key($logging, 'channels') {
+        validate_hash($logging['channels'])
+      }
+      else {
+        fail('$logging should have a key named "channels"')
+      }
+
+      if has_key($logging, 'categories') {
+        validate_hash($logging['categories'])
+      }
+      else {
+        fail('$logging should have a key named "categories"')
+      }
+    }
 
     File {
         ensure  => present,
@@ -60,6 +80,13 @@ class bind (
         mode    => '2755',
     }
 
+    file { '/var/log/named':
+      ensure  => directory,
+      owner   => $bind_user,
+      mode    => '0750',
+      seltype => 'named_log_t',
+    }
+    
     file { $namedconf:
         content => template('bind/named.conf.erb'),
     }
