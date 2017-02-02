@@ -78,6 +78,7 @@ class bind (
         "${confdir}/acls.conf",
         "${confdir}/keys.conf",
         "${confdir}/views.conf",
+        "${confdir}/servers.conf",
         "${confdir}/view-mappings.txt",
         "${confdir}/domain-mappings.txt",
         ]:
