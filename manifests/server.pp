@@ -5,12 +5,11 @@ define bind::server (
     $edns      = true,
     $key       = undef,
     $transfers = undef,
-    $order     = '10',
 ) {
     include bind
 
     concat::fragment { "bind-server-${name}":
-        order   => $order,
+        order   => 10,
         target  => "${::bind::confdir}/servers.conf",
         content => template('bind/server.erb'),
     }
