@@ -43,7 +43,7 @@ view "<%= @name %>" {
 <%-   if @allow_query_on and @allow_query_on != '' -%>
 	allow-query-on {
 <%-     Array(@allow_query_on).each do |query_server| -%>
-		<%= match_server %>;
+		<%= query_server %>;
 <%-     end -%>
 	};
 <%-   end -%>
