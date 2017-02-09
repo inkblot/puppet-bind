@@ -1,0 +1,10 @@
+server <%= @name %> {
+  bogus <%= @bogus ? 'yes' : 'no' %>;
+  edns <%= @edns ? 'yes' : 'no' %>;
+<%- if @key -%>
+  keys <%= @key %>;
+<% end -%>
+<%- if @transfers -%>
+	transfers <%= @transfers %>;
+<%- end -%>
+};
