@@ -1,0 +1,18 @@
+	channel <%= @name %> {
+<%- case @destination -%>
+<%-   when "file" -%>
+		file "<%= @file_path %>/<%= @file_name %>";
+<%-   when "syslog" -%>
+		syslog <%= @syslog_facility %>;
+<%-   when "stderr" -%>
+		stderr;
+<%-   when "null" -%>
+		null;
+<%- end -%>
+<%- if @severity and @severity != '' -%>
+		severity <%= @severity %>;
+<%- end -%>
+		print-category <%= @print_category ? 'yes' : 'no' %>;
+		print-severity <%= @print_severity ? 'yes' : 'no' %>;
+		print-time <%= @print_time ? 'yes' : 'no' %>;
+	};

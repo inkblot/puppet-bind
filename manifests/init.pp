@@ -79,6 +79,7 @@ class bind (
         "${confdir}/keys.conf",
         "${confdir}/views.conf",
         "${confdir}/servers.conf",
+        "${confdir}/logging.conf",
         "${confdir}/view-mappings.txt",
         "${confdir}/domain-mappings.txt",
         ]:
@@ -88,6 +89,18 @@ class bind (
         warn    => true,
         require => Package['bind'],
         notify  => Service['bind'],
+    }
+
+    concat::fragment { 'bind-logging-header':
+        order   => "00-header",
+        target  => "${confdir}/logging.conf",
+        content => "logging {\n";
+    }
+
+    concat::fragment { 'bind-logging-footer':
+        order   => "99-footer",
+        target  => "${confdir}/logging.conf",
+        content => "};\n";
     }
 
     service { 'bind':
