@@ -5,6 +5,7 @@ class bind::defaults (
     $confdir                = undef,
     $namedconf              = undef,
     $cachedir               = undef,
+    $logdir                 = undef,
     $random_device          = undef,
     $bind_user              = undef,
     $bind_group             = undef,
