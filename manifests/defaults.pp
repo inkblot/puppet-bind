@@ -15,6 +15,7 @@ class bind::defaults (
     $managed_keys_directory = undef,
     $default_zones_include  = undef,
     $default_zones_source   = undef,
+    $isc_bind_keys          = undef,
 ) {
     unless is_bool($supported) {
         fail('Please ensure that the dependencies of the bind module are installed and working correctly')

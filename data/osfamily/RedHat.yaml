@@ -12,5 +12,6 @@ bind::defaults::cachedir: '/var/named'
 bind::defaults::logdir: '/var/log/named'
 bind::defaults::default_zones_include: '/etc/named.default-zones.conf'
 bind::defaults::default_zones_source: 'puppet:///modules/bind/RedHat/named.default-zones.conf'
+bind::defaults::isc_bind_keys: '/etc/named.iscdlv.key'
 
 bind::updater::keydir: '/etc/named/keys'
