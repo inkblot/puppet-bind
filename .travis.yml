@@ -3,8 +3,6 @@ rvm:
   - 2.0.0
   - 2.1.0
 env:
-  - PUPPET_VERSION=3.7.0
-  - PUPPET_VERSION=3.8.0
   - PUPPET_VERSION=4.0.0
   - PUPPET_VERSION=4.5.0
 gemfile: Gemfile.travis
