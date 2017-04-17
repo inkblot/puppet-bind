@@ -110,4 +110,5 @@ class bind (
         hasrestart => true,
         hasstatus  => true,
     }
+	Service['bind'] ~> Resource_record<| |>
 }
