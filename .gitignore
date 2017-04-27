@@ -1,7 +1,8 @@
 pkg/
 .*.sw?
-spec/fixtures
 Gemfile.lock
+spec/fixtures/manifests
+spec/fixtures/modules
 .rspec_system
 .vagrant
 .bundle
