@@ -1,7 +1,7 @@
 # ex: syntax=puppet si ts=4 sw=4 et
 
 define bind::logging::category (
-	$channels
+    $channels
 ) {
     concat::fragment { "bind-logging-category-${name}":
         order   => "60-${name}",
