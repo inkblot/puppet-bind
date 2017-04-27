@@ -7,29 +7,33 @@ describe 'bind' do
       {
         :concat_basedir  => '/wtf',
         :osfamily        => 'Debian',
+        :os => {
+          :family => 'Debian',
+        },
         :operatingsystem => 'Debian'
       }
     end
-    it {
+    it { is_expected.to compile }
+    it do
       should contain_package('bind-tools').with({
-        'ensure' => 'latest',
-        'name'   => 'dnsutils'
-      }).that_comes_before('Package[bind]')
-    }
-    it {
-      should contain_package('bind').with({
-        'ensure' => 'latest',
-        'name' => 'bind9'
+        ensure: 'present',
+        name: 'dnsutils'
       })
-    }
+    end
+    it do
+      should contain_package('bind').with({
+        ensure: 'latest',
+        name: 'bind9'
+      })
+    end
 
-    it { should contain_file('_NAMEDCONF_').that_requires('Package[bind]') }
-    it { should contain_file('_NAMEDCONF_').that_notifies('Service[bind]') }
+    it { should contain_file('/etc/bind/named.conf').that_requires('Package[bind]') }
+    it { should contain_file('/etc/bind/named.conf').that_notifies('Service[bind]') }
 
     it {
       should contain_service('bind').with({
-        'ensure' => 'running',
-        'name' => 'bind9'
+        ensure: 'running',
+        name: 'bind9'
       })
     }
   end
@@ -38,12 +42,15 @@ describe 'bind' do
       {
         :concat_basedir  => '/wtf',
         :osfamily        => 'RedHat',
+        :os => {
+          :family => 'RedHat',
+        },
         :operatingsystem => 'CentOS'
       }
     end
     it {
       should contain_package('bind-tools').with({
-        'ensure' => 'latest',
+        'ensure' => 'present',
         'name'   => 'bind-utils'
       })
     }
@@ -54,8 +61,8 @@ describe 'bind' do
       })
     }
 
-    it { should contain_file('_NAMEDCONF_').that_requires('Package[bind]') }
-    it { should contain_file('_NAMEDCONF_').that_notifies('Service[bind]') }
+    it { should contain_file('/etc/named.conf').that_requires('Package[bind]') }
+    it { should contain_file('/etc/named.conf').that_notifies('Service[bind]') }
 
     it {
       should contain_service('bind').with({
