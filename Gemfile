@@ -1,14 +1,15 @@
 source ENV['GEM_SOURCE'] || "https://rubygems.org"
 
 group :test do
-  gem "rake", '< 11.0'
-  gem "puppet", ENV['PUPPET_GEM_VERSION'] || '~> 3.8.0'
-  gem "rspec", '<= 3.1.0'
+  puppetversion = ENV.key?('PUPPET_VERSION') ? "= #{ENV['PUPPET_VERSION']}" : ['>= 4.9']
+  gem "rake"
+  gem "puppet", puppetversion
+  gem "rspec", '> 3.4.0'
   gem "rspec-puppet"
   gem "puppetlabs_spec_helper"
   gem "metadata-json-lint"
   gem "rspec-puppet-facts"
-  gem 'rubocop', '0.33.0'
+  gem 'rubocop', '0.42.0'
   gem 'simplecov', '>= 0.11.0'
   gem 'simplecov-console'
 
@@ -24,10 +25,12 @@ group :test do
 end
 
 group :development do
-  gem "travis" if RUBY_VERSION >= '2.1.0'
-  gem "travis-lint" if RUBY_VERSION >= '2.1.0'
+  gem "travis"              if RUBY_VERSION >= '2.1.0'
+  gem "travis-lint"         if RUBY_VERSION >= '2.1.0'
   gem "puppet-blacksmith"
   gem "guard-rake" if RUBY_VERSION >= '2.2.5' # per dependency https://rubygems.org/gems/ruby_dep
+  gem 'yard'
+  gem 'puppet-strings'
 end
 
 group :system_tests do
