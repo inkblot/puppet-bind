@@ -64,7 +64,7 @@ class bind (
         content => template('bind/named.conf.erb'),
     }
 
-    if $::bind::defaults::include_default_zones and $::bind::defaults::default_zones_source {
+    if $include_default_zones and $::bind::defaults::default_zones_source {
         file { $::bind::defaults::default_zones_include:
             source => $::bind::defaults::default_zones_source,
         }
