@@ -63,6 +63,10 @@ Style/RedundantSelf:
 Metrics/MethodLength:
   Enabled: false
 
+# DISABLED
+Metrics/BlockLength:
+  Enabled: false
+
 # DISABLED - not useful
 Style/WhileUntilModifier:
   Enabled: false
@@ -72,7 +76,7 @@ Lint/AmbiguousRegexpLiteral:
   Enabled: false
 
 # DISABLED
-Lint/Eval:
+Security/Eval:
   Enabled: false
 
 # DISABLED
@@ -211,16 +215,13 @@ Style/SpaceInsideParens:
 Style/LeadingCommentSpace:
   Enabled: false
 
-Style/SingleSpaceBeforeFirstArg:
-  Enabled: false
-
 Style/SpaceAfterColon:
   Enabled: false
 
 Style/SpaceAfterComma:
   Enabled: false
 
-Style/SpaceAfterControlKeyword:
+Style/SpaceAroundKeyword:
   Enabled: false
 
 Style/SpaceAfterMethodName:
@@ -268,8 +269,8 @@ Style/Documentation:
 Style/DefWithParentheses:
   Enabled: false
 
-Style/DeprecatedHashMethods:
-  Enabled: false
+#Style/DeprecatedHashMethods:
+#  Enabled: false
 
 Style/DotPosition:
   Enabled: false
@@ -308,7 +309,7 @@ Style/EmptyLiteral:
 Metrics/LineLength:
   Enabled: false
 
-Style/MethodCallParentheses:
+Style/MethodCallWithoutArgsParentheses:
   Enabled: false
 
 Style/MethodDefParentheses:
@@ -323,7 +324,7 @@ Style/TrailingWhitespace:
 Style/StringLiterals:
   Enabled: false
 
-Style/TrailingComma:
+Style/TrailingCommaInLiteral:
   Enabled: false
 
 Style/GlobalVars:
@@ -464,7 +465,7 @@ Metrics/ParameterLists:
 Lint/RequireParentheses:
   Enabled: false
 
-Lint/SpaceBeforeFirstArg:
+Style/SpaceBeforeFirstArg:
   Enabled: false
 
 Style/ModuleFunction:
