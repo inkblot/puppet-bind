@@ -35,7 +35,7 @@ describe 'bind' do
             algorithm: 'hmac-md5',
             secret_bits: '512',
             keydir: expected_confdir,
-            keyfile: 'rndc.key',
+            keyfile: 'rndc.key'
           )
         end
         it { is_expected.to contain_file('/usr/local/bin/rndc-helper') }

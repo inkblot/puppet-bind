@@ -24,14 +24,14 @@ describe 'bind::key' do
           is_expected.to contain_file("#{expected_confdir}/keys/foobar-key").with(
             owner: 'root',
             group: expected_group,
-            content: /^key foobar-key/,
+            content: /^key foobar-key/
           )
         end
         it do
           is_expected.to contain_concat__fragment('bind-key-foobar-key').with(
             order: '10',
             target: "#{expected_confdir}/keys.conf",
-            content: "include \"#{expected_confdir}\/keys\/foobar-key\";\n",
+            content: "include \"#{expected_confdir}\/keys\/foobar-key\";\n"
           )
         end
       end
