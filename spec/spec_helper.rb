@@ -4,9 +4,6 @@ require 'rspec-puppet'
 
 include RspecPuppetFacts
 
-require 'simplecov'
-require 'simplecov-console'
-
 RSpec.configure do |c|
   c.hiera_config = File.expand_path(File.join(__FILE__, '../fixtures/hiera.yaml'))
   c.after(:suite) do
