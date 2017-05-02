@@ -15,7 +15,7 @@ class bind (
     File {
         ensure  => present,
         owner   => 'root',
-        group   => $bind_group,
+        group   => $::bind::defaults::bind_group,
         mode    => '0644',
         require => Package['bind'],
         notify  => Service['bind'],
@@ -25,7 +25,7 @@ class bind (
 
     package { 'bind':
         ensure => latest,
-        name   => $bind_package,
+        name   => $::bind::defaults::bind_package,
     }
 
     if $dnssec {
@@ -42,7 +42,7 @@ class bind (
     bind::key { 'rndc-key':
         algorithm   => 'hmac-md5',
         secret_bits => '512',
-        keydir      => $confdir,
+        keydir      => $bind::defaults::confdir,
         keyfile     => 'rndc.key',
         include     => false,
     }
@@ -55,36 +55,36 @@ class bind (
         content => template('bind/rndc-helper.erb'),
     }
 
-    file { "${confdir}/zones":
-        ensure  => directory,
-        mode    => '2755',
+    file { "${::bind::defaults::confdir}/zones":
+        ensure => directory,
+        mode   => '2755',
     }
 
-    file { $namedconf:
+    file { $::bind::defaults::namedconf:
         content => template('bind/named.conf.erb'),
     }
 
-    if $include_default_zones and $default_zones_source {
-        file { $default_zones_include:
-            source => $default_zones_source,
+    if $include_default_zones and $::bind::defaults::default_zones_source {
+        file { $::bind::defaults::default_zones_include:
+            source => $::bind::defaults::default_zones_source,
         }
     }
 
-    class { 'bind::keydir':
-        keydir => "${confdir}/keys",
+    class { '::bind::keydir':
+        keydir => "${::bind::defaults::confdir}/keys",
     }
 
     concat { [
-        "${confdir}/acls.conf",
-        "${confdir}/keys.conf",
-        "${confdir}/views.conf",
-        "${confdir}/servers.conf",
-        "${confdir}/logging.conf",
-        "${confdir}/view-mappings.txt",
-        "${confdir}/domain-mappings.txt",
+        "${::bind::defaults::confdir}/acls.conf",
+        "${::bind::defaults::confdir}/keys.conf",
+        "${::bind::defaults::confdir}/views.conf",
+        "${::bind::defaults::confdir}/servers.conf",
+        "${::bind::defaults::confdir}/logging.conf",
+        "${::bind::defaults::confdir}/view-mappings.txt",
+        "${::bind::defaults::confdir}/domain-mappings.txt",
         ]:
         owner   => 'root',
-        group   => $bind_group,
+        group   => $::bind::defaults::bind_group,
         mode    => '0644',
         warn    => true,
         require => Package['bind'],
@@ -92,20 +92,20 @@ class bind (
     }
 
     concat::fragment { 'bind-logging-header':
-        order   => "00-header",
-        target  => "${confdir}/logging.conf",
+        order   => '00-header',
+        target  => "${::bind::defaults::confdir}/logging.conf",
         content => "logging {\n";
     }
 
     concat::fragment { 'bind-logging-footer':
-        order   => "99-footer",
-        target  => "${confdir}/logging.conf",
+        order   => '99-footer',
+        target  => "${::bind::defaults::confdir}/logging.conf",
         content => "};\n";
     }
 
     service { 'bind':
         ensure     => running,
-        name       => $bind_service,
+        name       => $::bind::defaults::bind_service,
         enable     => true,
         hasrestart => true,
         hasstatus  => true,
