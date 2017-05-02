@@ -14,4 +14,8 @@ bind::defaults::default_zones_include: '/etc/named.default-zones.conf'
 bind::defaults::default_zones_source: 'puppet:///modules/bind/RedHat/named.default-zones.conf'
 bind::defaults::isc_bind_keys: '/etc/named.iscdlv.key'
 
+bind::defaults::bind_chroot_package: 'bind-chroot'
+bind::defaults::bind_chroot_service: 'named-chroot'
+bind::defaults::bind_chroot_dir: '/var/named/chroot'
+
 bind::updater::keydir: '/etc/named/keys'
