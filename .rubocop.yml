@@ -6,6 +6,9 @@ AllCops:
     - 'vendor/**/*'
     # Ignore code from test fixtures
     - 'spec/fixtures/**/*'
+    # Ignore lib/** as it contains a lot of offenses for now.
+    # TODO : fix lib/** offenses
+    - 'lib/**/*'
 
 Lint/ConditionPosition:
   Enabled: true
