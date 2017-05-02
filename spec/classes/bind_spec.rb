@@ -11,11 +11,13 @@ describe 'bind' do
           expected_bind_service = 'bind9'
           expected_named_conf = '/etc/bind/named.conf'
           expected_confdir = '/etc/bind'
+          expected_default_zones_include = '/etc/bind/named.conf.default-zones'
         when 'RedHat'
           expected_bind_pkg = 'bind'
           expected_bind_service = 'named'
           expected_named_conf = '/etc/named.conf'
           expected_confdir = '/etc/named'
+          expected_default_zones_include = '/etc/named.default-zones.conf'
       end
       context 'with defaults for all parameters' do
         it { is_expected.to contain_class('bind::defaults') }
@@ -39,6 +41,14 @@ describe 'bind' do
           )
         end
         it { is_expected.to contain_file('/usr/local/bin/rndc-helper') }
+
+        case facts[:os]['family']
+        when 'RedHat'
+          it { is_expected.to contain_file(expected_default_zones_include) }
+        when 'Debian'
+          it { is_expected.not_to contain_file(expected_default_zones_include) }
+        end
+
         it { is_expected.to contain_concat("#{expected_confdir}/acls.conf") }
         it { is_expected.to contain_concat("#{expected_confdir}/keys.conf") }
         it { is_expected.to contain_concat("#{expected_confdir}/views.conf") }
