@@ -1,9 +1,0 @@
----
-:hierarchy:
-  - "tests/%{::test_config}"
-  - common
-:backends:
-  - yaml
-  - module_data
-:yaml:
-  :datadir: 'spec/fixtures/hiera'

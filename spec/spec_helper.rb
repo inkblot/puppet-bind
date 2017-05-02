@@ -1,14 +1,15 @@
 require 'puppetlabs_spec_helper/module_spec_helper'
-require 'fixtures/modules/module_data/lib/hiera/backend/module_data_backend.rb'
+require 'rspec-puppet-facts'
+require 'rspec-puppet'
+
+include RspecPuppetFacts
 
 RSpec.configure do |c|
-  c.default_facts = {
-    :osfamily =>  'Debian',
-    :operatingsystem => 'Debian',
-    :lsbdistcodename => 'wheezy',
-    :architecture => 'amd64',
-    :kernel => 'Linux',
-    :test_config => 'default'
-  }
-  c.hiera_config = File.join('spec', 'fixtures', 'hiera', 'hiera.yaml')
+  c.hiera_config = File.expand_path(File.join(__FILE__, '../fixtures/hiera.yaml'))
+  c.after(:suite) do
+    RSpec::Puppet::Coverage.report!
+  end
 end
+
+# Deal with missing fact in puppet firewall module
+add_custom_fact :concat_basedir, '/tmp/concat/basedir'

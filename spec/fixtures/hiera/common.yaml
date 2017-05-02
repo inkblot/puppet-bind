@@ -1,3 +1,0 @@
----
-bind::defaults::confdir: '_CONFDIR_'
-bind::defaults::namedconf: '_NAMEDCONF_'
