@@ -13,3 +13,4 @@ bind::defaults::default_zones_include: '/etc/bind/named.conf.default-zones'
 bind::defaults::isc_bind_keys: '/etc/bind/bind.keys'
 
 bind::updater::keydir: '/etc/bind/keys'
+bind::defaults::bind_chroot_dir: '/var/lib/named/chroot'

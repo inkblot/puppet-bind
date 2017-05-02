@@ -10,7 +10,28 @@ class bind (
     $auth_nxdomain         = undef,
     $include_default_zones = true,
     $include_local         = false,
+    $chroot                = false,
+    $chroot_supported      = $::bind::defaults::chroot_supported,
+    $chroot_dir            = $::bind::defaults::bind_chroot_dir,
+    # NOTE: we need to be able to override this parameter when declaring class,
+    # especially when not using hiera (i.e. when using Foreman as ENC):
+    $default_zones_include = $::bind::defaults::default_zones_include,
 ) inherits bind::defaults {
+    if $chroot and !$chroot_supported {
+        fail('Chroot for bind is not supported on your OS')
+    }
+
+    if $chroot {
+        if $::bind::defaults::bind_chroot_service {
+            $real_bind_service = $::bind::defaults::bind_chroot_service
+        }
+        if $::bind::defaults::bind_chroot_package {
+            $real_bind_package = $::bind::defaults::bind_chroot_package
+        }
+    } else {
+        $real_bind_service = $::bind::defaults::bind_service
+        $real_bind_package = $::bind::defaults::bind_package
+    }
 
     File {
         ensure  => present,
@@ -25,7 +46,7 @@ class bind (
 
     package { 'bind':
         ensure => latest,
-        name   => $::bind::defaults::bind_package,
+        name   => $real_bind_package,
     }
 
     if $dnssec {
@@ -65,7 +86,7 @@ class bind (
     }
 
     if $include_default_zones and $::bind::defaults::default_zones_source {
-        file { $::bind::defaults::default_zones_include:
+        file { $default_zones_include:
             source => $::bind::defaults::default_zones_source,
         }
     }
@@ -103,11 +124,29 @@ class bind (
         content => "};\n";
     }
 
-    service { 'bind':
-        ensure     => running,
-        name       => $::bind::defaults::bind_service,
-        enable     => true,
-        hasrestart => true,
-        hasstatus  => true,
+    if $chroot and $::bind::defaults::bind_chroot_service {
+        service { 'bind':
+            ensure     => running,
+            name       => $::bind::defaults::bind_chroot_service,
+            enable     => true,
+            hasrestart => true,
+            hasstatus  => true,
+        }
+        # On RHEL Family, there is a dedicated service named-chroot and we need
+        # to stop/disable 'named' service:
+        service { 'bind-no-chroot':
+            ensure => stopped,
+            name   => $::bind::defaults::bind_service,
+            enable => false,
+        }
+
+    } else {
+        service { 'bind':
+            ensure     => running,
+            name       => $::bind::defaults::bind_service,
+            enable     => true,
+            hasrestart => true,
+            hasstatus  => true,
+        }
     }
 }

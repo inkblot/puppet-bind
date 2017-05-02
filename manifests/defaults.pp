@@ -2,6 +2,7 @@
 
 class bind::defaults (
     $supported              = undef,
+    $chroot_supported       = undef,
     $confdir                = undef,
     $namedconf              = undef,
     $cachedir               = undef,
@@ -10,7 +11,10 @@ class bind::defaults (
     $bind_user              = undef,
     $bind_group             = undef,
     $bind_package           = undef,
+    $bind_chroot_package    = undef,
     $bind_service           = undef,
+    $bind_chroot_service    = undef,
+    $bind_chroot_dir        = undef,
     $nsupdate_package       = undef,
     $managed_keys_directory = undef,
     $default_zones_include  = undef,
