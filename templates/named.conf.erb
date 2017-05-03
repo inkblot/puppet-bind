@@ -42,6 +42,15 @@ options {
 <%- if @version != '' -%>
 	version "<%= @version %>";
 <%- end -%>
+<%- @extra_options.each do |k,v|
+        if v.is_a? Array -%>
+        <%= k %> {<%- v.each do |vvalue| %>
+            <%= vvalue %>;
+        <% end -%>};
+<%-     else -%>
+        <%= k %> "<%= v %>";
+<%-     end
+    end -%>
 };
 <%- if @include_local -%>
 
