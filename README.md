@@ -64,6 +64,30 @@ server's upstream resolvers are controlled using `forwarders`, enabling of DNSSe
 using `dnssec`, and the reported version is controlled using `version`. It is unlikely that you will need to define an
 alternate value for `confdir` or `cachedir`.
 
+#### Run bind daemon with chroot
+
+You can setup bind with chroot using the `$chroot` parameter:
+Example for CentOS7:
+
+```
+class { 'bind':
+    chroot                => true,
+    # Note: this file MUST be into the /etc/named directory so the
+    # RHEL7 specific setup-named-chroot.sh script will make it available into
+    # the chroot.
+    default_zones_include => '/etc/named/default-zones.conf',
+    forwarders            => [
+        '8.8.8.8',
+        '8.8.4.4',
+    ],
+    dnssec                => true,
+    version               => 'Controlled by Puppet',
+}
+```
+
+Note: chroot is not supported for all operating systems. For now only
+RHEL7/CentOS7 is supported.
+
 ### `bind::updater`
 
 The `bind::updater` class is an alternate entrypoint into the module. This class installs the BIND client tools but not

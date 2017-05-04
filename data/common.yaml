@@ -1,5 +1,6 @@
 ---
 bind::defaults::supported: false
+bind::defaults::chroot_supported: false
 bind::defaults::random_device: '/dev/random'
 
 bind::forwarders: ''

@@ -10,12 +10,33 @@ class bind (
     $auth_nxdomain         = undef,
     $include_default_zones = true,
     $include_local         = false,
+    $chroot                = false,
+    $chroot_supported      = $::bind::defaults::chroot_supported,
+    $chroot_dir            = $::bind::defaults::bind_chroot_dir,
+    # NOTE: we need to be able to override this parameter when declaring class,
+    # especially when not using hiera (i.e. when using Foreman as ENC):
+    $default_zones_include = $::bind::defaults::default_zones_include,
 ) inherits bind::defaults {
+    if $chroot and !$chroot_supported {
+        fail('Chroot for bind is not supported on your OS')
+    }
+
+    if $chroot {
+        if $::bind::defaults::bind_chroot_service {
+            $real_bind_service = $::bind::defaults::bind_chroot_service
+        }
+        if $::bind::defaults::bind_chroot_package {
+            $real_bind_package = $::bind::defaults::bind_chroot_package
+        }
+    } else {
+        $real_bind_service = $::bind::defaults::bind_service
+        $real_bind_package = $::bind::defaults::bind_package
+    }
 
     File {
         ensure  => present,
         owner   => 'root',
-        group   => $bind_group,
+        group   => $::bind::defaults::bind_group,
         mode    => '0644',
         require => Package['bind'],
         notify  => Service['bind'],
@@ -25,7 +46,7 @@ class bind (
 
     package { 'bind':
         ensure => latest,
-        name   => $bind_package,
+        name   => $real_bind_package,
     }
 
     if $dnssec {
@@ -42,7 +63,7 @@ class bind (
     bind::key { 'rndc-key':
         algorithm   => 'hmac-md5',
         secret_bits => '512',
-        keydir      => $confdir,
+        keydir      => $bind::defaults::confdir,
         keyfile     => 'rndc.key',
         include     => false,
     }
@@ -55,36 +76,36 @@ class bind (
         content => template('bind/rndc-helper.erb'),
     }
 
-    file { "${confdir}/zones":
-        ensure  => directory,
-        mode    => '2755',
+    file { "${::bind::defaults::confdir}/zones":
+        ensure => directory,
+        mode   => '2755',
     }
 
-    file { $namedconf:
+    file { $::bind::defaults::namedconf:
         content => template('bind/named.conf.erb'),
     }
 
-    if $include_default_zones and $default_zones_source {
+    if $include_default_zones and $::bind::defaults::default_zones_source {
         file { $default_zones_include:
-            source => $default_zones_source,
+            source => $::bind::defaults::default_zones_source,
         }
     }
 
-    class { 'bind::keydir':
-        keydir => "${confdir}/keys",
+    class { '::bind::keydir':
+        keydir => "${::bind::defaults::confdir}/keys",
     }
 
     concat { [
-        "${confdir}/acls.conf",
-        "${confdir}/keys.conf",
-        "${confdir}/views.conf",
-        "${confdir}/servers.conf",
-        "${confdir}/logging.conf",
-        "${confdir}/view-mappings.txt",
-        "${confdir}/domain-mappings.txt",
+        "${::bind::defaults::confdir}/acls.conf",
+        "${::bind::defaults::confdir}/keys.conf",
+        "${::bind::defaults::confdir}/views.conf",
+        "${::bind::defaults::confdir}/servers.conf",
+        "${::bind::defaults::confdir}/logging.conf",
+        "${::bind::defaults::confdir}/view-mappings.txt",
+        "${::bind::defaults::confdir}/domain-mappings.txt",
         ]:
         owner   => 'root',
-        group   => $bind_group,
+        group   => $::bind::defaults::bind_group,
         mode    => '0644',
         warn    => true,
         require => Package['bind'],
@@ -92,22 +113,40 @@ class bind (
     }
 
     concat::fragment { 'bind-logging-header':
-        order   => "00-header",
-        target  => "${confdir}/logging.conf",
+        order   => '00-header',
+        target  => "${::bind::defaults::confdir}/logging.conf",
         content => "logging {\n";
     }
 
     concat::fragment { 'bind-logging-footer':
-        order   => "99-footer",
-        target  => "${confdir}/logging.conf",
+        order   => '99-footer',
+        target  => "${::bind::defaults::confdir}/logging.conf",
         content => "};\n";
     }
 
-    service { 'bind':
-        ensure     => running,
-        name       => $bind_service,
-        enable     => true,
-        hasrestart => true,
-        hasstatus  => true,
+    if $chroot and $::bind::defaults::bind_chroot_service {
+        service { 'bind':
+            ensure     => running,
+            name       => $::bind::defaults::bind_chroot_service,
+            enable     => true,
+            hasrestart => true,
+            hasstatus  => true,
+        }
+        # On RHEL Family, there is a dedicated service named-chroot and we need
+        # to stop/disable 'named' service:
+        service { 'bind-no-chroot':
+            ensure => stopped,
+            name   => $::bind::defaults::bind_service,
+            enable => false,
+        }
+
+    } else {
+        service { 'bind':
+            ensure     => running,
+            name       => $::bind::defaults::bind_service,
+            enable     => true,
+            hasrestart => true,
+            hasstatus  => true,
+        }
     }
 }

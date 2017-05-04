@@ -1,12 +1,19 @@
+---
 language: ruby
-rvm:
-  - 2.0.0
-  - 2.1.0
+sudo: false
+bundler_args: --without development system_tests
+before_install: rm Gemfile.lock || true
+script: bundle exec rake test
 env:
-  - PUPPET_VERSION=4.0.0
-  - PUPPET_VERSION=4.5.0
-gemfile: Gemfile.travis
-before_install: 'cp Gemfile Gemfile.travis'
-notifications:
-  email:
-    - 'inkblot@movealong.org'
+  - PUPPET_GEM_VERSION="~> 4.0.0"
+  - PUPPET_GEM_VERSION="~> 4.5.0"
+  - PUPPET_GEM_VERSION="~> 4.9.0"
+rvm:
+  - 2.2
+matrix:
+  exclude:
+    - rvm: 2.2
+      env: PUPPET_GEM_VERSION="~> 3.7.0"
+    - rvm: 2.2
+      env: PUPPET_GEM_VERSION="~> 3.8.0"
+  fast_finish: false
