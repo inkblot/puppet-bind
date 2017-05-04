@@ -50,12 +50,16 @@ defines the overall structure of DNS service on the node.
 
 ```
 class { 'bind':
-    forwarders => [
+    forwarders          => [
         '8.8.8.8',
         '8.8.4.4',
     ],
-    dnssec     => true,
-    version    => 'Controlled by Puppet',
+    dnssec             => true,
+    version            => 'Controlled by Puppet',
+    extra_options      => {
+        'dump-file'       => 'data/cache_dump.db',
+        'allow-recursion' => ['any'],
+    }
 }
 ```
 

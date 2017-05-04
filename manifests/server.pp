@@ -6,7 +6,7 @@ define bind::server (
     $key       = undef,
     $transfers = undef,
 ) {
-    include bind
+    include ::bind
 
     concat::fragment { "bind-server-${name}":
         order   => 10,

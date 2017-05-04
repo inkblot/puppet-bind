@@ -12,12 +12,14 @@ describe 'bind' do
           expected_named_conf = '/etc/bind/named.conf'
           expected_confdir = '/etc/bind'
           expected_default_zones_include = '/etc/bind/named.conf.default-zones'
+          expected_isc_bind_key = '/etc/bind/bind.keys'
         when 'RedHat'
           expected_bind_pkg = 'bind'
           expected_bind_service = 'named'
           expected_named_conf = '/etc/named.conf'
           expected_confdir = '/etc/named'
           expected_default_zones_include = '/etc/named.default-zones.conf'
+          expected_isc_bind_key = '/etc/named.iscdlv.key'
       end
       context 'with defaults for all parameters' do
         it { is_expected.to contain_class('bind::defaults') }
@@ -73,6 +75,30 @@ describe 'bind' do
         end
         it { is_expected.to contain_file(expected_named_conf).that_requires('Package[bind]') }
         it { is_expected.to contain_file(expected_named_conf).that_notifies('Service[bind]') }
+        it { is_expected.to contain_file(expected_named_conf).with_content(%r(bindkeys-file "#{expected_isc_bind_key}";\n};)) }
+        it do
+          is_expected.to contain_service('bind').with({
+            ensure: 'running',
+            name: expected_bind_service
+          })
+        end
+      end
+      context 'with extra_options param' do
+        let(:params) do
+          {
+            'extra_options' => {
+              'dump-file'       => 'data/cache_dump.db',
+              'allow-recursion' => ['any'],
+            },
+          }
+        end
+        it { is_expected.to compile.with_all_deps }
+        it do
+          is_expected.to contain_file(expected_named_conf)
+            .with_content(%r(bindkeys-file "#{expected_isc_bind_key}";\n))
+            .with_content(%r(dump-file "data/cache_dump.db";))
+            .with_content(%r(allow-recursion {\n\s+any;\n\s+};\n))
+        end
         it do
           is_expected.to contain_service('bind').with({
             ensure: 'running',
