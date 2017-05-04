@@ -22,7 +22,7 @@ define bind::zone (
     $forwarders_port = 53,
 ) {
     # where there is a zone, there is a server
-    include bind
+    include ::bind
 
     # Pull some platform defaults and `bind` class parameters into the local scope
     $cachedir = $::bind::defaults::cachedir
@@ -54,15 +54,15 @@ define bind::zone (
     }
 
     unless !($allow_updates != '' and ! $dynamic) {
-        fail("allow_updates may only be provided for bind::zone resources with dynamic set to true")
+        fail('allow_updates may only be provided for bind::zone resources with dynamic set to true')
     }
 
     unless !($dnssec and ! $dynamic) {
-        fail("dnssec may only be true for bind::zone resources with dynamic set to true")
+        fail('dnssec may only be true for bind::zone resources with dynamic set to true')
     }
 
     unless !($key_directory != '' and ! $dnssec) {
-        fail("key_directory may only be provided for bind::zone resources with dnssec set to true")
+        fail('key_directory may only be provided for bind::zone resources with dnssec set to true')
     }
 
     unless !($allow_notify != '' and ! member(['slave', 'stub'], $zone_type)) {
