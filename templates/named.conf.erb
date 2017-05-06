@@ -23,7 +23,7 @@ options {
 <%-   end -%>
 	};
 <%- end -%>
-<%- if @forward != '' -%>
+<%- if @forward and @forward != '' -%>
 	forward <%= @forward %>;
 <%- end -%>
 	auth-nxdomain <%= @auth_nxdomain ? 'yes' : 'no' %>;
@@ -39,7 +39,7 @@ options {
         bindkeys-file "<%= @isc_bind_keys %>";
 <%-   end -%>
 <%- end -%>
-<%- if @version != '' -%>
+<%- if @version and @version != '' -%>
 	version "<%= @version %>";
 <%- end -%>
 };
