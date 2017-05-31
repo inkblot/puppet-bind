@@ -1,15 +1,17 @@
 # ex: syntax=puppet si ts=4 sw=4 et
 
 class bind (
-    $forwarders            = undef,
-    $forward               = undef,
-    $dnssec                = undef,
-    $filter_ipv6           = undef,
-    $version               = undef,
-    $statistics_port       = undef,
-    $auth_nxdomain         = undef,
-    $include_default_zones = true,
-    $include_local         = false,
+    $forwarders             = undef,
+    $forward                = undef,
+    $dnssec                 = undef,
+    $filter_ipv6            = undef,
+    $version                = undef,
+    $statistics_port        = undef,
+    $auth_nxdomain          = undef,
+    $include_default_zones  = true,
+    $include_local          = false,
+    $tkey_gssapi_credential = undef,
+    $tkey_domain            = undef,
 ) inherits bind::defaults {
 
     File {
