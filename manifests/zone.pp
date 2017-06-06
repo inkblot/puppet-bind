@@ -19,6 +19,7 @@ define bind::zone (
     $forwarders      = '',
     $forward         = '',
     $source          = '',
+    $content         = '',
     $forwarders_port = 53,
 ) {
     # where there is a zone, there is a server
@@ -102,14 +103,26 @@ define bind::zone (
         }
 
         if member(['init', 'managed'], $zone_file_mode) {
-            file { "${cachedir}/${name}/${zone_file}":
-                ensure  => present,
-                owner   => $bind_user,
-                group   => $bind_group,
-                mode    => '0644',
-                replace => ($zone_file_mode == 'managed'),
-                source  => pick($source, 'puppet:///modules/bind/db.empty'),
-                audit   => [ content ],
+            if ! is_empty($content) {
+                file { "${cachedir}/${name}/${zone_file}":
+                  ensure  => present,
+                  owner   => $bind_user,
+                  group   => $bind_group,
+                  mode    => '0644',
+                  replace => ($zone_file_mode == 'managed'),
+                  content => $content,
+                  audit   => [ content ],
+                }
+            } else {
+                file { "${cachedir}/${name}/${zone_file}":
+                    ensure  => present,
+                    owner   => $bind_user,
+                    group   => $bind_group,
+                    mode    => '0644',
+                    replace => ($zone_file_mode == 'managed'),
+                    source  => pick($source, 'puppet:///modules/bind/db.empty'),
+                    audit   => [ content ],
+                }
             }
         }
 
