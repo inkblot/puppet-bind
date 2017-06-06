@@ -103,7 +103,7 @@ define bind::zone (
         }
 
         if member(['init', 'managed'], $zone_file_mode) {
-            if ! is_empty($content) {
+            if ! empty($content) {
                 file { "${cachedir}/${name}/${zone_file}":
                   ensure  => present,
                   owner   => $bind_user,
