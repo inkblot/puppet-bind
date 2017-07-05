@@ -57,7 +57,7 @@ module PuppetBind
         else
           nsupdate(file.path)
         end
-        file.unlink
+        #file.unlink
       end
 
       def accio(file)
