@@ -31,7 +31,6 @@ module PuppetBind
           accio(file)
           destructo(file)
         end
-        puts File.read(file)
       end
 
       def ttl
@@ -51,6 +50,8 @@ module PuppetBind
         yield file
         file.write "send\n"
         file.close
+        puts File.read(file.path)
+
         if keyed?
           nsupdate('-y', tsig_param, file.path)
         elsif keyfile?
