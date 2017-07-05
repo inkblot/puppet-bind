@@ -31,9 +31,7 @@ module PuppetBind
           accio(file)
           destructo(file)
         end
-
-        text = File.read(file.path)
-        puts text
+        puts File.read(file)
       end
 
       def ttl
