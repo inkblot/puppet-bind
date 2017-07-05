@@ -31,6 +31,9 @@ module PuppetBind
           accio(file)
           destructo(file)
         end
+
+        text = File.read(file.path)
+        puts text
       end
 
       def ttl
@@ -64,17 +67,12 @@ module PuppetBind
         rrdata_adds.each do |datum|
           file.write "update add #{name}. #{resource[:ttl]} #{rrclass} #{type} #{maybe_quote(type, datum)}\n"
         end
-        text = File.read(file.path)
-        puts text
-
       end
 
       def destructo(file)
         rrdata_deletes.each do |datum|
           file.write "update delete #{name}. #{ttl} #{rrclass} #{type} #{maybe_quote(type, datum)}\n"
         end
-        text = File.read(file.path)
-        puts text
       end
 
       def quoted_type?(type)
