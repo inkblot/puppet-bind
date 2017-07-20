@@ -12,7 +12,9 @@
 <%- if @severity and @severity != '' -%>
 		severity <%= @severity %>;
 <%- end -%>
+<%- if @destination != 'null' -%>
 		print-category <%= @print_category ? 'yes' : 'no' %>;
 		print-severity <%= @print_severity ? 'yes' : 'no' %>;
 		print-time <%= @print_time ? 'yes' : 'no' %>;
+<%- end -%>
 	};
