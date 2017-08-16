@@ -9,16 +9,12 @@ describe 'bind' do
         when 'Debian'
           expected_bind_pkg             = 'bind9'
           expected_bind_service         = 'bind9'
-          expected_bind_chroot_pkg      = nil
-          expected_bind_chroot_service  = nil
           expected_named_conf           = '/etc/bind/named.conf'
           expected_confdir              = '/etc/bind'
           expected_default_zones_include= '/etc/bind/named.conf.default-zones'
         when 'RedHat'
           expected_bind_pkg             = 'bind'
           expected_bind_service         = 'named'
-          expected_bind_chroot_pkg      = 'bind-chroot'
-          expected_bind_chroot_service  = 'named-chroot'
           expected_named_conf           = '/etc/named.conf'
           expected_confdir              = '/etc/named'
           expected_default_zones_include= '/etc/named.default-zones.conf'
@@ -96,21 +92,20 @@ describe 'bind' do
             default_zones_include: '/etc/named/default-zones.conf'
           }
         end
-        if not (facts[:os]['name'] == 'CentOS' && facts[:os]['release']['major'] == '7')
+
+
+        if not (facts[:os]['name'] == 'CentOS' && facts[:os]['release']['major'] == '7' or
+                facts[:os]['name'] == 'Debian' && facts[:os]['release']['major'].to_i >= 8)
           it { is_expected.to compile.and_raise_error(/Chroot for bind is not supported on your OS/) }
         else
+          # Generic chroot part:
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_class('bind::defaults') }
           it { is_expected.to contain_class('bind::keydir') }
           it { is_expected.to contain_class('bind::updater') }
           it { is_expected.to contain_class('bind') }
           it { is_expected.to compile.with_all_deps }
-          it do
-            is_expected.to contain_package('bind').with({
-              ensure: 'latest',
-              name: expected_bind_chroot_pkg
-            })
-          end
+          it { is_expected.to contain_package('bind').with({ ensure: 'latest', }) }
           it { is_expected.to contain_file('/usr/local/bin/dnssec-init') }
           it do
             is_expected.to contain_bind__key('rndc-key').with(
@@ -153,19 +148,13 @@ describe 'bind' do
           end
           it { is_expected.to contain_file(expected_named_conf).that_requires('Package[bind]') }
           it { is_expected.to contain_file(expected_named_conf).that_notifies('Service[bind]') }
-          it do
-            is_expected.to contain_service('bind-no-chroot').with({
-              ensure: 'stopped',
-              enable: false,
-              name: expected_bind_service
-            })
-          end
-          it do
-            is_expected.to contain_service('bind').with({
-              ensure: 'running',
-              enable: true,
-              name: expected_bind_chroot_service
-            })
+
+
+          # OS family specific chroot setup:
+          if (facts[:os]['family'] == 'Debian')
+            it { is_expected.to contain_class('bind::chroot::manual') }
+          elsif (facts[:os]['family'] == 'RedHat')
+            it { is_expected.to contain_class('bind::chroot::package') }
           end
         end
       end

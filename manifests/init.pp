@@ -1,40 +1,27 @@
 # ex: syntax=puppet si ts=4 sw=4 et
 
 class bind (
-    $forwarders             = undef,
-    $forward                = undef,
-    $dnssec                 = undef,
-    $filter_ipv6            = undef,
-    $version                = undef,
-    $statistics_port        = undef,
-    $auth_nxdomain          = undef,
-    $include_default_zones  = true,
-    $include_local          = false,
-    $tkey_gssapi_credential = undef,
-    $tkey_domain            = undef,
-    $chroot                = false,
-    $chroot_supported      = $::bind::defaults::chroot_supported,
-    $chroot_dir            = $::bind::defaults::bind_chroot_dir,
+    $forwarders                           = undef,
+    $forward                              = undef,
+    $dnssec                               = undef,
+    $filter_ipv6                          = undef,
+    $version                              = undef,
+    $statistics_port                      = undef,
+    $auth_nxdomain                        = undef,
+    $include_default_zones                = true,
+    $include_local                        = false,
+    $tkey_gssapi_credential               = undef,
+    $tkey_domain                          = undef,
+    $chroot                               = false,
+    $chroot_class                         = $::bind::defaults::chroot_class,
+    $chroot_dir                           = $::bind::defaults::chroot_dir,
     # NOTE: we need to be able to override this parameter when declaring class,
     # especially when not using hiera (i.e. when using Foreman as ENC):
-    $default_zones_include = $::bind::defaults::default_zones_include,
+    $default_zones_include                = $::bind::defaults::default_zones_include,
 ) inherits bind::defaults {
     if $chroot and !$chroot_supported {
         fail('Chroot for bind is not supported on your OS')
     }
-
-    if $chroot {
-        if $::bind::defaults::bind_chroot_service {
-            $real_bind_service = $::bind::defaults::bind_chroot_service
-        }
-        if $::bind::defaults::bind_chroot_package {
-            $real_bind_package = $::bind::defaults::bind_chroot_package
-        }
-    } else {
-        $real_bind_service = $::bind::defaults::bind_service
-        $real_bind_package = $::bind::defaults::bind_package
-    }
-
     File {
         ensure  => present,
         owner   => 'root',
@@ -48,7 +35,7 @@ class bind (
 
     package { 'bind':
         ensure => latest,
-        name   => $real_bind_package,
+        name   => $::bind::defaults::bind_package,
     }
 
     if $dnssec {
@@ -126,23 +113,14 @@ class bind (
         content => "};\n";
     }
 
-    if $chroot and $::bind::defaults::bind_chroot_service {
-        service { 'bind':
-            ensure     => running,
-            name       => $::bind::defaults::bind_chroot_service,
-            enable     => true,
-            hasrestart => true,
-            hasstatus  => true,
-        }
-        # On RHEL Family, there is a dedicated service named-chroot and we need
-        # to stop/disable 'named' service:
-        service { 'bind-no-chroot':
-            ensure => stopped,
-            name   => $::bind::defaults::bind_service,
-            enable => false,
-        }
-
-    } else {
+    if $chroot and $::bind::defaults::chroot_class {
+        # When using a dedicated chroot class, service declaration is dedicated to this class
+        class { $::bind::defaults::chroot_class : }
+    } 
+    # DO NOT declare a bind service when chrooting bind with bind::chroot::package class,
+    # because it needs another dedicated chrooted-bind service (i.e. named-chroot on RHEL)
+    # AND it also needs $::bind::defaults::bind_service being STOPPED and DISABLED.
+    if !$chroot or ($chroot and $::bind::defaults::chroot_class == 'bind::chroot::manual') {
         service { 'bind':
             ensure     => running,
             name       => $::bind::defaults::bind_service,

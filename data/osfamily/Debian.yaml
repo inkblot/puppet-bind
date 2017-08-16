@@ -12,5 +12,7 @@ bind::defaults::logdir: '/var/log/bind'
 bind::defaults::default_zones_include: '/etc/bind/named.conf.default-zones'
 bind::defaults::isc_bind_keys: '/etc/bind/bind.keys'
 
+bind::defaults::chroot_dir: '/var/bind9/chroot'
+bind::defaults::chroot_class: bind::chroot::manual
+
 bind::updater::keydir: '/etc/bind/keys'
-bind::defaults::bind_chroot_dir: '/var/lib/named/chroot'
