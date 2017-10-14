@@ -423,7 +423,7 @@ Style/NumericLiterals:
 Style/OneLineConditional:
   Enabled: false
 
-Style/OpMethod:
+Naming/BinaryOperatorParameter:
   Enabled: false
 
 Style/ParenthesesAroundCondition:
