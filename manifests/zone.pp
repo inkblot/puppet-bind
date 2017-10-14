@@ -109,7 +109,6 @@ define bind::zone (
                 mode    => '0644',
                 replace => ($zone_file_mode == 'managed'),
                 source  => pick($source, 'puppet:///modules/bind/db.empty'),
-                audit   => [ content ],
             }
         }
 
@@ -147,7 +146,6 @@ define bind::zone (
             owner => $bind_user,
             group => $bind_group,
             mode  => '0644',
-            audit => [ content ],
         }
     }
 
