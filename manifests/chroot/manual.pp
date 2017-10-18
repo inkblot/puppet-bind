@@ -4,7 +4,7 @@ class bind::chroot::manual(
     exec { 'mkdir-p-$chroot_dir':
       command => "mkdir -p ${::bind::defaults::chroot_dir}",
       path    => ['/bin', '/usr/bin'],
-      unless  => "test -d ${::bind::defaults::chroot_dir}",
+      creates => "${::bind::defaults::chroot_dir}",
     }
     # Creating system dirs under chroot dir:
     file { ["${::bind::defaults::chroot_dir}",
