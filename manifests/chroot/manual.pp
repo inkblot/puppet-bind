@@ -29,17 +29,17 @@ class bind::chroot::manual(
     exec { 'mknod-dev-null':
       command => "mknod ${::bind::defaults::chroot_dir}/dev/null c 1 3",
       path    => ['/bin', '/usr/bin'],
-      unless  => "test -d ${::bind::defaults::chroot_dir}/dev/null",
+      creates => "${::bind::defaults::chroot_dir}/dev/null",
     }
     exec { 'mknod-dev-random':
       command => "mknod ${::bind::defaults::chroot_dir}/dev/random c 1 8",
       path    => ['/bin', '/usr/bin'],
-      unless  => "test -d ${::bind::defaults::chroot_dir}/dev/random",
+      creates => "${::bind::defaults::chroot_dir}/dev/random",
     }
     exec { 'mknod-dev-urandom':
       command => "mknod ${::bind::defaults::chroot_dir}/dev/urandom c 1 9",
       path    => ['/bin', '/usr/bin'],
-      unless  => "test -d ${::bind::defaults::chroot_dir}/dev/urandom",
+      creates => "${::bind::defaults::chroot_dir}/dev/urandom",
     }
     file { [ "${::bind::defaults::chroot_dir}/dev/null",
              "${::bind::defaults::chroot_dir}/dev/random",
