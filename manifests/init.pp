@@ -38,6 +38,11 @@ class bind (
         name   => $::bind::defaults::bind_package,
     }
 
+    if $chroot and $::bind::defaults::chroot_class {
+        # When using a dedicated chroot class, service declaration is dedicated to this class
+        class { $::bind::defaults::chroot_class : }
+    }
+
     if $dnssec {
         file { '/usr/local/bin/dnssec-init':
             ensure => present,
@@ -113,10 +118,6 @@ class bind (
         content => "};\n";
     }
 
-    if $chroot and $::bind::defaults::chroot_class {
-        # When using a dedicated chroot class, service declaration is dedicated to this class
-        class { $::bind::defaults::chroot_class : }
-    } 
     # DO NOT declare a bind service when chrooting bind with bind::chroot::package class,
     # because it needs another dedicated chrooted-bind service (i.e. named-chroot on RHEL)
     # AND it also needs $::bind::defaults::bind_service being STOPPED and DISABLED.

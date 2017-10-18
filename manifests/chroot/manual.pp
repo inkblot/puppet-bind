@@ -14,7 +14,7 @@ class bind::chroot::manual(
             "${::bind::defaults::chroot_dir}/var/cache",
             "${::bind::defaults::chroot_dir}/var/run"]:
       ensure  => directory,
-      mode    => '0660',
+      mode    => '0661',
       require => Exec['mkdir-p-$chroot_dir'],
     }
 
@@ -48,13 +48,13 @@ class bind::chroot::manual(
       require => [ Exec['mknod-dev-null'], Exec['mknod-dev-random'], Exec['mknod-dev-urandom'] ],
     }
     exec { 'mv-etc-bind-into-jailed-etc':
-        command => "mv ${::bind::defaults::confdir} ${::bind::defaults::chroot_dir}",
+        command => "mv ${::bind::defaults::confdir} ${::bind::defaults::chroot_dir}${::bind::defaults::confdir}",
         path    => ['/bin', '/usr/bin'],
         unless  => "test -d ${::bind::defaults::chroot_dir}${::bind::defaults::confdir}",
-        require => [ File["${::bind::defaults::chroot_dir}/etc"] ]
+        require => [ Package['bind'], File["${::bind::defaults::chroot_dir}/etc"] ],
     }
-    #-> file { '/etc/bind':
-    #    ensure  => link,
-    #    target  => "${::bind::defaults::chroot_dir}/${::bind::defaults::confdir}",
-    #}
+    -> file { '/etc/bind':
+        ensure  => link,
+        target  => "${::bind::defaults::chroot_dir}${::bind::defaults::confdir}",
+    }
 }
