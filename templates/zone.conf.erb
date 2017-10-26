@@ -20,6 +20,9 @@ zone "<%= @_domain %>" {
 	notify <%= @ns_notify ? 'yes' : 'no' %>;
 <%-   end
     end -%>
+<%-   if !@check_names -%>
+       check-names ignore;
+<%-     end -%>
 <%- if @also_notify and @also_notify != '' -%>
 	also-notify {
 <%-   Array(@also_notify).each do |server| -%>
