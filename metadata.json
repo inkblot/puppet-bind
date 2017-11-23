@@ -1,6 +1,6 @@
 {
   "name": "inkblot-bind",
-  "version": "7.3.0",
+  "version": "7.3.1",
   "author": "inkblot",
   "license": "Apache-2.0",
   "summary": "ISC BIND name server",
@@ -28,7 +28,7 @@
   ],
   "dependencies": [
     { "name": "puppetlabs/stdlib", "version_requirement": ">= 4.15.0 < 5.0.0" },
-    { "name": "puppetlabs/concat", "version_requirement": ">= 2.2.1 < 3.0.0" }
+    { "name": "puppetlabs/concat", "version_requirement": ">= 2.2.1 < 5.0.0" }
   ],
   "data_provider": "hiera"
 }
