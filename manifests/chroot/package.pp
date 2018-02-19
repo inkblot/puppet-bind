@@ -1,3 +1,4 @@
+# Chroot class for distribution using dedicated package
 class bind::chroot::package(
     $chroot_dir            = $::bind::defaults::chroot_dir,
 ) inherits bind::defaults {

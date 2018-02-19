@@ -19,7 +19,7 @@ class bind (
     # especially when not using hiera (i.e. when using Foreman as ENC):
     $default_zones_include                = $::bind::defaults::default_zones_include,
 ) inherits bind::defaults {
-    if $chroot and !$chroot_supported {
+    if $chroot and !$::bind::defaults::chroot_supported {
         fail('Chroot for bind is not supported on your OS')
     }
     File {

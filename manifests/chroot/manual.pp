@@ -1,13 +1,14 @@
+# Chroot class for distribution without specific packaging
 class bind::chroot::manual(
     $chroot_dir            = $::bind::defaults::chroot_dir,
 ) inherits bind::defaults {
     exec { 'mkdir-p-$chroot_dir':
       command => "mkdir -p ${::bind::defaults::chroot_dir}",
       path    => ['/bin', '/usr/bin'],
-      creates => "${::bind::defaults::chroot_dir}",
+      creates => $::bind::defaults::chroot_dir,
     }
     # Creating system dirs under chroot dir:
-    file { ["${::bind::defaults::chroot_dir}",
+    file { [$::bind::defaults::chroot_dir,
             "${::bind::defaults::chroot_dir}/etc",
             "${::bind::defaults::chroot_dir}/dev",
             "${::bind::defaults::chroot_dir}/var",
@@ -20,9 +21,9 @@ class bind::chroot::manual(
 
     file { ["${::bind::defaults::chroot_dir}/var/cache/bind",
             "${::bind::defaults::chroot_dir}/var/run/named"]:
-      ensure => directory,
-      mode   => '0775',
-      group  => $::bind::defaults::bind_group,
+      ensure  => directory,
+      mode    => '0775',
+      group   => $::bind::defaults::bind_group,
       require => Exec['mkdir-p-$chroot_dir'],
     }
 
@@ -42,8 +43,8 @@ class bind::chroot::manual(
       creates => "${::bind::defaults::chroot_dir}/dev/urandom",
     }
     file { [ "${::bind::defaults::chroot_dir}/dev/null",
-             "${::bind::defaults::chroot_dir}/dev/random",
-             "${::bind::defaults::chroot_dir}/dev/urandom"]:
+              "${::bind::defaults::chroot_dir}/dev/random",
+              "${::bind::defaults::chroot_dir}/dev/urandom"]:
       mode    => '0660',
       require => [ Exec['mknod-dev-null'], Exec['mknod-dev-random'], Exec['mknod-dev-urandom'] ],
     }
@@ -54,7 +55,7 @@ class bind::chroot::manual(
         require => [ Package['bind'], File["${::bind::defaults::chroot_dir}/etc"] ],
     }
     -> file { '/etc/bind':
-        ensure  => link,
-        target  => "${::bind::defaults::chroot_dir}${::bind::defaults::confdir}",
+        ensure => link,
+        target => "${::bind::defaults::chroot_dir}${::bind::defaults::confdir}",
     }
 }

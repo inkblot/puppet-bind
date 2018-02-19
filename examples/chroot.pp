@@ -1,4 +1,4 @@
-class { 'bind':
+class { '::bind':
     chroot                => true,
     # Note: this file MUST be into the /etc/named directory so the
     # RHEL7 specific setup-named-chroot.sh script will make it available into
