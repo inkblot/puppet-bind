@@ -20,6 +20,8 @@ define bind::view (
     $order                        = '10',
     $minimal_responses            = false,
     $transfer_format              = undef,
+    $check_names_type             = undef, #master, slave or response
+    $check_names_handling         = undef, #warn, fail or ignore
 ) {
     $confdir = $::bind::confdir
     $default_zones_include = $::bind::default_zones_include
