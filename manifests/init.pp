@@ -12,6 +12,7 @@ class bind (
     $include_local          = false,
     $tkey_gssapi_credential = undef,
     $tkey_domain            = undef,
+    $transfer_format        = undef,
 ) inherits bind::defaults {
 
     File {

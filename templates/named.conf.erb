@@ -48,6 +48,9 @@ options {
 <%- if @tkey_domain -%>
         tkey-domain "<%= @tkey_domain %>";
 <%- end -%>
+<%- if @transfer_format -%>
+    transfer-format <%= @transfer_format %>;
+<%- end -%>
 };
 <%- if @include_local -%>
 
