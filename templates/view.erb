@@ -69,7 +69,7 @@ view "<%= @name %>" {
 <%-   end -%>
 	};
 <%- end -%>
-<%- if @transfer_format -%>
+<%- if @transfer_format and @transfer_format != '' -%>
     transfer-format <%= @transfer_format %>;
 <%- end -%>
 <%- if @check_names_type != '' and @check_names_handling != '' -%>
