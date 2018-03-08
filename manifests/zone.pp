@@ -83,7 +83,7 @@ define bind::zone (
         fail("source may only be provided for bind::zone resources with zone_type 'master' or 'hint'")
     }
 
-    unless !($check_names != '' and ! member(['warn', 'fail', 'ignore', $check_names])) {
+    unless !($check_names != '' and ! member(['warn', 'fail', 'ignore'], $check_names)) {
         fail("check_names must be 'warn', 'fail' or 'ignore'")
     }
 
