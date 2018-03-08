@@ -69,6 +69,9 @@ view "<%= @name %>" {
 <%-   end -%>
 	};
 <%- end -%>
+<%- if @transfer_format -%>
+    transfer-format <%= @transfer_format %>;
+<%- end -%>
 <%- if @empty_zones != '' -%>
 	empty-zones-enable <%= @empty_zones ? 'yes' : 'no' %>;
 <%- end -%>

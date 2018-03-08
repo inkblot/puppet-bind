@@ -80,4 +80,7 @@ zone "<%= @_domain %>" {
 <%-   end -%>
 	};
 <%- end -%>
+<%- if @transfer_format -%>
+    transfer-format <%= @transfer_format %>;
+<%- end -%>
 };
