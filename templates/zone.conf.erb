@@ -83,4 +83,7 @@ zone "<%= @_domain %>" {
 <%- if @transfer_format -%>
     transfer-format <%= @transfer_format %>;
 <%- end -%>
+<%- if @check_names -%>
+    check-names <%= @check_names %>;
+<%- end -%>
 };
