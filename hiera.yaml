@@ -5,6 +5,7 @@ hierarchy:
   - name: "Platform"
     backend: yaml
     paths:
-      - "osfamily/%{facts.os.name}/%{facts.os.release.major}"
-      - "osfamily/%{facts.os.family}"
+      - "os/%{facts.os.family}/%{facts.os.name}/%{facts.os.release.major}"
+      - "os/%{facts.os.family}/%{facts.os.name}"
+      - "os/%{facts.os.family}"
       - "common"
