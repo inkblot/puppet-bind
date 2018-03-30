@@ -85,8 +85,8 @@ class { 'bind':
 }
 ```
 
-Note: chroot is not supported for all operating systems. For now only
-RHEL7/CentOS7 is supported.
+Note: chroot functionality is not suitable for moving an existing BIND installation and configuration into a chroot.
+Please use only for provisioning of new servers.
 
 ### `bind::updater`
 
