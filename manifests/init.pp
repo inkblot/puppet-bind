@@ -13,8 +13,8 @@ class bind (
     $tkey_gssapi_credential = undef,
     $tkey_domain            = undef,
     $transfer_format        = undef,
-    $check_names_type       = undef, #master, slave or response
-    $check_names_handling   = undef, #warn, fail or ignore
+    $check_names_type       = '', #master, slave or response
+    $check_names_handling   = '', #warn, fail or ignore
 ) inherits bind::defaults {
 
     File {
