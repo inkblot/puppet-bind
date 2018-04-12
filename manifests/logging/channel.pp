@@ -4,6 +4,7 @@ define bind::logging::channel (
     $destination     = 'file',
     $file_path       = $::bind::defaults::logdir,
     $file_name       = '',
+    $file_options    = '',
     $syslog_facility = '',
     $severity        = '',
     $print_category  = true,
