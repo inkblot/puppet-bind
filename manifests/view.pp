@@ -19,6 +19,7 @@ define bind::view (
     $empty_zones                  = '',
     $order                        = '10',
     $minimal_responses            = false,
+    $response_policy              = {},
 ) {
     $confdir = $::bind::confdir
     $default_zones_include = $::bind::default_zones_include

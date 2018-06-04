@@ -18,6 +18,43 @@ view "<%= @name %>" {
 <%- if @recursion_match_only -%>
 	match-recursive-only yes;
 <%- end -%>
+<%- if @response_policy.has_key?('zones') -%>
+	response-policy {
+<%-   @response_policy['zones'].each do |rpz_zone_name,rpz_zone| -%>
+		zone "<%= rpz_zone_name %>"
+<%-     if rpz_zone.has_key?('policy') and rpz_zone['policy'] != '' -%>
+			policy <%= rpz_zone['policy'] -%>
+<%-     end -%>
+<%-     if rpz_zone.has_key?('recursive_only') and rpz_zone['recursive_only'] != '' -%>
+<%= "\n" %>			recursive-only <%= rpz_zone['recursive_only'] ? 'yes' : 'no' -%>
+<%-     end -%>
+<%-     if rpz_zone.has_key?('max_policy_ttl') and rpz_zone['max_policy_ttl'] != '' -%>
+<%= "\n" %>			max-policy-ttl <%= rpz_zone['max_policy_ttl'] -%>
+<%-     end -%>
+<%-     if rpz_zone.has_key?('log') and rpz_zone['log'] != '' -%>
+<%= "\n" %>			log <%= rpz_zone['log'] ? 'yes' : 'no' -%>
+<%-     end -%>;
+<%-   end -%>
+		}
+<%-     if @response_policy.has_key?('recursive_only') and @response_policy['recursive_only'] != '' -%>
+		recursive-only <%= @response_policy['recursive_only'] ? 'yes' : 'no' -%>
+<%-     end -%>
+<%-     if @response_policy.has_key?('max_policy_ttl') and @response_policy['max_policy_ttl'] != '' -%>
+<%= "\n" %>		max-policy-ttl <%= @response_policy['max_policy_ttl'] -%>
+<%-     end -%>
+<%-     if @response_policy.has_key?('break_dnssec') and @response_policy['break_dnssec'] != '' -%>
+<%= "\n" %>		break-dnssec <%= @response_policy['break_dnssec'] ? 'yes' : 'no' -%>
+<%-     end -%>
+<%-     if @response_policy.has_key?('min_ns_dots') and @response_policy['min_ns_dots'] != '' -%>
+<%= "\n" %>		min-ns-dots <%= @response_policy['min_ns_dots'] -%>
+<%-     end -%>
+<%-     if @response_policy.has_key?('qname_wait_recurse') and @response_policy['qname_wait_recurse'] != '' -%>
+<%= "\n" %>		qname-wait-recurse <%= @response_policy['qname_wait_recurse'] ? 'yes' : 'no' -%>
+<%-     end -%>
+<%-     if @response_policy.has_key?('nsip_wait_recurse') and @response_policy['nsip_wait_recurse'] != '' -%>
+<%= "\n" %>		nsip-wait-recurse <%= @response_policy['nsip_wait_recurse'] ? 'yes' : 'no' -%>
+<%-     end -%>;
+<%- end -%>
 <%- if @recursion -%>
 <%-   if @recursion_match_clients and @recursion_match_clients != '' -%>
 	allow-recursion {
