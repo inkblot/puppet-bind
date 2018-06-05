@@ -21,18 +21,20 @@ view "<%= @name %>" {
 <%- if @response_policy.has_key?('zones') -%>
 	response-policy {
 <%-   @response_policy['zones'].each do |rpz_zone_name,rpz_zone| -%>
-		zone "<%= rpz_zone_name %>"
-<%-     if rpz_zone.has_key?('policy') and rpz_zone['policy'] != '' -%>
-			policy <%= rpz_zone['policy'] -%>
-<%-     end -%>
-<%-     if rpz_zone.has_key?('recursive_only') and rpz_zone['recursive_only'] != '' -%>
+		zone <%= "\"#{rpz_zone_name}\"" -%>
+<%-     if @rpz_zone -%>
+<%-       if rpz_zone.has_key?('policy') and rpz_zone['policy'] != '' -%>
+<%= "\n" %>			policy <%= rpz_zone['policy'] -%>
+<%-       end -%>
+<%-       if rpz_zone.has_key?('recursive_only') and rpz_zone['recursive_only'] != '' -%>
 <%= "\n" %>			recursive-only <%= rpz_zone['recursive_only'] ? 'yes' : 'no' -%>
-<%-     end -%>
-<%-     if rpz_zone.has_key?('max_policy_ttl') and rpz_zone['max_policy_ttl'] != '' -%>
+<%-       end -%>
+<%-       if rpz_zone.has_key?('max_policy_ttl') and rpz_zone['max_policy_ttl'] != '' -%>
 <%= "\n" %>			max-policy-ttl <%= rpz_zone['max_policy_ttl'] -%>
-<%-     end -%>
-<%-     if rpz_zone.has_key?('log') and rpz_zone['log'] != '' -%>
+<%-       end -%>
+<%-       if rpz_zone.has_key?('log') and rpz_zone['log'] != '' -%>
 <%= "\n" %>			log <%= rpz_zone['log'] ? 'yes' : 'no' -%>
+<%-       end -%>
 <%-     end -%>;
 <%-   end -%>
 		}
