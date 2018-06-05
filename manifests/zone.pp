@@ -10,6 +10,7 @@ define bind::zone (
     $allow_updates   = '',
     $update_policies = '',
     $allow_transfers = '',
+    $allow_query     = '',
     $dnssec          = false,
     $nsec3_salt      = '',
     $key_directory   = '',
