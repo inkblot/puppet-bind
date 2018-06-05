@@ -27,7 +27,17 @@ options {
 	forward <%= @forward %>;
 <%- end -%>
 	auth-nxdomain <%= @auth_nxdomain ? 'yes' : 'no' %>;
+<%- if @listen_on and @listen_on != '' -%>
+	listen-on {
+<%- Array(@listen_on).each do |listen_on_address| -%>
+		<%= listen_on_address %>;
+<%- end -%>
+	};
+<%- end -%>
 	listen-on-v6 { any; };
+<%- if @query_source and @query_source != '' -%>
+	query-source address <%= @query_source %>;
+<%- end -%>
 	dnssec-enable <%= @dnssec ? 'yes' : 'no' %>;
 <%- if @filter_ipv6 -%>
 	filter-aaaa-on-v4 yes;
