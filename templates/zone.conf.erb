@@ -20,6 +20,13 @@ zone "<%= @_domain %>" {
 	notify <%= @ns_notify ? 'yes' : 'no' %>;
 <%-   end
     end -%>
+<%- if @zone_type = 'static_stub' and @server_addresses != '' -%>
+	server-addresses {
+<%-   Array(@server_addresses).each do |server| -%>
+		<%= server %>;
+<%-   end -%>
+	};
+<%- end -%>
 <%- if @also_notify and @also_notify != '' -%>
 	also-notify {
 <%-   Array(@also_notify).each do |server| -%>
