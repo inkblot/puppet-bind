@@ -4,6 +4,8 @@ class bind (
     $forwarders                           = undef,
     $forward                              = undef,
     $dnssec                               = undef,
+    $listen_on                            = undef,
+    $query_source                         = undef,
     $filter_ipv6                          = undef,
     $version                              = undef,
     $statistics_port                      = undef,
