@@ -48,6 +48,13 @@ options {
 <%- if @tkey_domain -%>
         tkey-domain "<%= @tkey_domain %>";
 <%- end -%>
+<%- if @listen_on and @listen_on != '' -%>
+	listen-on {
+<%- Array(@listen_on).each do |listen_on_address| -%>
+		<%= listen_on_address %>;
+<%- end -%>
+	};
+<%- end -%>
 };
 <%- if @include_local -%>
 
