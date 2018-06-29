@@ -96,7 +96,9 @@ view "<%= @name %>" {
 	notify-source <%= @notify_source %>;
 <%- end -%>
 <%- if @include_default_zones and @default_zones_include -%>
-	include "<%= @default_zones_include %>";
+<%-   Array(@default_zones_include).each do |zone| -%>
+	include "<%= zone %>";
+<%-   end -%>
 <%- end -%>
 <%- if @response_policy.has_key?('zones') -%>
 	response-policy {
