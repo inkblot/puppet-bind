@@ -80,4 +80,11 @@ zone "<%= @_domain %>" {
 <%-   end -%>
 	};
 <%- end -%>
+<%- if @allow_query and @allow_query != '' -%>
+	allow-query {
+<%-   Array(@allow_query).each do |query_client| -%>
+		<%= query_client %>;
+<%-   end -%>
+	};
+<%- end -%>
 };
