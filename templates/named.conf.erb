@@ -55,6 +55,9 @@ options {
 <%- end -%>
 	};
 <%- end -%>
+<%- if @query_source and @query_source != '' -%>
+	query-source address <%= @query_source %>;
+<%- end -%>
 };
 <%- if @include_local -%>
 
