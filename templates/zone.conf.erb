@@ -87,4 +87,11 @@ zone "<%= @_domain %>" {
 <%-   end -%>
 	};
 <%- end -%>
+<%- if @zone_type == 'static-stub' and @server_addresses != '' -%>
+	server-addresses {
+<%-   Array(@server_addresses).each do |server| -%>
+		<%= server %>;
+<%-   end -%>
+	};
+<%- end -%>
 };
