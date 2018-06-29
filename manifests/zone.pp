@@ -2,24 +2,26 @@
 
 define bind::zone (
     $zone_type,
-    $domain          = '',
-    $dynamic         = true,
-    $masters         = '',
-    $transfer_source = '',
-    $notify_source   = '',
-    $allow_updates   = '',
-    $update_policies = '',
-    $allow_transfers = '',
-    $dnssec          = false,
-    $nsec3_salt      = '',
-    $key_directory   = '',
-    $ns_notify       = true,
-    $also_notify     = '',
-    $allow_notify    = '',
-    $forwarders      = '',
-    $forward         = '',
-    $source          = '',
-    $forwarders_port = 53,
+    $domain           = '',
+    $dynamic          = true,
+    $masters          = '',
+    $transfer_source  = '',
+    $notify_source    = '',
+    $allow_updates    = '',
+    $update_policies  = '',
+    $allow_transfers  = '',
+    $dnssec           = false,
+    $nsec3_salt       = '',
+    $key_directory    = '',
+    $ns_notify        = true,
+    $also_notify      = '',
+    $allow_notify     = '',
+    $forwarders       = '',
+    $forward          = '',
+    $source           = '',
+    $forwarders_port  = 53,
+    $allow_query      = '',
+    $server_addresses = '',
 ) {
     # where there is a zone, there is a server
     include ::bind
@@ -79,6 +81,10 @@ define bind::zone (
 
     unless !($source != '' and ! member(['master', 'hint'], $zone_type)) {
         fail("source may only be provided for bind::zone resources with zone_type 'master' or 'hint'")
+    }
+
+    unless !($server_addresses != '' and $zone_type != 'static-stub') {
+        fail("server_addresses may only be provided for bind::zone resources with zone_type 'static-stub'")
     }
 
     $zone_file_mode = $zone_type ? {

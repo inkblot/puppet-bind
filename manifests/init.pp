@@ -13,6 +13,8 @@ class bind (
     $tkey_gssapi_credential               = undef,
     $tkey_domain                          = undef,
     $chroot                               = false,
+    $listen_on                            = undef,
+    $query_source                         = undef,
     $chroot_class                         = $::bind::defaults::chroot_class,
     $chroot_dir                           = $::bind::defaults::chroot_dir,
     # NOTE: we need to be able to override this parameter when declaring class,

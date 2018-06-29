@@ -283,6 +283,33 @@ bind::view { 'ns':
 }
 ```
 
+View declaration can include `response-policy` clause configuration. Each zone included in `response-policy` can have
+specific options set or global options from view will be used:
+
+```
+bind::view { 'internet':
+    ...
+    'response_policy' => {
+        'zones' => {
+            'dontlike' => {
+                'policy'         => 'drop',
+                'recursive-only' => true,
+                'max-policy-ttl' => 3600,
+                'log'            => false,
+            },
+            ...
+        },
+        'recursive-only'     => true,
+        'max-policy-ttl'     => 6000,
+        'break-dnssec'       => false,
+        'min-ns-dots'        => 5,
+        'qname-wait-recurse' => true,
+        'nsip-wait-recurse'  => frue,
+    }
+    ...
+}
+```
+
 ## Resources
 
 ### `resource_record`
