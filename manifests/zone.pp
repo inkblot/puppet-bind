@@ -20,6 +20,8 @@ define bind::zone (
     $forward         = '',
     $source          = '',
     $forwarders_port = 53,
+    $transfer_format = '',
+    $check_names     = '',
 ) {
     # where there is a zone, there is a server
     include ::bind
@@ -79,6 +81,10 @@ define bind::zone (
 
     unless !($source != '' and ! member(['master', 'hint'], $zone_type)) {
         fail("source may only be provided for bind::zone resources with zone_type 'master' or 'hint'")
+    }
+
+    unless !($check_names != '' and ! member(['warn', 'fail', 'ignore'], $check_names)) {
+        fail("check_names must be 'warn', 'fail' or 'ignore'")
     }
 
     $zone_file_mode = $zone_type ? {

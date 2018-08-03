@@ -1,16 +1,17 @@
 # ex: syntax=puppet si ts=4 sw=4 et
 
 define bind::server (
-    $bogus     = false,
-    $edns      = true,
-    $key       = undef,
-    $transfers = undef,
+  $bogus           = false,
+  $edns            = true,
+  $key             = undef,
+  $transfers       = undef,
+  $transfer_format = undef,
 ) {
-    include ::bind
+  include ::bind
 
-    concat::fragment { "bind-server-${name}":
-        order   => 10,
-        target  => "${::bind::confdir}/servers.conf",
-        content => template('bind/server.erb'),
-    }
+  concat::fragment { "bind-server-${name}":
+    order   => 10,
+    target  => "${::bind::confdir}/servers.conf",
+    content => template('bind/server.erb'),
+  }
 }

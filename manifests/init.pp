@@ -18,6 +18,20 @@ class bind (
     # NOTE: we need to be able to override this parameter when declaring class,
     # especially when not using hiera (i.e. when using Foreman as ENC):
     $default_zones_include                = $::bind::defaults::default_zones_include,
+    $forwarders             = undef,
+    $forward                = undef,
+    $dnssec                 = undef,
+    $filter_ipv6            = undef,
+    $version                = undef,
+    $statistics_port        = undef,
+    $auth_nxdomain          = undef,
+    $include_default_zones  = true,
+    $include_local          = false,
+    $tkey_gssapi_credential = undef,
+    $tkey_domain            = undef,
+    $transfer_format        = undef,
+    $check_names_type       = '', #master, slave or response
+    $check_names_handling   = '', #warn, fail or ignore
 ) inherits bind::defaults {
     if $chroot and !$::bind::defaults::chroot_supported {
         fail('Chroot for bind is not supported on your OS')
