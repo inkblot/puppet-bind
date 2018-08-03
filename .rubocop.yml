@@ -9,6 +9,8 @@ AllCops:
     # Ignore lib/** as it contains a lot of offenses for now.
     # TODO : fix lib/** offenses
     - 'lib/**/*'
+    # The Puppet pkg directory
+    - 'pkg/**/*'
 
 Lint/ConditionPosition:
   Enabled: true
@@ -423,9 +425,6 @@ Style/NumericLiterals:
 Style/OneLineConditional:
   Enabled: false
 
-Naming/BinaryOperatorParameter:
-  Enabled: false
-
 Style/ParenthesesAroundCondition:
   Enabled: false
 
@@ -481,4 +480,7 @@ Style/IfWithSemicolon:
   Enabled: false
 
 Style/Encoding:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
   Enabled: false
