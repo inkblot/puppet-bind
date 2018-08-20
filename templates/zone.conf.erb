@@ -11,7 +11,11 @@ zone "<%= @_domain %>" {
 <%-   end -%>
 	file "<%= @cachedir %>/<%= @name %>/<%= @zone_file %>.signed";
 <%- elsif %w(init managed allowed).include? @zone_file_mode -%>
+<%- if @source and @source != '' -%>
+    file "<%= @source %>";
+<%- else -%>
 	file "<%= @cachedir %>/<%= @name %>/<%= @zone_file %>";
+<%- end -%>
 <%- end -%>
 <%- if %w(master slave).include? @zone_type
       if (@ns_notify == 'explicit') -%>
