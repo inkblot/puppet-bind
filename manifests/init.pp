@@ -4,6 +4,7 @@ class bind (
     $forwarders                           = undef,
     $forward                              = undef,
     $dnssec                               = undef,
+    $dnssec_random_device                 = $::bind::defaults::random_device,
     $filter_ipv6                          = undef,
     $version                              = undef,
     $statistics_port                      = undef,
