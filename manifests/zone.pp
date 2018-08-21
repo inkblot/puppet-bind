@@ -26,7 +26,7 @@ define bind::zone (
 
     # Pull some platform defaults and `bind` class parameters into the local scope
     $cachedir = $::bind::defaults::cachedir
-    $random_device = $::bind::defaults::random_device
+    $random_device = $::bind::dnssec_random_device
     $bind_user = $::bind::defaults::bind_user
     $bind_group = $::bind::defaults::bind_group
     $include_default_zones = $::bind::include_default_zones
