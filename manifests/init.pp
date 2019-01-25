@@ -15,6 +15,9 @@ class bind (
     $chroot                               = false,
     $chroot_class                         = $::bind::defaults::chroot_class,
     $chroot_dir                           = $::bind::defaults::chroot_dir,
+    $transfers_in                         = undef,
+    $transfers_per_ns                     = undef,
+    $transfers_out                        = undef,
     # NOTE: we need to be able to override this parameter when declaring class,
     # especially when not using hiera (i.e. when using Foreman as ENC):
     $default_zones_include                = $::bind::defaults::default_zones_include,

@@ -26,6 +26,15 @@ options {
 <%- if @forward != '' -%>
 	forward <%= @forward %>;
 <%- end -%>
+<%- if @transfers_in -%>
+        transfers-in <%= @transfers_in %>;
+<%- end -%>
+<%- if @transfers_out -%>
+        transfers-out <%= @transfers_out %>;
+<%- end -%>
+<%- if @transfers_per_ns -%>
+        transfers-per-ns <%= @transfers_per_ns %>;
+<%- end -%>
 	auth-nxdomain <%= @auth_nxdomain ? 'yes' : 'no' %>;
 	listen-on-v6 { any; };
 	dnssec-enable <%= @dnssec ? 'yes' : 'no' %>;
