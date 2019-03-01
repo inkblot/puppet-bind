@@ -2,7 +2,7 @@
 <%- case @destination -%>
 <%-   when "file" -%>
   <%- if @file_params -%>
-		file "<%= @file_path %>/<%= @file_name %> <%= @file_params %>";
+		file "<%= @file_path %>/<%= @file_name %>" <%= @file_params %>;
   <%- else -%>
 		file "<%= @file_path %>/<%= @file_name %>";
   <%- end -%>
