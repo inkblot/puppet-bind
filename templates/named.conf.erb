@@ -26,6 +26,9 @@ options {
 <%- if @forward != '' -%>
 	forward <%= @forward %>;
 <%- end -%>
+<%- if @query_log -%>
+	query_log <%= @query_log %>;
+<%- end -%>
 <%- if @transfers_in -%>
 	transfers-in <%= @transfers_in %>;
 <%- end -%>
@@ -36,13 +39,13 @@ options {
 	transfers-per-ns <%= @transfers_per_ns %>;
 <%- end -%>
 <%- if @max_refresh_time -%>
-	max-refresh-time <%= @min_refresh_time %>;
+	max-refresh-time <%= @max_refresh_time %>;
 <%- end -%>
 <%- if @min_refresh_time -%>
 	min-refresh-time <%= @min_refresh_time %>;
 <%- end -%>
 <%- if @max_retry_time -%>
-	max-retry-time <%= @min_retry_time %>;
+	max-retry-time <%= @max_retry_time %>;
 <%- end -%>
 <%- if @min_retry_time -%>
 	min-retry-time <%= @min_retry_time %>;
