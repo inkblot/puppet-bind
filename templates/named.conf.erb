@@ -27,13 +27,25 @@ options {
 	forward <%= @forward %>;
 <%- end -%>
 <%- if @transfers_in -%>
-        transfers-in <%= @transfers_in %>;
+	transfers-in <%= @transfers_in %>;
 <%- end -%>
 <%- if @transfers_out -%>
-        transfers-out <%= @transfers_out %>;
+	transfers-out <%= @transfers_out %>;
 <%- end -%>
 <%- if @transfers_per_ns -%>
-        transfers-per-ns <%= @transfers_per_ns %>;
+	transfers-per-ns <%= @transfers_per_ns %>;
+<%- end -%>
+<%- if @max_refresh_time -%>
+	max-refresh-time <%= @min_refresh_time %>;
+<%- end -%>
+<%- if @min_refresh_time -%>
+	min-refresh-time <%= @min_refresh_time %>;
+<%- end -%>
+<%- if @max_retry_time -%>
+	max-retry-time <%= @min_retry_time %>;
+<%- end -%>
+<%- if @min_retry_time -%>
+	min-retry-time <%= @min_retry_time %>;
 <%- end -%>
 	auth-nxdomain <%= @auth_nxdomain ? 'yes' : 'no' %>;
 	listen-on-v6 { any; };
@@ -45,17 +57,17 @@ options {
 	dnssec-validation yes;
 	dnssec-lookaside auto;
 <%-   if @isc_bind_keys -%>
-        bindkeys-file "<%= @isc_bind_keys %>";
+	bindkeys-file "<%= @isc_bind_keys %>";
 <%-   end -%>
 <%- end -%>
 <%- if @version != '' -%>
 	version "<%= @version %>";
 <%- end -%>
 <%- if @tkey_gssapi_credential -%>
-        tkey-gssapi-credential "<%= @tkey_gssapi_credential %>";
+	tkey-gssapi-credential "<%= @tkey_gssapi_credential %>";
 <%- end -%>
 <%- if @tkey_domain -%>
-        tkey-domain "<%= @tkey_domain %>";
+	tkey-domain "<%= @tkey_domain %>";
 <%- end -%>
 };
 <%- if @include_local -%>
