@@ -32,6 +32,9 @@ options {
 <%- if @request_ixfr -%>
 	request-ixfr <%= @request_ixfr %>;
 <%- end -%>
+<%- if @serial_query_rate -%>
+	serial-query-rate <%= @serial_query_rate %>;
+<%- end -%>
 <%- if @transfers_in -%>
 	transfers-in <%= @transfers_in %>;
 <%- end -%>

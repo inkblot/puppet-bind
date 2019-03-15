@@ -24,6 +24,7 @@ class bind (
     $min_retry_time                       = undef,
     $query_log                            = undef,
     $request_ixfr                         = undef,
+    $serial_query_rate                    = undef,
     # NOTE: we need to be able to override this parameter when declaring class,
     # especially when not using hiera (i.e. when using Foreman as ENC):
     $default_zones_include                = $::bind::defaults::default_zones_include,
