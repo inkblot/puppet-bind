@@ -23,6 +23,7 @@ class bind (
     $max_retry_time                       = undef,
     $min_retry_time                       = undef,
     $query_log                            = undef,
+    $request_ixfr                         = undef,
     # NOTE: we need to be able to override this parameter when declaring class,
     # especially when not using hiera (i.e. when using Foreman as ENC):
     $default_zones_include                = $::bind::defaults::default_zones_include,

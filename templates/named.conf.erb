@@ -29,6 +29,9 @@ options {
 <%- if @query_log -%>
 	querylog <%= @query_log %>;
 <%- end -%>
+<%- if @request_ixfr -%>
+	request-ixfr <%= @request_ixfr %>;
+<%- end -%>
 <%- if @transfers_in -%>
 	transfers-in <%= @transfers_in %>;
 <%- end -%>
