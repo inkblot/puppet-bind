@@ -72,6 +72,9 @@ options {
 <%- if @version != '' -%>
 	version "<%= @version %>";
 <%- end -%>
+<%- if @server_id -%>
+	server-id hostname;
+<%- end -%>
 <%- if @tkey_gssapi_credential -%>
 	tkey-gssapi-credential "<%= @tkey_gssapi_credential %>";
 <%- end -%>
