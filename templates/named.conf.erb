@@ -56,6 +56,9 @@ options {
 <%- if @min_retry_time -%>
 	min-retry-time <%= @min_retry_time %>;
 <%- end -%>
+<%- if @max_ncache_ttl -%>
+	max-ncache-ttl <%= @max_ncache_ttl %>;
+<%- end -%>
 	auth-nxdomain <%= @auth_nxdomain ? 'yes' : 'no' %>;
 	listen-on-v6 { any; };
 	dnssec-enable <%= @dnssec ? 'yes' : 'no' %>;

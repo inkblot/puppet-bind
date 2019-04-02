@@ -26,6 +26,7 @@ class bind (
     $request_ixfr                         = undef,
     $serial_query_rate                    = undef,
     $server_id                            = false,
+    $max_ncache_ttl                       = undef,
     # NOTE: we need to be able to override this parameter when declaring class,
     # especially when not using hiera (i.e. when using Foreman as ENC):
     $default_zones_include                = $::bind::defaults::default_zones_include,
