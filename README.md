@@ -192,6 +192,16 @@ bind::zone { 'example.com':
 }
 ```
 
+A master zone for which the zone contents are managed by an external tool (this module just ensures the zone exists
+and is served). Use of `resource_records` for an unmanaged zone is not supported.
+
+```
+bind::zone { 'example.com':
+    zone_type       => 'master',
+    manage_contents => false,
+}
+```
+
 A slave zone which allows notifications from servers matched by IP:
 
 ```

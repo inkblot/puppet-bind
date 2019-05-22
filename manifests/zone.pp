@@ -19,6 +19,7 @@ define bind::zone (
     $forwarders      = '',
     $forward         = '',
     $source          = '',
+    $manage_contents = true,
     $forwarders_port = 53,
 ) {
     # where there is a zone, there is a server
@@ -82,23 +83,35 @@ define bind::zone (
     }
 
     $zone_file_mode = $zone_type ? {
-        'master' => $dynamic ? {
-            true  => 'init',
-            false => 'managed',
+        'master'  => $manage_contents ? {
+            true  => $dynamic ? {
+                true  => 'init',
+                false => 'managed',
+            },
+            false => 'unmanaged',
         },
-        'slave'  => 'allowed',
-        'hint'   => 'managed',
-        'stub'   => 'allowed',
-        default  => 'absent',
+        'slave'   => 'allowed',
+        'hint'    => 'managed',
+        'stub'    => 'allowed',
+        default   => 'absent',
     }
 
-    if member(['init', 'managed', 'allowed'], $zone_file_mode) {
+    if member(['init', 'managed', 'unmanaged', 'allowed'], $zone_file_mode) {
         file { "${cachedir}/${name}":
             ensure  => directory,
             owner   => $bind_user,
             group   => $bind_group,
             mode    => '0755',
             require => Package['bind'],
+        }
+
+        if member(['unmanaged'], $zone_file_mode) {
+            file { "${cachedir}/${name}/${zone_file}":
+                ensure  => present,
+                owner   => $bind_user,
+                group   => $bind_group,
+                mode    => '0644';
+            }
         }
 
         if member(['init', 'managed'], $zone_file_mode) {
@@ -121,7 +134,7 @@ define bind::zone (
                 subscribe   => File["${cachedir}/${name}/${zone_file}"],
             }
         }
-    } elsif $zone_file_mode == 'absent' {
+    } elsif $zone_file_mode == 'absent' and $manage_contents {
         file { "${cachedir}/${name}":
             ensure => absent,
         }

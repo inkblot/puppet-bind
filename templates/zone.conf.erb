@@ -10,7 +10,7 @@ zone "<%= @_domain %>" {
 	key-directory "<%= @cachedir %>/<%= @name %>";
 <%-   end -%>
 	file "<%= @cachedir %>/<%= @name %>/<%= @zone_file %>.signed";
-<%- elsif %w(init managed allowed).include? @zone_file_mode -%>
+<%- elsif %w(init managed unmanaged allowed).include? @zone_file_mode -%>
 	file "<%= @cachedir %>/<%= @name %>/<%= @zone_file %>";
 <%- end -%>
 <%- if %w(master slave).include? @zone_type
