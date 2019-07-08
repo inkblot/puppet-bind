@@ -2,6 +2,8 @@
 
 define bind::acl (
     $addresses,
+    $geoip_type = undef,
+    $geoip_location = undef,
 ) {
 
     concat::fragment { "bind-acl-${name}":
