@@ -21,6 +21,7 @@ class bind (
   $transfer_format        = undef,
   $check_names_type       = '', #master, slave or response
   $check_names_handling   = '', #warn, fail or ignore
+  $geoip_directory        = undef,
 ) inherits bind::defaults {
   if $chroot and !$::bind::defaults::chroot_supported {
     fail('Chroot for bind is not supported on your OS')
