@@ -55,7 +55,7 @@ options {
     check-names <%= @check_names_type %> <%= @check_names_handling %>;
 <%- end -%>
 <%- if @geoip_directory and @geoip_directory != '' -%>
-    geoip-directory "@geoip_directory";
+    geoip-directory "<%= @geoip_directory %>";
 <%- end -%>
 };
 <%- if @include_local -%>
