@@ -5,7 +5,7 @@ acl <%= @name %> {
 <%- end -%>
 <%- if @geoip_type and @geoip_location and @geoip_type == 'city' -%>
     geoip <%= @geoip_type %> "<%= @geoip_location %>";
-<%- else if @geoip_type and @geoip_location -%>
+<%- elsif @geoip_type and @geoip_location -%>
     geoip <%= @geoip_type %> <%= @geoip_location %>;
 <%- end -%>
 };
