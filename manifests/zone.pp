@@ -22,6 +22,7 @@ define bind::zone (
     $forwarders_port = 53,
     $transfer_format = '',
     $check_names     = '',
+    $deploy_file     = true,
 ) {
     # where there is a zone, there is a server
     include ::bind
