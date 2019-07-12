@@ -10,7 +10,7 @@ zone "<%= @_domain %>" {
 	key-directory "<%= @cachedir %>/<%= @name %>";
 <%-   end -%>
 	file "<%= @cachedir %>/<%= @name %>/<%= @zone_file %>.signed";
-<%- elsif %w(init managed allowed).include? @zone_file_mode -%>
+<%- elsif %w(init managed allowed).include? @zone_file_mode and @deploy_file -%>
 <%- if @source and @source != '' -%>
     file "<%= @source %>";
 <%- else -%>
