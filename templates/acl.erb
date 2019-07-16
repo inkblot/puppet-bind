@@ -6,6 +6,12 @@ acl <%= @name %> {
 <%- if @geoip_type and @geoip_location and @geoip_type == 'city' -%>
     geoip <%= @geoip_type %> "<%= @geoip_location %>";
 <%- elsif @geoip_type and @geoip_location -%>
+  <%- if @geoip_location.is_a?(Array) -%>
+    <%- Array(@geoip_location).each do |geo_loc| -%>
+    geoip <%= @geoip_type %> <%= geo_loc %>;
+    <%- end %->
+  <%- else -%>
     geoip <%= @geoip_type %> <%= @geoip_location %>;
+  <%- end -%>
 <%- end -%>
 };
