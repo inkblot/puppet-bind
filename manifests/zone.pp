@@ -23,6 +23,7 @@ define bind::zone (
     $transfer_format = '',
     $check_names     = '',
     $deploy_file     = true,
+    $in_view         = undef,
 ) {
     # where there is a zone, there is a server
     include ::bind
