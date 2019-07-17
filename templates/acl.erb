@@ -9,9 +9,8 @@ acl <%= @name %> {
   <%- if @geoip_location.is_a?(Array) -%>
     <%- Array(@geoip_location).each do |geo_loc| -%>
     geoip <%= @geoip_type %> <%= geo_loc %>;
-    <%- end %->
-  <%- end -%>
-  <%- if @geoip_location.is_a?(String) -%>
+    <%- end -%>
+  <%- else -%>
     geoip <%= @geoip_type %> <%= @geoip_location %>;
   <%- end -%>
 <%- end -%>
