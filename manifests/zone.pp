@@ -157,14 +157,26 @@ define bind::zone (
         }
     }
 
-    file { "${::bind::confdir}/zones/${name}.conf":
-        ensure  => present,
-        owner   => 'root',
-        group   => $bind_group,
-        mode    => '0644',
-        content => template('bind/zone.conf.erb'),
-        notify  => Exec['bind-config-test'],
-        require => Package['bind'],
+    if $in_view != undef {
+        file { "${::bind::confdir}/zones/geo/${name}.conf":
+          ensure  => present,
+          owner   => 'root',
+          group   => $bind_group,
+          mode    => '0644',
+          content => template('bind/zone.conf.erb'),
+          notify  => Exec['bind-config-test'],
+          require => Package['bind'],
+        }
+    } else {
+        file { "${::bind::confdir}/zones/${name}.conf":
+          ensure  => present,
+          owner   => 'root',
+          group   => $bind_group,
+          mode    => '0644',
+          content => template('bind/zone.conf.erb'),
+          notify  => Exec['bind-config-test'],
+          require => Package['bind'],
+        }
     }
 
     concat::fragment { "bind-zone-mapping-${name}":

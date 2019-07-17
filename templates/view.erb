@@ -108,4 +108,7 @@ view "<%= @name %>" {
 <%- Array(@zones).each do |zone| -%>
 	include "<%= @confdir %>/zones/<%= zone %>.conf";
 <%- end -%>
+<%- Array(@geo_zones).each do |geo_zone| -%>
+    include "<%= @confdir %>/zones/geo/<%= geo_zone %>.conf";
+<%- end -%>
 };
