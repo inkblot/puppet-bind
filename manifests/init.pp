@@ -66,21 +66,24 @@ class bind (
     include     => false,
   }
 
-  file { '/usr/local/bin/rndc-helper':
-    ensure  => present,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0755',
-    content => template('bind/rndc-helper.erb'),
-  }
-
-  file { "${::bind::defaults::confdir}/zones":
-    ensure => directory,
-    mode   => '2755',
-  }
-
-  file { $::bind::defaults::namedconf:
-    content => template('bind/named.conf.erb'),
+  file {
+    '/usr/local/bin/rndc-helper':
+      ensure  => present,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0755',
+      content => template('bind/rndc-helper.erb'),
+    ;
+    "${::bind::defaults::confdir}/zones":
+      ensure => directory,
+      mode   => '2755',
+    ;
+    "${::bind::defaults::confdir}/zones/geo":
+      ensure => directory,
+      mode   => '2755',
+    ;
+    $::bind::defaults::namedconf:
+      content => template('bind/named.conf.erb'),
   }
 
   if $include_default_zones and $::bind::defaults::default_zones_source {

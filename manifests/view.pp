@@ -22,6 +22,7 @@ define bind::view (
     $transfer_format              = '',
     $check_names_type             = '', #master, slave or response
     $check_names_handling         = '', #warn, fail or ignore
+    $geo_zones                    = [],
 ) {
     $confdir = $::bind::confdir
     $default_zones_include = $::bind::default_zones_include
