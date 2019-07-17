@@ -77,10 +77,14 @@ class bind (
     "${::bind::defaults::confdir}/zones":
       ensure => directory,
       mode   => '2755',
+      purge  => true,
+      force  => true,
     ;
     "${::bind::defaults::confdir}/zones/geo":
       ensure => directory,
       mode   => '2755',
+      purge  => true,
+      force  => true,
     ;
     $::bind::defaults::namedconf:
       content => template('bind/named.conf.erb'),
