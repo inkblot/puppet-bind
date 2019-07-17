@@ -1,7 +1,7 @@
 
 # This file managed by puppet - changes will be lost
 zone "<%= @_domain %>" {
-<%- if @in_view and @in_view != '' -%>
+<%- if @in_view != '' -%>
     in-view "<%= @in_view %>";
 <%- else -%>
 	type <%= @zone_type %>;

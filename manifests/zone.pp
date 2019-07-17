@@ -23,7 +23,7 @@ define bind::zone (
     $transfer_format = '',
     $check_names     = '',
     $deploy_file     = true,
-    $in_view         = undef,
+    $in_view         = '',
 ) {
     # where there is a zone, there is a server
     include ::bind
@@ -157,8 +157,8 @@ define bind::zone (
         }
     }
 
-    if $in_view != undef {
-        file { "${::bind::confdir}/zones/geo/${name}.conf":
+    if $in_view != '' {
+        file { "${::bind::confdir}/zones/geo/${_domain}.conf":
           ensure  => present,
           owner   => 'root',
           group   => $bind_group,
