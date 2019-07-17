@@ -1,6 +1,9 @@
 
 # This file managed by puppet - changes will be lost
 zone "<%= @_domain %>" {
+<%- if @in_view and @in_view != '' -%>
+    in-view "<%= @in_view %>";
+<%- else -%>
 	type <%= @zone_type %>;
 <%- if @dnssec -%>
 	auto-dnssec maintain;
@@ -89,5 +92,6 @@ zone "<%= @_domain %>" {
 <%- end -%>
 <%- if @check_names and @check_names != ''-%>
     check-names <%= @check_names %>;
+<%- end -%>
 <%- end -%>
 };
