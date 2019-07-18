@@ -158,7 +158,7 @@ define bind::zone (
     }
 
     if $in_view != '' {
-        file { "${::bind::confdir}/zones/geo/${_domain}.conf":
+        file { "${::bind::confdir}/zones/geo/${name}.conf":
           ensure  => present,
           owner   => 'root',
           group   => $bind_group,
