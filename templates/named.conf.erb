@@ -53,6 +53,9 @@ options {
 <%- if @min_refresh_time -%>
 	min-refresh-time <%= @min_refresh_time %>;
 <%- end -%>
+<%- if @send_cookie == false -%>
+	send-cookie false;
+<%- end -%>
 <%- if @max_retry_time -%>
 	max-retry-time <%= @max_retry_time %>;
 <%- end -%>

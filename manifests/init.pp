@@ -28,6 +28,7 @@ class bind (
     $server_id                            = false,
     $max_ncache_ttl                       = undef,
     $ixfr_from_differences                = undef,
+    $send_cookie                          = true,
     # NOTE: we need to be able to override this parameter when declaring class,
     # especially when not using hiera (i.e. when using Foreman as ENC):
     $default_zones_include                = $::bind::defaults::default_zones_include,
