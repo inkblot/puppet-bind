@@ -26,6 +26,45 @@ options {
 <%- if @forward != '' -%>
 	forward <%= @forward %>;
 <%- end -%>
+<%- if @query_log -%>
+	querylog <%= @query_log %>;
+<%- end -%>
+<%- if @request_ixfr -%>
+	request-ixfr <%= @request_ixfr %>;
+<%- end -%>
+<%- if @ixfr_from_differences -%>
+	ixfr-from-differences <%= @ixfr_from_differences %>;
+<%- end -%>
+<%- if @serial_query_rate -%>
+	serial-query-rate <%= @serial_query_rate %>;
+<%- end -%>
+<%- if @transfers_in -%>
+	transfers-in <%= @transfers_in %>;
+<%- end -%>
+<%- if @transfers_out -%>
+	transfers-out <%= @transfers_out %>;
+<%- end -%>
+<%- if @transfers_per_ns -%>
+	transfers-per-ns <%= @transfers_per_ns %>;
+<%- end -%>
+<%- if @max_refresh_time -%>
+	max-refresh-time <%= @max_refresh_time %>;
+<%- end -%>
+<%- if @min_refresh_time -%>
+	min-refresh-time <%= @min_refresh_time %>;
+<%- end -%>
+<%- if @send_cookie == false -%>
+	send-cookie false;
+<%- end -%>
+<%- if @max_retry_time -%>
+	max-retry-time <%= @max_retry_time %>;
+<%- end -%>
+<%- if @min_retry_time -%>
+	min-retry-time <%= @min_retry_time %>;
+<%- end -%>
+<%- if @max_ncache_ttl -%>
+	max-ncache-ttl <%= @max_ncache_ttl %>;
+<%- end -%>
 	auth-nxdomain <%= @auth_nxdomain ? 'yes' : 'no' %>;
 	listen-on-v6 { any; };
 	dnssec-enable <%= @dnssec ? 'yes' : 'no' %>;
@@ -36,17 +75,20 @@ options {
 	dnssec-validation yes;
 	dnssec-lookaside auto;
 <%-   if @isc_bind_keys -%>
-        bindkeys-file "<%= @isc_bind_keys %>";
+	bindkeys-file "<%= @isc_bind_keys %>";
 <%-   end -%>
 <%- end -%>
 <%- if @version != '' -%>
 	version "<%= @version %>";
 <%- end -%>
+<%- if @server_id -%>
+	server-id hostname;
+<%- end -%>
 <%- if @tkey_gssapi_credential -%>
-        tkey-gssapi-credential "<%= @tkey_gssapi_credential %>";
+	tkey-gssapi-credential "<%= @tkey_gssapi_credential %>";
 <%- end -%>
 <%- if @tkey_domain -%>
-        tkey-domain "<%= @tkey_domain %>";
+	tkey-domain "<%= @tkey_domain %>";
 <%- end -%>
 };
 <%- if @include_local -%>

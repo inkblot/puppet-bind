@@ -9,6 +9,7 @@ define bind::logging::channel (
     $print_category  = true,
     $print_severity  = true,
     $print_time      = true,
+    $file_params     = undef,
 ) {
     unless member(['file', 'syslog', 'stderr', 'null'], $destination) {
         fail("Bind::logging::channel[${name}] has invalid destination: ${destination}. Must be one of: file syslog stderr null")
