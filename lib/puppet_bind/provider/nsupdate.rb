@@ -50,6 +50,7 @@ module PuppetBind
         yield file
         file.write "send\n"
         file.close
+        Puppet.debug(IO.read(file.path))
         if keyed?
           nsupdate('-y', tsig_param, file.path)
         elsif keyfile?
@@ -110,7 +111,9 @@ module PuppetBind
       end
 
       def rrdata_adds
-        resource[:ensure] === :absent ? [] : newdata - rrdata
+        adds = resource[:ensure] === :absent ? [] : newdata - rrdata
+        adds = newdata if (@properties[:ttl] && adds.empty?)
+        adds
       end
 
       def rrdata_deletes
