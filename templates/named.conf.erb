@@ -34,7 +34,6 @@ options {
 <%- end -%>
 <%- if @dnssec -%>
 	dnssec-validation yes;
-	dnssec-lookaside auto;
 <%-   if @isc_bind_keys -%>
         bindkeys-file "<%= @isc_bind_keys %>";
 <%-   end -%>
