@@ -9,6 +9,7 @@ group :test do
   gem "rspec", '> 3.4.0'
   gem "rspec-puppet"
   gem "rspec-puppet-facts"
+  gem "rspec-command"
   gem 'rubocop', '> 0.47.0', '< 0.49.0'
   gem 'simplecov', '>= 0.11.0'
   gem 'simplecov-console'

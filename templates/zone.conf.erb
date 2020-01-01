@@ -4,6 +4,9 @@ zone "<%= @_domain %>" {
 	type <%= @zone_type %>;
 <%- if @dnssec -%>
 	auto-dnssec maintain;
+<%-   if @dnssec_ksk_only -%>
+	update-check-ksk no;
+<%-   end -%>
 <%-   if @key_directory and @key_directory != '' -%>
 	key-directory "<%= @key_directory %>";
 <%-   else -%>
