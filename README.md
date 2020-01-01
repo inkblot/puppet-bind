@@ -184,6 +184,19 @@ bind::zone { 'example.com-external':
 
 Set parameter `dnssec_ksk_only => true` if a DNSSEC zone should only be signed with a key signing key and no zone signing key should be created.
 
+The DNSSEC key algorithm can be configured by `dnssec_key_algorithm` which can be one of (defaults to `RSASHA256`):
+* RSASHA256
+* RSASHA512
+* ECCGOST
+* ECDSAP256SHA256
+* ECDSAP384SHA384
+* ED25519
+* ED448
+
+For algorithms `RSASHA256` and `RSASHA512` key length can be configured by:
+* `dnssec_ksk_size` for the key signing key (default 2048)
+* `dnssec_ksk_size` for the zone signing key (default 1024)
+
 A master zone which is initialized with a pre-existing zone file (for example, to migrate an existing zone to a
 bind-module controlled server or to recover from a backup):
 

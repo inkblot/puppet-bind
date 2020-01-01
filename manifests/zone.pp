@@ -12,6 +12,9 @@ define bind::zone (
     $allow_transfers = '',
     $dnssec          = false,
     Boolean $dnssec_ksk_only = false,
+    Enum['RSASHA256', 'RSASHA512', 'ECCGOST', 'ECDSAP256SHA256', 'ECDSAP384SHA384', 'ED25519', 'ED448'] $dnssec_key_algorithm = 'RSASHA256',
+    Integer $dnssec_ksk_size = 2048,
+    Integer $dnssec_zsk_size = 1024,
     $nsec3_salt      = '',
     $key_directory   = '',
     $ns_notify       = true,
@@ -132,7 +135,8 @@ define bind::zone (
         exec { "dnssec-keygen-${name}":
             command => "/usr/local/bin/dnssec-init '${cachedir}' '${name}'\
                 '${_domain}' '${key_directory}' '${random_device}' '${nsec3_salt}'\
-                '${zone_file}' '${dnssec_ksk_only}'",
+                '${zone_file}' '${dnssec_ksk_only}' '${dnssec_key_algorithm}'\
+                '${dnssec_ksk_size}' '${dnssec_zsk_size}'",
             cwd     => $cachedir,
             user    => $bind_user,
             creates => "${cachedir}/${name}/${zone_file}.signed",

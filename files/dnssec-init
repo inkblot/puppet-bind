@@ -8,12 +8,20 @@ RANDOM_DEVICE="$5"
 NSEC3_SALT="$6"
 ZONE_FILE="$7"
 DNSSEC_KSK_ONLY="$8"
+DNSSEC_KEY_ALGO="$9"
+DNSSEC_KSK_SIZE="${10}"
+DNSSEC_ZSK_SIZE="${11}"
 PATH=/bin:/sbin:/usr/bin:/usr/sbin
 
-if [ "$DNSSEC_KSK_ONLY" != "true" ]; then
-    dnssec-keygen -a RSASHA256 -b 1024 -r "${RANDOM_DEVICE}" -K "${KEY_DIRECTORY}" "${DOMAIN}"
+if [ "$DNSSEC_KEY_ALGO" = "RSASHA256" -o "$DNSSEC_KEY_ALGO" = "RSASHA512" ]; then
+    DNSSEC_KSK_OPTIONS="-b ${DNSSEC_KSK_SIZE}"
+    DNSSEC_ZSK_OPTIONS="-b ${DNSSEC_ZSK_SIZE}"
 fi
-dnssec-keygen -a RSASHA256 -b 2048 -r "${RANDOM_DEVICE}" -f KSK -K "${KEY_DIRECTORY}" "${DOMAIN}"
+
+if [ "$DNSSEC_KSK_ONLY" != "true" ]; then
+    dnssec-keygen -a "${DNSSEC_KEY_ALGO}" ${DNSSEC_ZSK_OPTIONS} -r "${RANDOM_DEVICE}" -K "${KEY_DIRECTORY}" "${DOMAIN}"
+fi
+dnssec-keygen -a "${DNSSEC_KEY_ALGO}" ${DNSSEC_KSK_OPTIONS} -r "${RANDOM_DEVICE}" -f KSK -K "${KEY_DIRECTORY}" "${DOMAIN}"
 
 if [ "$DNSSEC_KSK_ONLY" ]; then
     DNSSEC_KSK_ONLY_SIGN_OPTIONS="-z"
