@@ -11,6 +11,7 @@ define bind::zone (
     $update_policies = '',
     $allow_transfers = '',
     $dnssec          = false,
+    Boolean $dnssec_ksk_only = false,
     $nsec3_salt      = '',
     $key_directory   = '',
     $ns_notify       = true,
@@ -131,7 +132,7 @@ define bind::zone (
         exec { "dnssec-keygen-${name}":
             command => "/usr/local/bin/dnssec-init '${cachedir}' '${name}'\
                 '${_domain}' '${key_directory}' '${random_device}' '${nsec3_salt}'\
-                '${zone_file}'",
+                '${zone_file}' '${dnssec_ksk_only}'",
             cwd     => $cachedir,
             user    => $bind_user,
             creates => "${cachedir}/${name}/${zone_file}.signed",

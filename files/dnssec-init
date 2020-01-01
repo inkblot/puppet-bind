@@ -7,13 +7,19 @@ KEY_DIRECTORY="${4:-${CACHEDIR}/${NAME}}"
 RANDOM_DEVICE="$5"
 NSEC3_SALT="$6"
 ZONE_FILE="$7"
+DNSSEC_KSK_ONLY="$8"
 PATH=/bin:/sbin:/usr/bin:/usr/sbin
 
-dnssec-keygen -a RSASHA256 -b 1024 -r "${RANDOM_DEVICE}" -K "${KEY_DIRECTORY}" "${DOMAIN}"
+if [ "$DNSSEC_KSK_ONLY" != "true" ]; then
+    dnssec-keygen -a RSASHA256 -b 1024 -r "${RANDOM_DEVICE}" -K "${KEY_DIRECTORY}" "${DOMAIN}"
+fi
 dnssec-keygen -a RSASHA256 -b 2048 -r "${RANDOM_DEVICE}" -f KSK -K "${KEY_DIRECTORY}" "${DOMAIN}"
 
+if [ "$DNSSEC_KSK_ONLY" ]; then
+    DNSSEC_KSK_ONLY_SIGN_OPTIONS="-z"
+fi
 if [ "$NSEC3_SALT" != '' ]; then
-    dnssec-signzone -S -u -3 "${NSEC3_SALT}" -d "${CACHEDIR}" -K "${KEY_DIRECTORY}" -o "${DOMAIN}" "${CACHEDIR}/${NAME}/${ZONE_FILE}"
+    dnssec-signzone -S ${DNSSEC_KSK_ONLY_SIGN_OPTIONS} -u -3 "${NSEC3_SALT}" -d "${CACHEDIR}" -K "${KEY_DIRECTORY}" -o "${DOMAIN}" "${CACHEDIR}/${NAME}/${ZONE_FILE}"
 else
-    dnssec-signzone -S -d "${CACHEDIR}" -K "${KEY_DIRECTORY}" -o "${DOMAIN}" "${CACHEDIR}/${NAME}/${ZONE_FILE}"
+    dnssec-signzone -S ${DNSSEC_KSK_ONLY_SIGN_OPTIONS} -d "${CACHEDIR}" -K "${KEY_DIRECTORY}" -o "${DOMAIN}" "${CACHEDIR}/${NAME}/${ZONE_FILE}"
 fi
