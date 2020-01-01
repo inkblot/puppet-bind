@@ -182,6 +182,8 @@ bind::zone { 'example.com-external':
 }
 ```
 
+Set parameter `dnssec_ksk_only => true` if a DNSSEC zone should only be signed with a key signing key and no zone signing key should be created.
+
 A master zone which is initialized with a pre-existing zone file (for example, to migrate an existing zone to a
 bind-module controlled server or to recover from a backup):
 
