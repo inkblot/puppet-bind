@@ -7,4 +7,7 @@ server <%= @name %> {
 <%- if @transfers -%>
 	transfers <%= @transfers %>;
 <%- end -%>
+<%- if @transfer_format -%>
+    transfer-format <%= @transfer_format %>;
+<%- end -%>
 };

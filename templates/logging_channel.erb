@@ -1,7 +1,7 @@
 	channel <%= @name %> {
 <%- case @destination -%>
 <%-   when "file" -%>
-		file "<%= @file_path %>/<%= @file_name %>";
+		file "<%= @file_path %>/<%= @file_name %>" <%= @file_options %>;
 <%-   when "syslog" -%>
 		syslog <%= @syslog_facility %>;
 <%-   when "stderr" -%>

@@ -20,6 +20,10 @@ define bind::zone (
     $forward         = '',
     $source          = '',
     $forwarders_port = 53,
+    $transfer_format = '',
+    $check_names     = '',
+    $deploy_file     = true,
+    $in_view         = '',
 ) {
     # where there is a zone, there is a server
     include ::bind
@@ -79,6 +83,10 @@ define bind::zone (
 
     unless !($source != '' and ! member(['master', 'hint'], $zone_type)) {
         fail("source may only be provided for bind::zone resources with zone_type 'master' or 'hint'")
+    }
+
+    unless !($check_names != '' and ! member(['warn', 'fail', 'ignore'], $check_names)) {
+        fail("check_names must be 'warn', 'fail' or 'ignore'")
     }
 
     $zone_file_mode = $zone_type ? {
@@ -149,14 +157,26 @@ define bind::zone (
         }
     }
 
-    file { "${::bind::confdir}/zones/${name}.conf":
-        ensure  => present,
-        owner   => 'root',
-        group   => $bind_group,
-        mode    => '0644',
-        content => template('bind/zone.conf.erb'),
-        notify  => Service['bind'],
-        require => Package['bind'],
+    if $in_view != '' {
+        file { "${::bind::confdir}/zones/geo/${name}.conf":
+          ensure  => present,
+          owner   => 'root',
+          group   => $bind_group,
+          mode    => '0644',
+          content => template('bind/zone.conf.erb'),
+          notify  => Exec['bind-config-test'],
+          require => Package['bind'],
+        }
+    } else {
+        file { "${::bind::confdir}/zones/${name}.conf":
+          ensure  => present,
+          owner   => 'root',
+          group   => $bind_group,
+          mode    => '0644',
+          content => template('bind/zone.conf.erb'),
+          notify  => Exec['bind-config-test'],
+          require => Package['bind'],
+        }
     }
 
     concat::fragment { "bind-zone-mapping-${name}":

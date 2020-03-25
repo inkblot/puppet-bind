@@ -1,6 +1,9 @@
 
 # This file managed by puppet - changes will be lost
 zone "<%= @_domain %>" {
+<%- if @in_view != '' -%>
+    in-view "<%= @in_view %>";
+<%- else -%>
 	type <%= @zone_type %>;
 <%- if @dnssec -%>
 	auto-dnssec maintain;
@@ -10,8 +13,12 @@ zone "<%= @_domain %>" {
 	key-directory "<%= @cachedir %>/<%= @name %>";
 <%-   end -%>
 	file "<%= @cachedir %>/<%= @name %>/<%= @zone_file %>.signed";
-<%- elsif %w(init managed allowed).include? @zone_file_mode -%>
+<%- elsif %w(init managed allowed).include? @zone_file_mode and @deploy_file -%>
+<%- if @source and @source != '' -%>
+    file "<%= @source %>";
+<%- else -%>
 	file "<%= @cachedir %>/<%= @name %>/<%= @zone_file %>";
+<%- end -%>
 <%- end -%>
 <%- if %w(master slave).include? @zone_type
       if (@ns_notify == 'explicit') -%>
@@ -79,5 +86,12 @@ zone "<%= @_domain %>" {
 <%-   end -%>
 <%-   end -%>
 	};
+<%- end -%>
+<%- if @transfer_format and @transfer_format != '' -%>
+    transfer-format <%= @transfer_format %>;
+<%- end -%>
+<%- if @check_names and @check_names != ''-%>
+    check-names <%= @check_names %>;
+<%- end -%>
 <%- end -%>
 };
