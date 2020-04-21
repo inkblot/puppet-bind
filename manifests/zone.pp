@@ -19,6 +19,8 @@ define bind::zone (
     $forwarders      = '',
     $forward         = '',
     $source          = '',
+    $content         = '',
+    $use_template    = false,
     $forwarders_port = 53,
 ) {
     # where there is a zone, there is a server
@@ -81,6 +83,10 @@ define bind::zone (
         fail("source may only be provided for bind::zone resources with zone_type 'master' or 'hint'")
     }
 
+    if ($use_template and empty($content)) {
+        fail("content must be provided for bind::zone resources with use_template set to true")
+    }
+
     $zone_file_mode = $zone_type ? {
         'master' => $dynamic ? {
             true  => 'init',
@@ -102,13 +108,24 @@ define bind::zone (
         }
 
         if member(['init', 'managed'], $zone_file_mode) {
-            file { "${cachedir}/${name}/${zone_file}":
-                ensure  => present,
-                owner   => $bind_user,
-                group   => $bind_group,
-                mode    => '0644',
-                replace => ($zone_file_mode == 'managed'),
-                source  => pick($source, 'puppet:///modules/bind/db.empty'),
+            if $use_template {
+                file { "${cachedir}/${name}/${zone_file}":
+                  ensure  => present,
+                  owner   => $bind_user,
+                  group   => $bind_group,
+                  mode    => '0644',
+                  replace => ($zone_file_mode == 'managed'),
+                  content => $content,
+                }
+            } else {
+                file { "${cachedir}/${name}/${zone_file}":
+                  ensure  => present,
+                  owner   => $bind_user,
+                  group   => $bind_group,
+                  mode    => '0644',
+                  replace => ($zone_file_mode == 'managed'),
+                  source  => pick($source, 'puppet:///modules/bind/db.empty'),
+                }
             }
         }
 
