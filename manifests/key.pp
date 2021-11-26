@@ -5,13 +5,13 @@ define bind::key (
     $secret_bits = 256,
     $algorithm   = 'hmac-sha256',
     $owner       = 'root',
-    $group       = $::bind::defaults::bind_group,
+    $group       = $::bind::bind_group,
     $keydir      = $::bind::keydir::keydir,
     $keyfile     = undef,
     $include     = true,
 ) {
     # Pull some platform defaults into the local scope
-    $confdir = $::bind::defaults::confdir
+    $confdir = $::bind::confdir
 
     # Generate a key of size $secret_bits if no $secret
     $secret_actual = $secret ? {

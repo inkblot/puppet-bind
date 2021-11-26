@@ -1,39 +1,39 @@
 Puppet::Type.newtype(:dns_rr) do
-  @doc = "A Resource Record in the DNS"
+  @doc = 'A Resource Record in the DNS'
 
   Puppet.warning('The dns_rr resource type is deprecated. Use resource_record instead')
 
   ensurable
 
-  newparam(:spec, :namevar => true) do
-    desc "Class/Type/Name for the resource record"
+  newparam(:spec, namevar: true) do
+    desc 'Class/Type/Name for the resource record'
 
     validate do |value|
-      if (value =~ /^([A-Z]+)\/([A-Z]+)\/((\*\.)?([a-zA-Z0-9_-]+\.)*[a-zA-Z0-9_-]+)$/)
-        rrclass = $1
-        if ( !%w(IN CH HS).include? rrclass )
-          Util::Errors.fail "Invalid resource record class: %s" % rrdata
+      if value =~ %r{^([A-Z]+)/([A-Z]+)/((\*\.)?([a-zA-Z0-9_-]+\.)*[a-zA-Z0-9_-]+)$}
+        rrclass = Regexp.last_match(1)
+        unless ['IN', 'CH', 'HS'].include? rrclass
+          Util::Errors.fail 'Invalid resource record class: %s' % rrdata
         end
-        type = $2
-        if ( !%w(A AAAA CNAME NS MX SPF SRV NAPTR PTR TXT DS).include? type)
-          Util::Errors.fail "Invalid resource record type: %s" % type
+        type = Regexp.last_match(2)
+        unless ['A', 'AAAA', 'CNAME', 'NS', 'MX', 'SPF', 'SRV', 'NAPTR', 'PTR', 'TXT', 'DS'].include? type
+          Util::Errors.fail 'Invalid resource record type: %s' % type
         end
       else
-        Util::Errors.fail "%s must be of the form Class/Type/Name" % value
+        Util::Errors.fail '%s must be of the form Class/Type/Name' % value
       end
     end
   end
 
   newproperty(:ttl) do
     desc 'Time to live of the resource record'
-    defaultto 43200
+    defaultto 43_200
 
     munge do |value|
       Integer(value)
     end
   end
 
-  newproperty(:rrdata, :array_matching => :all) do
+  newproperty(:rrdata, array_matching: :all) do
     desc 'The resource record\'s data'
     isrequired
 
@@ -70,5 +70,4 @@ Puppet::Type.newtype(:dns_rr) do
   newparam(:secret) do
     desc 'The secret of the update key'
   end
-
 end

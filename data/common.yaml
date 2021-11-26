@@ -1,10 +1,8 @@
 ---
-bind::defaults::supported: false
-bind::defaults::chroot_supported: false
-bind::defaults::chroot_class: ''
-bind::defaults::random_device: '/dev/random'
-
-bind::forwarders: ''
+bind::supported: false
+bind::chroot_supported: false
+bind::random_device: '/dev/random'
+bind::forwarders: []
 bind::forward: ''
 bind::dnssec: true
 bind::filter_ipv6: false

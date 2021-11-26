@@ -2,7 +2,7 @@
 require 'securerandom'
 
 module Puppet::Parser::Functions
-  newfunction(:hmac_secret, :type => :rvalue) do |args|
+  newfunction(:hmac_secret, type: :rvalue) do |args|
     bits = args[0].to_i
     SecureRandom.base64(bits / 8)
   end

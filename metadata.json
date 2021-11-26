@@ -1,34 +1,76 @@
 {
-  "name": "inkblot-bind",
-  "version": "7.4.0",
-  "author": "inkblot",
-  "license": "Apache-2.0",
+  "name": "fervid-bind",
+  "version": "7.6.0",
+  "author": "fervid",
   "summary": "ISC BIND name server",
-  "source": "git://github.com/inkblot/puppet-bind.git",
-  "project_page": "https://github.com/inkblot/puppet-bind",
-  "issues_url": "https://github.com/inkblot/puppet-bind/issues",
-  "tags": [ "bind", "dns", "dnssec", "nsupdate" ],
+  "license": "Apache-2.0",
+  "source": "git://github.com/fervidus/fervid-bind.git",
+  "project_page": "https://github.com/fervidus/fervid-bind",
+  "issues_url": "https://github.com/fervidus/fervid-bind/issues",
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.15.0 < 8.0.0"
+    },
+    {
+      "name": "puppetlabs/concat",
+      "version_requirement": ">= 2.2.1 <8.0.0"
+    }
+  ],
+  "data_provider": "hiera",
   "operatingsystem_support": [
     {
       "operatingsystem": "Debian",
-      "operatingsystemrelease": [ "7", "8", "9"]
+      "operatingsystemrelease": [
+        "7",
+        "8",
+        "9",
+        "10",
+        "11"
+      ]
     },
     {
       "operatingsystem": "Ubuntu",
-      "operatingsystemrelease": [ "12.04", "14.04", "16.04" ]
+      "operatingsystemrelease": [
+        "12.04",
+        "14.04",
+        "16.04",
+        "18.04",
+        "20.04"
+      ]
     },
     {
       "operatingsystem": "CentOS",
-      "operatingsystemrelease": [ "6", "7"]
+      "operatingsystemrelease": [
+        "6",
+        "7",
+        "8"
+      ]
     },
     {
       "operatingsystem": "RedHat",
-      "operatingsystemrelease": [ "6", "7" ]
+      "operatingsystemrelease": [
+        "6",
+        "7",
+        "8",
+        "9"
+      ]
     }
   ],
-  "dependencies": [
-    { "name": "puppetlabs/stdlib", "version_requirement": ">= 4.15.0 < 5.0.0" },
-    { "name": "puppetlabs/concat", "version_requirement": ">= 2.2.1 < 5.0.0" }
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 6.21.0 < 8.0.0"
+    }
   ],
-  "data_provider": "hiera"
+  "tags": [
+    "bind",
+    "dns",
+    "dnssec",
+    "named",
+    "nsupdate"
+  ],
+  "pdk-version": "2.2.0",
+  "template-url": "pdk-default#2.2.0",
+  "template-ref": "tags/2.2.0-0-g2381db6"
 }

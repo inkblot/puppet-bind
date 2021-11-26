@@ -1,133 +1,154 @@
 # ex: syntax=puppet si ts=4 sw=4 et
 
 class bind (
-    $forwarders                           = undef,
-    $forward                              = undef,
-    $dnssec                               = undef,
-    $filter_ipv6                          = undef,
-    $version                              = undef,
-    $statistics_port                      = undef,
-    $auth_nxdomain                        = undef,
-    $include_default_zones                = true,
-    $include_local                        = false,
-    $tkey_gssapi_credential               = undef,
-    $tkey_domain                          = undef,
-    $chroot                               = false,
-    $chroot_class                         = $::bind::defaults::chroot_class,
-    $chroot_dir                           = $::bind::defaults::chroot_dir,
-    # NOTE: we need to be able to override this parameter when declaring class,
-    # especially when not using hiera (i.e. when using Foreman as ENC):
-    $default_zones_include                = $::bind::defaults::default_zones_include,
-) inherits bind::defaults {
-    if $chroot and !$::bind::defaults::chroot_supported {
-        fail('Chroot for bind is not supported on your OS')
-    }
-    File {
-        ensure  => present,
-        owner   => 'root',
-        group   => $::bind::defaults::bind_group,
-        mode    => '0644',
-        require => Package['bind'],
-        notify  => Service['bind'],
-    }
+  Boolean $supported,
+  Boolean $chroot_supported,
+  String $chroot_class,
+  String $chroot_dir,
+  String $confdir,
+  String $default_zones_include,
+  String $default_zones_source,
+  String $namedconf,
+  String $cachedir,
+  String $logdir,
+  String $bind_user,
+  String $bind_group,
+  String $bind_package,
+  String $bind_chroot_package,
+  String $bind_service,
+  String $bind_chroot_service,
+  String $bind_chroot_dir,
+  String $nsupdate_package,
+  String $managed_keys_directory,
+  String $isc_bind_keys,
+  String $random_device,
+  String $forward,
+  Boolean $dnssec,
+  Booleab $filter_ipv6,
+  String $version,
+  Integer $statistics_port,
+  String $auth_nxdomain,
+  String $tkey_gssapi_credential,
+  String $tkey_domain,
+  Boolean $chroot = false,
+  Boolean $include_default_zones = true,
+  Boolean $include_local = false,
+  Array $forwarders = [],
+) {
 
-    include ::bind::updater
+  include ::bind::updater
 
-    package { 'bind':
-        ensure => latest,
-        name   => $::bind::defaults::bind_package,
-    }
+  unless $supported {
+    fail('Platform is not supported by this version of bind module')
+  }
 
-    if $chroot and $::bind::defaults::chroot_class {
-        # When using a dedicated chroot class, service declaration is dedicated to this class
-        class { $::bind::defaults::chroot_class : }
-    }
+  if $chroot and !$chroot_supported {
+    fail('Running bind with chroot is not supported on your OS')
+  }
 
-    if $dnssec {
-        file { '/usr/local/bin/dnssec-init':
-            ensure => present,
-            owner  => 'root',
-            group  => 'root',
-            mode   => '0755',
-            source => 'puppet:///modules/bind/dnssec-init',
-        }
-    }
+  File {
+    ensure  => present,
+    owner   => 'root',
+    group   => $bind_group,
+    mode    => '0644',
+    require => Package['bind'],
+    notify  => Service['bind'],
+  }
 
-    # rndc only supports HMAC-MD5
-    bind::key { 'rndc-key':
-        algorithm   => 'hmac-md5',
-        secret_bits => '512',
-        keydir      => $bind::defaults::confdir,
-        keyfile     => 'rndc.key',
-        include     => false,
-    }
+  package { 'bind':
+    ensure => latest,
+    name   => $bind_package,
+  }
 
-    file { '/usr/local/bin/rndc-helper':
-        ensure  => present,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0755',
-        content => template('bind/rndc-helper.erb'),
-    }
+  if $chroot and $chroot_class {
+    # When using a dedicated chroot class, service declaration is dedicated to this class
+    class { $chroot_class : }
+  }
 
-    file { "${::bind::defaults::confdir}/zones":
-        ensure => directory,
-        mode   => '2755',
+  if $dnssec {
+    file { '/usr/local/bin/dnssec-init':
+      ensure => present,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0755',
+      source => 'puppet:///modules/bind/dnssec-init',
     }
+  }
 
-    file { $::bind::defaults::namedconf:
-        content => template('bind/named.conf.erb'),
-    }
+  # rndc only supports HMAC-MD5
+  bind::key { 'rndc-key':
+    algorithm   => 'hmac-md5',
+    secret_bits => '512',
+    keydir      => $confdir,
+    keyfile     => 'rndc.key',
+    include     => false,
+  }
 
-    if $include_default_zones and $::bind::defaults::default_zones_source {
-        file { $default_zones_include:
-            source => $::bind::defaults::default_zones_source,
-        }
-    }
+  file { '/usr/local/bin/rndc-helper':
+    ensure  => present,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    content => template('bind/rndc-helper.erb'),
+  }
 
-    class { '::bind::keydir':
-        keydir => "${::bind::defaults::confdir}/keys",
-    }
+  file { "${confdir}/zones":
+    ensure => directory,
+    mode   => '2755',
+  }
 
-    concat { [
-        "${::bind::defaults::confdir}/acls.conf",
-        "${::bind::defaults::confdir}/keys.conf",
-        "${::bind::defaults::confdir}/views.conf",
-        "${::bind::defaults::confdir}/servers.conf",
-        "${::bind::defaults::confdir}/logging.conf",
-        "${::bind::defaults::confdir}/view-mappings.txt",
-        "${::bind::defaults::confdir}/domain-mappings.txt",
-        ]:
-        owner   => 'root',
-        group   => $::bind::defaults::bind_group,
-        mode    => '0644',
-        warn    => true,
-        require => Package['bind'],
-        notify  => Service['bind'],
-    }
+  file { $namedconf:
+    content => template('bind/named.conf.erb'),
+  }
 
-    concat::fragment { 'bind-logging-header':
-        order   => '00-header',
-        target  => "${::bind::defaults::confdir}/logging.conf",
-        content => "logging {\n";
+  if $include_default_zones and $default_zones_source {
+    file { $default_zones_include:
+        source => $default_zones_source,
     }
+  }
 
-    concat::fragment { 'bind-logging-footer':
-        order   => '99-footer',
-        target  => "${::bind::defaults::confdir}/logging.conf",
-        content => "};\n";
-    }
+  class { '::bind::keydir':
+    keydir => "${confdir}/keys",
+  }
 
-    # DO NOT declare a bind service when chrooting bind with bind::chroot::package class,
-    # because it needs another dedicated chrooted-bind service (i.e. named-chroot on RHEL)
-    # AND it also needs $::bind::defaults::bind_service being STOPPED and DISABLED.
-    if !$chroot or ($chroot and $::bind::defaults::chroot_class == 'bind::chroot::manual') {
-        service { 'bind':
-            ensure     => running,
-            name       => $::bind::defaults::bind_service,
-            enable     => true,
-            hasrestart => true,
-            hasstatus  => true,
-        }
+  concat { [
+    "${confdir}/acls.conf",
+    "${confdir}/keys.conf",
+    "${confdir}/views.conf",
+    "${confdir}/servers.conf",
+    "${confdir}/logging.conf",
+    "${confdir}/view-mappings.txt",
+    "${confdir}/domain-mappings.txt",
+    ]:
+    owner   => 'root',
+    group   => $bind_group,
+    mode    => '0644',
+    warn    => true,
+    require => Package['bind'],
+    notify  => Service['bind'],
+  }
+
+  concat::fragment { 'bind-logging-header':
+    order   => '00-header',
+    target  => "${confdir}/logging.conf",
+    content => "logging {\n";
+  }
+
+  concat::fragment { 'bind-logging-footer':
+    order   => '99-footer',
+    target  => "${confdir}/logging.conf",
+    content => "};\n";
+  }
+
+  # DO NOT declare a bind service when chrooting bind with bind::chroot::package class,
+  # because it needs another dedicated chrooted-bind service (i.e. named-chroot on RHEL)
+  # AND it also needs $::bind::defaults::bind_service being STOPPED and DISABLED.
+  if !$chroot or ($chroot and $chroot_class == 'bind::chroot::manual') {
+    service { $bind_service:
+        ensure     => running,
+        enable     => true,
+        hasrestart => true,
+        hasstatus  => true,
     }
+  }
 }

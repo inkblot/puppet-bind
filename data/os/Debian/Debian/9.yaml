@@ -1,1 +1,1 @@
-bind::defaults::chroot_supported: true
+bind::chroot_supported: true

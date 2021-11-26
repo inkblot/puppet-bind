@@ -1,18 +1,18 @@
 ---
-bind::defaults::supported: true
-bind::defaults::bind_user: 'bind'
-bind::defaults::bind_group: 'bind'
-bind::defaults::bind_package: 'bind9'
-bind::defaults::bind_service: 'bind9'
-bind::defaults::nsupdate_package: 'dnsutils'
-bind::defaults::confdir: '/etc/bind'
-bind::defaults::namedconf: '/etc/bind/named.conf'
-bind::defaults::cachedir: '/var/cache/bind'
-bind::defaults::logdir: '/var/log/bind'
-bind::defaults::default_zones_include: '/etc/bind/named.conf.default-zones'
-bind::defaults::isc_bind_keys: '/etc/bind/bind.keys'
+bind::supported: true
+bind::bind_user: 'bind'
+bind::bind_group: 'bind'
+bind::bind_package: 'bind9'
+bind::bind_service: 'bind9'
+bind::nsupdate_package: 'dnsutils'
+bind::confdir: '/etc/bind'
+bind::namedconf: '/etc/bind/named.conf'
+bind::cachedir: '/var/cache/bind'
+bind::logdir: '/var/log/bind'
+bind::default_zones_include: '/etc/bind/named.conf.default-zones'
+bind::isc_bind_keys: '/etc/bind/bind.keys'
 
-bind::defaults::chroot_dir: '/var/bind9/chroot'
-bind::defaults::chroot_class: bind::chroot::manual
+bind::chroot_dir: '/var/bind9/chroot'
+bind::chroot_class: bind::chroot::manual
 
 bind::updater::keydir: '/etc/bind/keys'

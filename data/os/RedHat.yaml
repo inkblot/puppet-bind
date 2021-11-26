@@ -1,22 +1,22 @@
 ---
-bind::defaults::supported: true
-bind::defaults::bind_user: 'named'
-bind::defaults::bind_group: 'named'
-bind::defaults::bind_package: 'bind'
-bind::defaults::bind_service: 'named'
-bind::defaults::nsupdate_package: 'bind-utils'
-bind::defaults::managed_keys_directory: '/var/named/dynamic'
-bind::defaults::confdir: '/etc/named'
-bind::defaults::namedconf: '/etc/named.conf'
-bind::defaults::cachedir: '/var/named'
-bind::defaults::logdir: '/var/log/named'
-bind::defaults::default_zones_include: '/etc/named.default-zones.conf'
-bind::defaults::default_zones_source: 'puppet:///modules/bind/RedHat/named.default-zones.conf'
-bind::defaults::isc_bind_keys: '/etc/named.iscdlv.key'
+bind::supported: true
+bind::bind_user: 'named'
+bind::bind_group: 'named'
+bind::bind_package: 'bind'
+bind::bind_service: 'named'
+bind::nsupdate_package: 'bind-utils'
+bind::managed_keys_directory: '/var/named/dynamic'
+bind::confdir: '/etc/named'
+bind::namedconf: '/etc/named.conf'
+bind::cachedir: '/var/named'
+bind::logdir: '/var/log/named'
+bind::default_zones_include: '/etc/named.default-zones.conf'
+bind::default_zones_source: 'puppet:///modules/bind/RedHat/named.default-zones.conf'
+bind::isc_bind_keys: '/etc/named.iscdlv.key'
 
-# XXX bind::defaults::chroot_package: 'bind-chroot'
-# XXX bind::defaults::chroot_service: 'named-chroot'
-# XXX bind::defaults::chroot_dir: '/var/named/chroot'
-bind::defaults::chroot_class: bind::chroot::package
+# XXX bind::chroot_package: 'bind-chroot'
+# XXX bind::chroot_service: 'named-chroot'
+# XXX bind::chroot_dir: '/var/named/chroot'
+bind::chroot_class: bind::chroot::package
 
 bind::updater::keydir: '/etc/named/keys'

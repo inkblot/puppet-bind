@@ -4,32 +4,32 @@ require 'spec_helper'
 describe 'bind' do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
-      let (:facts) {facts}
+      let(:facts) { facts }
+
       case facts[:os]['family']
-        when 'Debian'
-          expected_bind_pkg             = 'bind9'
-          expected_bind_service         = 'bind9'
-          expected_named_conf           = '/etc/bind/named.conf'
-          expected_confdir              = '/etc/bind'
-          expected_default_zones_include= '/etc/bind/named.conf.default-zones'
-        when 'RedHat'
-          expected_bind_pkg             = 'bind'
-          expected_bind_service         = 'named'
-          expected_named_conf           = '/etc/named.conf'
-          expected_confdir              = '/etc/named'
-          expected_default_zones_include= '/etc/named.default-zones.conf'
+      when 'Debian'
+        expected_bind_pkg             = 'bind9'
+        expected_bind_service         = 'bind9'
+        expected_named_conf           = '/etc/bind/named.conf'
+        expected_confdir              = '/etc/bind'
+        expected_default_zones_include = '/etc/bind/named.conf.default-zones'
+      when 'RedHat'
+        expected_bind_pkg             = 'bind'
+        expected_bind_service         = 'named'
+        expected_named_conf           = '/etc/named.conf'
+        expected_confdir              = '/etc/named'
+        expected_default_zones_include = '/etc/named.default-zones.conf'
       end
       context 'with defaults for all parameters' do
-        it { is_expected.to contain_class('bind::defaults') }
         it { is_expected.to contain_class('bind::keydir') }
         it { is_expected.to contain_class('bind::updater') }
         it { is_expected.to contain_class('bind') }
         it { is_expected.to compile.with_all_deps }
         it do
           is_expected.to contain_package('bind').with({
-            ensure: 'latest',
+                                                        ensure: 'latest',
             name: expected_bind_pkg
-          })
+                                                      })
         end
         it { is_expected.to contain_file('/usr/local/bin/dnssec-init') }
         it do
@@ -37,7 +37,7 @@ describe 'bind' do
             algorithm: 'hmac-md5',
             secret_bits: '512',
             keydir: expected_confdir,
-            keyfile: 'rndc.key'
+            keyfile: 'rndc.key',
           )
         end
         it { is_expected.to contain_file('/usr/local/bin/rndc-helper') }
@@ -54,28 +54,28 @@ describe 'bind' do
           is_expected.to contain_concat__fragment('bind-logging-header').with(
             order: '00-header',
             target: "#{expected_confdir}/logging.conf",
-            content: "logging {\n"
+            content: "logging {\n",
           )
         end
         it do
           is_expected.to contain_concat__fragment('bind-logging-footer').with(
             order: '99-footer',
             target: "#{expected_confdir}/logging.conf",
-            content: "};\n"
+            content: "};\n",
           )
         end
         it { is_expected.to contain_file(expected_named_conf).that_requires('Package[bind]') }
         it { is_expected.to contain_file(expected_named_conf).that_notifies('Service[bind]') }
         it do
-          is_expected.to contain_file(expected_named_conf)
-            .with_content(/^options {$/)
-            .without_content(/^\s+tkey-gssapi-credential/)
+          is_expected.to contain_file('expected_named_conf')
+            .with_content('%r{^options {$}')
+            .without_content('%r{^\s+tkey-gssapi-credential}')
         end
         it do
           is_expected.to contain_service('bind').with({
-            ensure: 'running',
+                                                        ensure: 'running',
             name: expected_bind_service
-          })
+                                                      })
         end
         case facts[:os]['family']
         when 'RedHat'
@@ -93,14 +93,12 @@ describe 'bind' do
           }
         end
 
-
-        if not (facts[:os]['name'] == 'CentOS' && facts[:os]['release']['major'] == '7' or
+        if !(facts[:os]['name'] == 'CentOS' && facts[:os]['release']['major'] == '7' ||
                 facts[:os]['name'] == 'Debian' && facts[:os]['release']['major'].to_i >= 8)
-          it { is_expected.to compile.and_raise_error(/Chroot for bind is not supported on your OS/) }
+          it { is_expected.to compile.and_raise_error(%r{Chroot for bind is not supported on your OS}) }
         else
           # Generic chroot part:
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to contain_class('bind::defaults') }
           it { is_expected.to contain_class('bind::keydir') }
           it { is_expected.to contain_class('bind::updater') }
           it { is_expected.to contain_class('bind') }
@@ -112,7 +110,7 @@ describe 'bind' do
               algorithm: 'hmac-md5',
               secret_bits: '512',
               keydir: expected_confdir,
-              keyfile: 'rndc.key'
+              keyfile: 'rndc.key',
             )
           end
           it { is_expected.to contain_file('/usr/local/bin/rndc-helper') }
@@ -136,24 +134,23 @@ describe 'bind' do
             is_expected.to contain_concat__fragment('bind-logging-header').with(
               order: '00-header',
               target: "#{expected_confdir}/logging.conf",
-              content: "logging {\n"
+              content: "logging {\n",
             )
           end
           it do
             is_expected.to contain_concat__fragment('bind-logging-footer').with(
               order: '99-footer',
               target: "#{expected_confdir}/logging.conf",
-              content: "};\n"
+              content: "};\n",
             )
           end
           it { is_expected.to contain_file(expected_named_conf).that_requires('Package[bind]') }
           it { is_expected.to contain_file(expected_named_conf).that_notifies('Service[bind]') }
 
-
           # OS family specific chroot setup:
-          if (facts[:os]['family'] == 'Debian')
+          if facts[:os]['family'] == 'Debian'
             it { is_expected.to contain_class('bind::chroot::manual') }
-          elsif (facts[:os]['family'] == 'RedHat')
+          elsif facts[:os]['family'] == 'RedHat'
             it { is_expected.to contain_class('bind::chroot::package') }
           end
         end
@@ -165,11 +162,12 @@ describe 'bind' do
             tkey_domain: 'foobar.com'
           }
         end
+
         it do
           is_expected.to contain_file(expected_named_conf)
-            .with_content(/^options {$/)
-            .with_content(%r{^\s+tkey-gssapi-credential "DNS/ds01.foobar.com";$})
-            .with_content(%r{^\s+tkey-domain "foobar.com";$})
+            .with_content('%r{^options {$}')
+            .with_content('%r{^\s+tkey-gssapi-credential "DNS/ds01.foobar.com";}')
+            .with_content('%r{^\s+tkey-domain "foobar.com";$}')
         end
       end
     end

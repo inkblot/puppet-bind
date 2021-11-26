@@ -7,9 +7,9 @@ Puppet::Type.newtype(:resource_record) do
   autorequire(:service) do
     reqs = []
     # Depend on the bind service if the record is local
-    reqs << 'bind' if !Socket.respond_to? :ip_address_list or Socket.ip_address_list.any? do |intf|
+    reqs << 'bind' if !Socket.respond_to?(:ip_address_list) || Socket.ip_address_list.any? do |intf|
       Resolv.getaddresses(self[:server]).any? do |addr|
-        intf.ip_address === addr
+        intf.ip_address == addr
       end
     end
     reqs
@@ -17,7 +17,7 @@ Puppet::Type.newtype(:resource_record) do
 
   ensurable
 
-  newparam(:title, :namevar => true) do
+  newparam(:title, namevar: true) do
     desc 'A unique name for the puppet resource'
   end
 
@@ -38,7 +38,7 @@ Puppet::Type.newtype(:resource_record) do
     isrequired
 
     validate do |value|
-      raise ArgumentError, "Invalid value for record: #{value}" unless value =~ /^(\*\.)?([a-zA-Z0-9_-]+\.)*[a-zA-Z0-9_-]+$/
+      raise ArgumentError, "Invalid value for record: #{value}" unless %r{^(\*\.)?([a-zA-Z0-9_-]+\.)*[a-zA-Z0-9_-]+$}.match?(value)
     end
   end
 
@@ -77,14 +77,14 @@ Puppet::Type.newtype(:resource_record) do
 
   newproperty(:ttl) do
     desc 'Time to live of the resource record'
-    defaultto 43200
+    defaultto 43_200
 
     munge do |value|
       Integer(value)
     end
   end
 
-  newproperty(:data, :array_matching => :all) do
+  newproperty(:data, array_matching: :all) do
     desc 'The resource record\'s data'
     isrequired
 
@@ -92,5 +92,4 @@ Puppet::Type.newtype(:resource_record) do
       Array(is).sort == Array(@should).sort
     end
   end
-
 end

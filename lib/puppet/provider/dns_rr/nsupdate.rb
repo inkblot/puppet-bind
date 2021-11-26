@@ -2,17 +2,16 @@ begin
   require 'puppet_bind/provider/nsupdate'
 rescue LoadError => e
   # work around for puppet bug SERVER-973
-  Puppet.info('Puppet did not autoload from the lib directory... falling back to relative path load.')
+  Puppet.info("#{e} - Puppet did not autoload from the lib directory... falling back to relative path load.")
   require File.join(File.expand_path(File.join(__FILE__, '../../../..')), 'puppet_bind/provider/nsupdate')
 end
 
 Puppet::Type.type(:dns_rr).provide(:nsupdate) do
-
   include PuppetBind::Provider::NsUpdate
 
-  commands :dig => 'dig', :nsupdate => 'nsupdate'
+  commands dig: 'dig', nsupdate: 'nsupdate'
 
-  def initialize(value={})
+  def initialize(value = {})
     super(value)
     @properties = {}
   end
@@ -25,7 +24,7 @@ Puppet::Type.type(:dns_rr).provide(:nsupdate) do
     @properties[:rrdata] = rrdata
   end
 
-private
+  private
 
   def newdata
     resource[:rrdata]
@@ -46,5 +45,4 @@ private
   def name
     specarray[2]
   end
-
 end
