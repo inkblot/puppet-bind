@@ -1,10 +1,10 @@
 # ex: syntax=puppet si ts=4 sw=4 et
 
 class bind (
+  String $version,
   Boolean $supported,
   Boolean $chroot_supported,
   String $chroot_class,
-  Optional[String] $chroot_dir = undef,
   String $confdir,
   String $default_zones_include,
   String $default_zones_source,
@@ -14,10 +14,7 @@ class bind (
   String $bind_user,
   String $bind_group,
   String $bind_package,
-  Optional[String] $bind_chroot_package = undef,
   String $bind_service,
-  Optional[String] $bind_chroot_service = undef,
-  Optional[String] $bind_chroot_dir = undef,
   String $nsupdate_package,
   String $managed_keys_directory,
   String $isc_bind_keys,
@@ -25,15 +22,18 @@ class bind (
   String $forward,
   Boolean $dnssec,
   Boolean $filter_ipv6,
-  String $version,
-  Optional[Integer] $statistics_port = undef,
   Boolean $auth_nxdomain,
-  Optional[String] $tkey_gssapi_credential = undef,
-  Optional[String] $tkey_domain = undef,
   Boolean $chroot = false,
   Boolean $include_default_zones = true,
   Boolean $include_local = false,
-  Array $forwarders = [],
+  Optional[Array] $forwarders = [],
+  Optional[Integer] $statistics_port = undef,
+  Optional[String] $chroot_dir = undef,
+  Optional[String] $bind_chroot_package = undef,
+  Optional[String] $bind_chroot_service = undef,
+  Optional[String] $bind_chroot_dir = undef,
+  Optional[String] $tkey_gssapi_credential = undef,
+  Optional[String] $tkey_domain = undef,
 ) {
 
   include ::bind::updater
