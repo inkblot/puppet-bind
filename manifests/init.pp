@@ -4,7 +4,7 @@ class bind (
   Boolean $supported,
   Boolean $chroot_supported,
   String $chroot_class,
-  String $chroot_dir,
+  Optional[String] $chroot_dir = undef,
   String $confdir,
   String $default_zones_include,
   String $default_zones_source,
@@ -14,22 +14,22 @@ class bind (
   String $bind_user,
   String $bind_group,
   String $bind_package,
-  String $bind_chroot_package,
+  Optional[String] $bind_chroot_package = undef,
   String $bind_service,
-  String $bind_chroot_service,
-  String $bind_chroot_dir,
+  Optional[String] $bind_chroot_service = undef,
+  Optional[String] $bind_chroot_dir = undef,
   String $nsupdate_package,
   String $managed_keys_directory,
   String $isc_bind_keys,
   String $random_device,
   String $forward,
   Boolean $dnssec,
-  Booleab $filter_ipv6,
+  Boolean $filter_ipv6,
   String $version,
-  Integer $statistics_port,
-  String $auth_nxdomain,
-  String $tkey_gssapi_credential,
-  String $tkey_domain,
+  Optional[Integer] $statistics_port = undef,
+  Boolean $auth_nxdomain,
+  Optional[String] $tkey_gssapi_credential = undef,
+  Optional[String] $tkey_domain = undef,
   Boolean $chroot = false,
   Boolean $include_default_zones = true,
   Boolean $include_local = false,
@@ -51,8 +51,8 @@ class bind (
     owner   => 'root',
     group   => $bind_group,
     mode    => '0644',
-    require => Package['bind'],
-    notify  => Service['bind'],
+    require => Package[$bind_package],
+    notify  => Service[$bind_service],
   }
 
   package { 'bind':
@@ -124,8 +124,8 @@ class bind (
     group   => $bind_group,
     mode    => '0644',
     warn    => true,
-    require => Package['bind'],
-    notify  => Service['bind'],
+    require => Package[$bind_package],
+    notify  => Service[$bind_service],
   }
 
   concat::fragment { 'bind-logging-header':
@@ -145,10 +145,12 @@ class bind (
   # AND it also needs $::bind::defaults::bind_service being STOPPED and DISABLED.
   if !$chroot or ($chroot and $chroot_class == 'bind::chroot::manual') {
     service { $bind_service:
-        ensure     => running,
-        enable     => true,
-        hasrestart => true,
-        hasstatus  => true,
+      ensure     => running,
+      enable     => true,
+      hasrestart => true,
+      hasstatus  => true,
     }
   }
+
 }
+

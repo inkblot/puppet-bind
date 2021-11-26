@@ -21,7 +21,7 @@ define bind::zone (
   $source          = '',
   $forwarders_port = 53,
 ) {
-  # where there is a zone, there is a server
+
   include ::bind
 
   # Pull some platform defaults and `bind` class parameters into the local scope
@@ -29,6 +29,8 @@ define bind::zone (
   $random_device = $::bind::random_device
   $bind_user = $::bind::bind_user
   $bind_group = $::bind::bind_group
+  $bind_package = $::bind::bind_package
+  $bind_service = $::bind::bind_service
   $include_default_zones = $::bind::include_default_zones
 
   $_domain = pick($domain, $name)
@@ -155,8 +157,8 @@ define bind::zone (
     group   => $bind_group,
     mode    => '0644',
     content => template('bind/zone.conf.erb'),
-    notify  => Service['bind'],
-    require => Package['bind'],
+    notify  => Service[$bind_service],
+    require => Package[$bind_package],
   }
 
   concat::fragment { "bind-zone-mapping-${name}":
