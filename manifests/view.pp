@@ -20,18 +20,18 @@ define bind::view (
   $order                        = '10',
   $minimal_responses            = false,
 ) {
-  $confdir = $::bind::confdir
-  $default_zones_include = $::bind::default_zones_include
-  $include_default_zones = $::bind::include_default_zones
+  $confdir = $bind::confdir
+  $default_zones_include = $bind::default_zones_include
+  $include_default_zones = $bind::include_default_zones
 
   concat::fragment { "bind-view-${name}":
-      order   => $order,
-      target  => "${::bind::confdir}/views.conf",
-      content => template('bind/view.erb'),
+    order   => $order,
+    target  => "${facts['bind::confdir']}/views.conf",
+    content => template('bind/view.erb'),
   }
 
   concat::fragment { "bind-view-mappings-${name}":
-      target  => "${::bind::confdir}/view-mappings.txt",
-      content => template('bind/view-mappings.erb'),
+    target  => "${facts['bind::confdir']}/view-mappings.txt",
+    content => template('bind/view-mappings.erb'),
   }
 }

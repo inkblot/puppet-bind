@@ -2,7 +2,7 @@
 
 define bind::logging::channel (
   $destination     = 'file',
-  $file_path       = $::bind::logdir,
+  $file_path       = $bind::logdir,
   $file_name       = '',
   $syslog_facility = '',
   $severity        = '',
@@ -10,7 +10,6 @@ define bind::logging::channel (
   $print_severity  = true,
   $print_time      = true,
 ) {
-
   unless member(['file', 'syslog', 'stderr', 'null'], $destination) {
     fail("Bind::logging::channel[${name}] has invalid destination: ${destination}. Must be one of: file syslog stderr null")
   }
@@ -19,8 +18,8 @@ define bind::logging::channel (
     unless defined(File[$file_path]) {
       file { $file_path:
         ensure => directory,
-        owner  => $::bind::bind_user,
-        group  => $::bind::bind_group,
+        owner  => $bind::bind_user,
+        group  => $bind::bind_group,
         mode   => '0640',
       }
     }
@@ -32,9 +31,9 @@ define bind::logging::channel (
 
   if $destination == 'syslog' {
     unless member(['AUTH', 'AUTHPRIV', 'CRON', 'DAEMON', 'FTP', 'KERN', 'LOCAL0',
-            'LOCAL1', 'LOCAL2', 'LOCAL3', 'LOCAL4', 'LOCAL5', 'LOCAL6', 'LOCAL7',
-            'LPR', 'MAIL', 'NEWS', 'SYSLOG', 'USER', 'UUCP'], $syslog_facility) {
-        file("Bind::logging::channell[${name}] has invalid syslog_facility: ${syslog_facility}.")
+        'LOCAL1', 'LOCAL2', 'LOCAL3', 'LOCAL4', 'LOCAL5', 'LOCAL6', 'LOCAL7',
+    'LPR', 'MAIL', 'NEWS', 'SYSLOG', 'USER', 'UUCP'], $syslog_facility) {
+      file("Bind::logging::channell[${name}] has invalid syslog_facility: ${syslog_facility}.")
     }
   }
 
@@ -44,8 +43,7 @@ define bind::logging::channel (
 
   concat::fragment { "bind-logging-channel-${name}":
     order   => "40-${name}",
-    target  => "${::bind::confdir}/logging.conf",
+    target  => "${facts['bind::confdir']}/logging.conf",
     content => template('bind/logging_channel.erb'),
   }
-
 }

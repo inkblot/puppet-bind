@@ -35,8 +35,7 @@ class bind (
   Optional[String] $tkey_gssapi_credential = undef,
   Optional[String] $tkey_domain = undef,
 ) {
-
-  include ::bind::updater
+  include bind::updater
 
   unless $supported {
     fail('Platform is not supported by this version of bind module')
@@ -67,7 +66,7 @@ class bind (
 
   if $dnssec {
     file { '/usr/local/bin/dnssec-init':
-      ensure => present,
+      ensure => file,
       owner  => 'root',
       group  => 'root',
       mode   => '0755',
@@ -85,7 +84,7 @@ class bind (
   }
 
   file { '/usr/local/bin/rndc-helper':
-    ensure  => present,
+    ensure  => file,
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
@@ -103,29 +102,29 @@ class bind (
 
   if $include_default_zones and $default_zones_source {
     file { $default_zones_include:
-        source => $default_zones_source,
+      source => $default_zones_source,
     }
   }
 
-  class { '::bind::keydir':
+  class { 'bind::keydir':
     keydir => "${confdir}/keys",
   }
 
   concat { [
-    "${confdir}/acls.conf",
-    "${confdir}/keys.conf",
-    "${confdir}/views.conf",
-    "${confdir}/servers.conf",
-    "${confdir}/logging.conf",
-    "${confdir}/view-mappings.txt",
-    "${confdir}/domain-mappings.txt",
+      "${confdir}/acls.conf",
+      "${confdir}/keys.conf",
+      "${confdir}/views.conf",
+      "${confdir}/servers.conf",
+      "${confdir}/logging.conf",
+      "${confdir}/view-mappings.txt",
+      "${confdir}/domain-mappings.txt",
     ]:
-    owner   => 'root',
-    group   => $bind_group,
-    mode    => '0644',
-    warn    => true,
-    require => Package[$bind_package],
-    notify  => Service[$bind_service],
+      owner   => 'root',
+      group   => $bind_group,
+      mode    => '0644',
+      warn    => true,
+      require => Package[$bind_package],
+      notify  => Service[$bind_service],
   }
 
   concat::fragment { 'bind-logging-header':
@@ -151,6 +150,4 @@ class bind (
       hasstatus  => true,
     }
   }
-
 }
-

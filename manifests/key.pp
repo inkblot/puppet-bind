@@ -1,18 +1,18 @@
 # ex: syntax=puppet si ts=4 sw=4 et
 
 define bind::key (
-    $secret       = undef,
-    $secret_bits  = 256,
-    $algorithm    = 'hmac-sha256',
-    $owner        = 'root',
-    $group        = $::bind::bind_group,
-    $keydir       = $::bind::keydir::keydir,
-    $bind_service = $::bind::bind_service,
-    $keyfile      = undef,
-    $include      = true,
+  $secret       = undef,
+  $secret_bits  = 256,
+  $algorithm    = 'hmac-sha256',
+  $owner        = 'root',
+  $group        = $bind::bind_group,
+  $keydir       = $bind::keydir::keydir,
+  $bind_service = $bind::bind_service,
+  $keyfile      = undef,
+  $include      = true,
 ) {
   # Pull some platform defaults into the local scope
-  $confdir = $::bind::confdir
+  $confdir = $bind::confdir
 
   # Generate a key of size $secret_bits if no $secret
   $secret_actual = $secret ? {
@@ -33,7 +33,7 @@ define bind::key (
   }
 
   file { "${keydir}/${key_file_name}":
-    ensure  => present,
+    ensure  => file,
     owner   => $owner,
     group   => $group,
     mode    => '0640',
@@ -50,5 +50,4 @@ define bind::key (
       content => "include \"${keydir}/${key_file_name}\";\n",
     }
   }
-
 }

@@ -1,8 +1,7 @@
 # Chroot class for distribution using dedicated package
-class bind::chroot::package(
-  $chroot_dir = $::bind::chroot_dir,
+class bind::chroot::package (
+  $chroot_dir = $bind::chroot_dir,
 ) {
-
   package { 'bind-chroot':
     ensure  => latest,
   }
@@ -19,8 +18,7 @@ class bind::chroot::package(
   # to stop/disable 'named' service:
   service { 'bind-without-chroot':
     ensure => stopped,
-    name   => $::bind::bind_service,
+    name   => $bind::bind_service,
     enable => false,
   }
-
 }

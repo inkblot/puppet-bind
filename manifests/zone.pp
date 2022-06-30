@@ -21,17 +21,16 @@ define bind::zone (
   $source          = '',
   $forwarders_port = 53,
 ) {
-
-  include ::bind
+  include bind
 
   # Pull some platform defaults and `bind` class parameters into the local scope
-  $cachedir = $::bind::cachedir
-  $random_device = $::bind::random_device
-  $bind_user = $::bind::bind_user
-  $bind_group = $::bind::bind_group
-  $bind_package = $::bind::bind_package
-  $bind_service = $::bind::bind_service
-  $include_default_zones = $::bind::include_default_zones
+  $cachedir = $bind::cachedir
+  $random_device = $bind::random_device
+  $bind_user = $bind::bind_user
+  $bind_group = $bind::bind_group
+  $bind_package = $bind::bind_package
+  $bind_service = $bind::bind_service
+  $include_default_zones = $bind::include_default_zones
 
   $_domain = pick($domain, $name)
   $zone_file = $_domain ? {
@@ -105,7 +104,7 @@ define bind::zone (
 
     if member(['init', 'managed'], $zone_file_mode) {
       file { "${cachedir}/${name}/${zone_file}":
-        ensure  => present,
+        ensure  => file,
         owner   => $bind_user,
         group   => $bind_group,
         mode    => '0644',
@@ -114,15 +113,15 @@ define bind::zone (
       }
     }
 
-  if $zone_file_mode == 'managed' {
-    exec { "rndc reload ${name}":
-      command     => "/usr/local/bin/rndc-helper reload ${name}",
-      user        => $bind_user,
-      refreshonly => true,
-      require     => Service['bind'],
-      subscribe   => File["${cachedir}/${name}/${zone_file}"],
+    if $zone_file_mode == 'managed' {
+      exec { "rndc reload ${name}":
+        command     => "/usr/local/bin/rndc-helper reload ${name}",
+        user        => $bind_user,
+        refreshonly => true,
+        require     => Service['bind'],
+        subscribe   => File["${cachedir}/${name}/${zone_file}"],
+      }
     }
-  }
   } elsif $zone_file_mode == 'absent' {
     file { "${cachedir}/${name}":
       ensure => absent,
@@ -139,8 +138,8 @@ define bind::zone (
       creates => "${cachedir}/${name}/${zone_file}.signed",
       timeout => 0, # crypto is hard
       require => [
-          File['/usr/local/bin/dnssec-init'],
-          File["${cachedir}/${name}/${zone_file}"]
+        File['/usr/local/bin/dnssec-init'],
+        File["${cachedir}/${name}/${zone_file}"]
       ],
     }
 
@@ -151,8 +150,8 @@ define bind::zone (
     }
   }
 
-  file { "${::bind::confdir}/zones/${name}.conf":
-    ensure  => present,
+  file { "${facts['bind::confdir']}/zones/${name}.conf":
+    ensure  => file,
     owner   => 'root',
     group   => $bind_group,
     mode    => '0644',
@@ -162,7 +161,7 @@ define bind::zone (
   }
 
   concat::fragment { "bind-zone-mapping-${name}":
-    target  => "${::bind::confdir}/domain-mappings.txt",
+    target  => "${facts['bind::confdir']}/domain-mappings.txt",
     content => "${name}:${_domain}\n",
   }
 }
